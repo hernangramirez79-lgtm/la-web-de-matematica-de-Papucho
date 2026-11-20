@@ -32,8 +32,8 @@ matematica-1-en-juego/
 2. En la planilla: **Extensiones → Apps Script**.
 3. Borrá lo que aparece en `Código.gs` y pegá todo el contenido de [`apps-script/Codigo.gs`](apps-script/Codigo.gs). Guardá (ícono del disquete).
 4. En **Configuración del proyecto** (el engranaje), poné la zona horaria **(GMT-03:00) Buenos Aires**.
-5. Arriba, elegí la función **`instalar`** y tocá **Ejecutar**. Google te va a pedir permisos (planilla, enviar mails y ejecutar a horario): aceptalos. Si dice "Google no verificó esta app", tocá *Configuración avanzada → Ir a … (no seguro)*: es tu propio script.
-   - Esto prepara la hoja **Intentos**, programa el mail diario para las 23:59 y te manda un **mail de prueba**.
+5. Arriba, elegí la función **`instalar`** y tocá **Ejecutar**. Google te va a pedir permisos (planilla, Drive para guardar las fotos, enviar mails y ejecutar a horario): aceptalos. Si dice "Google no verificó esta app", tocá *Configuración avanzada → Ir a … (no seguro)*: es tu propio script.
+   - Esto prepara la hoja **Intentos**, crea en tu Drive la carpeta **Matemática 1 en Juego – Fotos**, programa el mail diario para las 23:59 y te manda un **mail de prueba** con el link a esa carpeta.
 6. **Implementar → Nueva implementación** → tipo **Aplicación web**:
    - *Ejecutar como*: **Yo**
    - *Quién tiene acceso*: **Cualquier persona**
@@ -54,14 +54,16 @@ matematica-1-en-juego/
 
 ## Cómo funciona para los alumnos
 
-- Arriba escriben su **nombre** y su **número de camiseta**. Sin nombre no pueden enviar ejercicios (así el profe sabe quién es quién). Debajo ven si sus ejercicios se están registrando.
+- **Cada vez que entran** aparece una ventana de bienvenida donde escriben su **nombre** y su **número de camiseta** (obligatorios); la camiseta se va dibujando mientras escriben. Queda precargado lo de la vez anterior y arriba hay un botón **Cambiar jugador**.
+- Cada ejercicio se resuelve en la hoja: para enviarlo tienen que escribir el resultado **y subir una foto de la hoja**. Si se equivocan, tienen que corregir la hoja y subir una foto nueva. Los puntos se dan según el resultado escrito; el profe revisa el procedimiento en las fotos.
 - El progreso y los puntos se guardan en el navegador de cada alumno: si cambia de celu o borra los datos del navegador, arranca de cero (el registro del profe no se pierde).
-- Si no hay internet al enviar, el intento queda guardado y se manda solo cuando vuelve la conexión.
+- Si no hay internet al enviar, el intento queda guardado y se manda solo cuando vuelve la conexión (si cierran la página antes, se manda el intento sin la foto).
 
 ## Qué ve el profe
 
-- **La planilla**: una fila por intento con fecha, alumno, número, ejercicio, tema, qué respondió, la respuesta correcta, el resultado (verde = correcto, rojo = incorrecto o sin intentos), intento y puntos. Se puede filtrar y ordenar como cualquier planilla.
-- **El mail diario** (alrededor de las 23:59; Google lo corre con ±15 minutos de margen), a la cuenta de Google que instaló el script: por alumno, ejercicios hechos, bien, errores, sin intentos y puntos; la tabla de cada intento; y los temas para repasar. Si ese día nadie hizo ejercicios, llega igual avisándolo.
+- **La planilla**: una fila por intento con fecha, alumno, número, ejercicio, tema, qué respondió, la respuesta correcta, el resultado (verde = correcto, rojo = incorrecto o sin intentos), intento, puntos y el **link a la foto de la hoja**. Se puede filtrar y ordenar como cualquier planilla.
+- **Las fotos**: en tu Drive, carpeta **Matemática 1 en Juego – Fotos**, con nombres como `2026-11-20 17.40 - Mateo Pérez - ej 1a - intento 1 - incorrecto.jpg`. La web las achica antes de mandarlas (unos 100 KB cada una).
+- **El mail diario** (alrededor de las 23:59; Google lo corre con ±15 minutos de margen), a la cuenta de Google que instaló el script: por alumno, ejercicios hechos, bien, errores, sin intentos y puntos; la tabla de cada intento con el link a cada foto; y los temas para repasar. Si ese día nadie hizo ejercicios, llega igual avisándolo.
 - Para mandar el mail a otra dirección, completá `MAIL_PROFE` al principio de `Codigo.gs`.
 
 ## Ajustes de la web
@@ -71,7 +73,7 @@ Al principio del bloque "Corrector con foto" de `docs/index.html`:
 | Constante | Valor actual | Qué hace |
 |---|---|---|
 | `REGISTRO_URL` | `""` | URL de la app web de Apps Script. Vacía = no se registra en la planilla. |
-| `FOTO` | `false` | En `true`, exige la foto de la hoja y Claude revisa el procedimiento (solo funciona en la versión publicada dentro de claude.ai). |
+| `FOTO` | `true` | Exige la foto de la hoja en cada envío. En la web pública la foto se guarda en el Drive del profe; dentro de claude.ai, además, Claude revisa el procedimiento antes de dar los puntos. En `false`, alcanza con el resultado. |
 | `MAXT` | `3` | Intentos por ejercicio. |
 
 Los ejercicios están en `CAPS`, las explicaciones de cada tema en `REC`, el paso a paso de cada ejercicio en `EXPL` y los niveles de premios en `PRIZES`.

@@ -1,11 +1,13 @@
-Registro en Google Sheets y mail diario sin cuentas de Claude
+Foto de la hoja obligatoria y bienvenida con nombre y número
 
-- docs/index.html: la web manda cada intento a una app web de Apps Script
-  (REGISTRO_URL), pide el nombre antes de enviar y reenvía lo pendiente si
-  no hubo conexión. Se mueve a docs/ para publicarla con GitHub Pages.
-- apps-script/: anota cada intento en la hoja "Intentos" y manda el resumen
-  diario por mail a las 23:59.
-- README: guía de puesta en marcha (planilla, Apps Script y GitHub Pages).
+- docs/index.html: vuelve a pedir la foto de la hoja en cada envío (y una
+  nueva después de cada error); la foto se achica y viaja con el intento a
+  la planilla. Ventana de bienvenida al entrar que pide nombre y número de
+  camiseta, con la camiseta dibujada en vivo; botón "Cambiar jugador".
+- apps-script/Codigo.gs: guarda cada foto en la carpeta de Drive
+  "Matemática 1 en Juego – Fotos", con el link en la columna Foto y en el
+  mail diario.
+- README actualizado.
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01C7qzxvbqCKuG9uuySDaxhs

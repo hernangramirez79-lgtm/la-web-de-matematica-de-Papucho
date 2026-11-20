@@ -184,6 +184,23 @@ main .wrap{padding-block:22px 48px}
 .unavail{background:var(--bad-soft);border-left:5px solid var(--bad);border-radius:0 10px 10px 0;padding:10px 14px;margin-bottom:16px;font-size:.92rem}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--vio);border-radius:50%;animation:sp 1s linear infinite;vertical-align:-2px;margin-right:6px}
 @keyframes sp{to{transform:rotate(360deg)}}
+/* Bienvenida */
+.player{font-size:.95rem;color:#E4DEFF}
+.player b{color:#fff;font-family:var(--display)}
+.welcome{position:fixed;inset:0;z-index:40;display:grid;place-items:center;overflow-y:auto;background:rgba(14,10,38,.78);padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wcard{background:var(--surface);color:var(--ink);border-radius:18px;width:min(440px,100%);padding:16px 18px 20px;display:grid;gap:10px;text-align:center;box-shadow:0 8px 0 var(--yel);animation:pop .35s cubic-bezier(.2,1.6,.4,1)}
+.wcard h2{font-family:var(--display);font-weight:900;font-size:1.6rem;color:var(--mag);line-height:1.1}
+.wcard p{margin:0;color:var(--muted);font-size:.95rem}
+.wsvg svg{width:100%;height:auto;display:block;border-radius:12px}
+.wrow{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:10px;text-align:left}
+.wf{display:grid;gap:4px;min-width:0}
+.wf label{font-family:var(--display);font-weight:800;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.wf input{width:100%;border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:1.05rem;font-weight:600}
+.wf input:focus{border-color:var(--mag)}
+.wn input{text-align:center;font-family:var(--display);font-weight:900;font-size:1.3rem}
+.werr{color:var(--bad);font-weight:700;font-size:.9rem;min-height:1.2em}
+.wgo{font-size:1.15rem;padding:12px;border-radius:10px}
+@media (max-width:420px){.wrow{grid-template-columns:1fr}}
 /* Sonido y festejos */
 .sndbtn{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:6px 10px;font-weight:600;font-size:.88rem}
 .scene{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:rgba(14,10,38,.6);padding:16px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));overflow:hidden;cursor:pointer}
@@ -216,7 +233,7 @@ main .wrap{padding-block:22px 48px}
   <div>
     <span class="kick">Matemática 1 · Nuevo Dinámica</span>
     <h1>Matemática 1 <span>en Juego</span></h1>
-    <div class="who"><label for="alumno">Alumno/a:</label><input id="alumno" placeholder="Escribí tu nombre" autocomplete="off"><label for="numero">N.° camiseta:</label><input id="numero" placeholder="10" inputmode="numeric" maxlength="2" autocomplete="off"><button class="sndbtn" id="snd" type="button">🔊 Sonido: sí</button></div>
+    <div class="who"><span class="player" id="player"></span><button class="sndbtn" id="cambiar" type="button">Cambiar jugador</button><button class="sndbtn" id="snd" type="button">🔊 Sonido: sí</button></div>
     <div class="reg" id="reg" hidden></div>
   </div>
   <div class="score" aria-live="polite">
@@ -231,6 +248,7 @@ main .wrap{padding-block:22px 48px}
 <main><div class="wrap" id="view"></div></main>
 <div class="toast" id="toast" role="status"></div>
 <div class="scene" id="scene" hidden role="dialog" aria-live="assertive"></div>
+<div class="welcome" id="welcome" hidden></div>
 
 <script>
 const F=(a,b)=>`<span class="fr"><span>${a}</span><span>${b}</span></span>`;
@@ -606,7 +624,7 @@ function view(){
   const c=CAPS.find(x=>x.n===S.cap)||CAPS[0];const st=capStats(c);const full=st.ok===st.n;
   v.innerHTML=`<div class="chead"><div><small>CAPÍTULO ${c.n}</small><h2>${c.name}</h2></div>
    <div class="medal ${full?"on":""}"><span class="m">${c.n}</span>${full?"¡Medalla del capítulo ganada!":`Medalla del capítulo: ${st.ok} de ${st.n}`}</div></div>
-   <div class="howto"><span><b>1</b>Resolvé el ejercicio en tu hoja</span><span><b>2</b>Escribí el resultado acá</span>${FOTO?`<span><b>3</b>Sacale una foto a la hoja y subila</span><span><b>4</b>Enviá: se revisa el resultado y cómo lo resolviste</span>`:`<span><b>3</b>Enviá para corregir</span>`}</div>
+   <div class="howto"><span><b>1</b>Resolvé el ejercicio en tu hoja</span><span><b>2</b>Escribí el resultado acá</span>${FOTO?`<span><b>3</b>Sacale una foto a la hoja y subila</span><span><b>4</b>Enviá: se corrige el resultado y tu hoja le llega al profe</span>`:`<span><b>3</b>Enviá para corregir</span>`}</div>
    <div class="unavail" id="aibox" hidden></div><div class="temas"></div>`;
   aiBanner();
   const box=v.querySelector(".temas");
@@ -627,13 +645,13 @@ function view(){
 /* REGISTRO_URL: dirección de la app web de Google Apps Script que anota cada intento en la planilla del profe.
    Vacío = no se registra en Google Sheets (en claude.ai se usa la base de datos de la página). */
 const REGISTRO_URL="";
-const FOTO=false;
+const FOTO=true; // foto de la hoja obligatoria en cada envío
 const MAXT=3; // intentos por ejercicio
 let SAMPLE=null,IMG=false,SREADY=false,AIOFF="";
 const PHOTOS={};
 (async()=>{try{SAMPLE=await window.claude?.use?.("sample")||null;}catch(e){SAMPLE=null;}
   if(SAMPLE){try{const l=await SAMPLE.limits();IMG=!!l.images;}catch(e){IMG=false;}}
-  SREADY=true;if(!SAMPLE||!IMG)AIOFF="La corrección con foto no está disponible en esta vista. Abrí la página desde tu cuenta de Claude para poder enviar los ejercicios.";aiBanner();})();
+  SREADY=true;aiBanner();})();
 function aiBanner(){const b=$("#aibox");if(!b)return;b.hidden=!AIOFF||!FOTO;b.textContent=AIOFF;}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function plain(html){const d=document.createElement("div");d.innerHTML=html;
@@ -676,28 +694,30 @@ function exercise(e,i,t){
   d.querySelector(".hb").onclick=()=>{S.hints[e.id]=true;save();fb.className="fb hint";fb.innerHTML=`<b>Pista:</b> ${e.h} <span style="opacity:.75">(con pista, este ejercicio vale ${pointsFor(e)} pts)</span>`;};
   go.onclick=async()=>{
     const val=getVal(),photo=PHOTOS[e.id];
-    if(REGISTRO_URL&&!(S.name||"").trim()){fb.className="fb hint";fb.innerHTML="Antes de enviar, escribí tu <b>nombre</b> arriba, así el profe sabe que sos vos.";$("#alumno").focus();return;}
+    if(!(S.name||"").trim()){welcome();return;}
     if(!val||(FOTO&&!photo)){fb.className="fb hint";fb.innerHTML="Para enviar necesitás escribir el resultado <b>y</b> subir la foto de la hoja.";return;}
     const r=check(e,val);
     if(r==="fmt"){fb.className="fb hint";fb.innerHTML="No entendí el número. Escribilo así: 12, 6,5, −3 o 3/4.";return;}
     if(r==="irr"){fb.className="fb hint";fb.innerHTML="El valor está bien, pero falta simplificar hasta la fracción irreducible.";return;}
-    if(!FOTO){
+    if(FOTO&&window.claude&&!SREADY){fb.className="fb hint";fb.innerHTML="Conectando con el corrector… probá de nuevo en unos segundos.";return;}
+    const useAI=FOTO&&SAMPLE&&IMG;
+    if(!useAI){
+      const foto=FOTO?photo:null;
       sfx("whistle");go.disabled=true;fb.className="fb";fb.innerHTML="";
       setTimeout(()=>{
-        if(r===true){const p=pointsFor(e);S.solved[e.id]=p;save();logAttempt(e,t,val,"correcto",p);sfx("goal");celebrate(true,p);
+        if(r===true){const p=pointsFor(e);S.solved[e.id]=p;save();logAttempt(e,t,val,"correcto",p,foto);delete PHOTOS[e.id];sfx("goal");celebrate(true,p);
           const before=PRIZES.filter(z=>total()-p>=z.need).length,after=PRIZES.filter(z=>total()>=z.need).length;
           if(after>before)setTimeout(()=>toast(`🏅 ¡Desbloqueaste el nivel ${PRIZES[after-1].name}!`),3300);
           render();return;}
         S.tries[e.id]=(S.tries[e.id]||0)+1;
-        if(S.tries[e.id]>=MAXT){S.failed=S.failed||{};S.failed[e.id]=true;save();logAttempt(e,t,val,"sin intentos",0);sfx("miss");celebrate(false,0,`Se terminaron los ${MAXT} intentos de este ejercicio`);render();return;}
-        save();logAttempt(e,t,val,"incorrecto",0);sfx("miss");const left=MAXT-S.tries[e.id],lt=left===1?"Te queda 1 intento":`Te quedan ${left} intentos`;celebrate(false,0,lt);
-        fb.className="fb no";fb.innerHTML=`<b>Todavía no.</b> Revisá la cuenta en tu hoja con esta ayuda:${helpHTML(e,S.tries[e.id])}<div class="help"><b>${lt}.</b> <span style="opacity:.75">(si acertás ahora sumás ${pointsFor(e)} pts)</span></div>`;
+        if(S.tries[e.id]>=MAXT){S.failed=S.failed||{};S.failed[e.id]=true;save();logAttempt(e,t,val,"sin intentos",0,foto);delete PHOTOS[e.id];sfx("miss");celebrate(false,0,`Se terminaron los ${MAXT} intentos de este ejercicio`);render();return;}
+        save();logAttempt(e,t,val,"incorrecto",0,foto);
+        if(FOTO){delete PHOTOS[e.id];file.value="";img.hidden=true;pn.textContent="Corregí la hoja y subí una foto nueva";sync();}sfx("miss");const left=MAXT-S.tries[e.id],lt=left===1?"Te queda 1 intento":`Te quedan ${left} intentos`;celebrate(false,0,lt);
+        fb.className="fb no";fb.innerHTML=`<b>Todavía no.</b> ${FOTO?"Revisá la cuenta en tu hoja, corregila y subí una foto nueva. ":""}Esta ayuda te puede servir:${helpHTML(e,S.tries[e.id])}<div class="help"><b>${lt}.</b> <span style="opacity:.75">(si acertás ahora sumás ${pointsFor(e)} pts)</span></div>`;
         att.textContent=`Intentos: ${left} de ${MAXT}`;
-        go.disabled=false;
+        go.disabled=!(getVal()&&(!FOTO||PHOTOS[e.id]));
       },900);
       return;}
-    if(!SREADY){fb.className="fb hint";fb.innerHTML="Conectando con el corrector… probá de nuevo en unos segundos.";return;}
-    if(!SAMPLE||!IMG){fb.className="fb no";fb.innerHTML=AIOFF;return;}
     sfx("whistle");
     go.disabled=true;fb.className="fb";rv.className="review show";rv.innerHTML=`<div><span class="spin"></span>Revisando tu hoja… puede tardar hasta un minuto.</div>`;
     const prompt=`Sos profesor de Matemática de 1.er año de secundaria en Argentina. Te paso la FOTO de la hoja donde un alumno resolvió a mano este ejercicio.
@@ -757,7 +777,7 @@ function prizes(v){
     <div class="ideas">${z.ideas.map(i=>`<span>${i}</span>`).join("")}</div></article>`).join("")}</div>
   <div class="rules"><h3>Cómo se suman puntos</h3><ul>
     ${FOTO?`<li>Cada ejercicio se resuelve en la hoja. Para enviarlo hay que escribir el resultado <b>y</b> subir la foto de la hoja.</li>
-    <li>Se aprueba cuando el resultado es correcto, la foto es de ese ejercicio, el procedimiento está bien y el resultado de la hoja coincide con el escrito.</li>`:`<li>Cada ejercicio se resuelve en la hoja y el resultado se escribe acá para corregirlo.</li>`}
+    <li>Se aprueba cuando el resultado es correcto. La foto de tu hoja le llega al profe, que revisa cómo lo resolviste. Si te equivocás, corregí la hoja y subí una foto nueva.</li>`:`<li>Cada ejercicio se resuelve en la hoja y el resultado se escribe acá para corregirlo.</li>`}
     <li><b>10 puntos</b> si se aprueba al primer envío, sin pista.</li>
     <li><b>6 puntos</b> si usaste la pista o te equivocaste una vez.</li>
     <li><b>3 puntos</b> si acertás en el tercer intento (desde el segundo error aparece la pista sola).</li>
@@ -889,19 +909,28 @@ let SENDING=false;
 async function flushPend(){
   if(!REGISTRO_URL||SENDING)return;S.pend=S.pend||[];if(!S.pend.length)return;SENDING=true;
   try{while(S.pend.length){const row=S.pend[0];
-      await fetch(REGISTRO_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(row)});
-      S.pend.shift();save();}}
+      await fetch(REGISTRO_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({},row,{foto:PENDPH[row.id]||""}))});
+      delete PENDPH[row.id];S.pend.shift();save();}}
   catch(err){/* sin conexión: se reintenta más tarde */}
   finally{SENDING=false;}
 }
-function logAttempt(e,t,val,res,pts){
+const PENDPH={}; // fotos pendientes de envío (en memoria, no en el navegador)
+async function prepFoto(file){
+  if(!file)return"";
+  try{const bmp=await createImageBitmap(file,{imageOrientation:"from-image"});const k=Math.min(1,1100/Math.max(bmp.width,bmp.height));
+    const c=document.createElement("canvas");c.width=Math.round(bmp.width*k);c.height=Math.round(bmp.height*k);c.getContext("2d").drawImage(bmp,0,0,c.width,c.height);
+    return c.toDataURL("image/jpeg",.6);}
+  catch(e){if(file.size>2e6)return"";return await new Promise(ok=>{const r=new FileReader();r.onload=()=>ok(String(r.result));r.onerror=()=>ok("");r.readAsDataURL(file);});}
+}
+async function logAttempt(e,t,val,res,pts,foto){
   const intento=res==="correcto"?(S.tries[e.id]||0)+1:(S.tries[e.id]||0);
   const now=new Date().toISOString();
   if(!S.dev){S.dev=Math.random().toString(36).slice(2,8);save();}
   const row={fecha:now,alumno:(S.name||"").trim()||"Sin nombre",numero:S.num||"",dispositivo:S.dev,capitulo:e.cap,tema:`${t.n}. ${t.t}`,
     ejercicio:`${t.n}${"abcdefgh"[t.ej.indexOf(e)]}`,enunciado:plain(e.q),respuesta:String(val),correcta:ansText(e),
     resultado:res,intento,maxIntentos:MAXT,puntos:pts,totalPuntos:total()};
-  if(REGISTRO_URL){S.pend=S.pend||[];if(S.pend.length<500)S.pend.push(row);save();flushPend();}
+  if(REGISTRO_URL){row.id=Math.random().toString(36).slice(2,10);const ph=await prepFoto(foto);if(ph)PENDPH[row.id]=ph;
+    S.pend=S.pend||[];if(S.pend.length<500)S.pend.push(row);save();flushPend();}
   if(!DB||!UID)return;
   const base=`intentos/${UID}`;
   LOGQ=LOGQ.then(async()=>{
@@ -932,9 +961,35 @@ async function panel(v){
 }
 
 function render(){header();tabs();view();}
-const al=$("#alumno");al.value=S.name||"";al.addEventListener("input",()=>{S.name=al.value;save();regStatus();});
-regStatus();flushPend();window.addEventListener("online",flushPend);
-const nu=$("#numero");nu.value=S.num||"";nu.addEventListener("input",()=>{nu.value=nu.value.replace(/\D/g,"").slice(0,2);S.num=nu.value;save();});
+/* ---------- Bienvenida: nombre y número de camiseta ---------- */
+function updatePlayer(){const el=$("#player");if(!el)return;const nm=(S.name||"").trim();
+  el.innerHTML=nm?`Jugador: <b>${esc(nm)}</b> · N.° <b>${esc(S.num||"10")}</b>`:"";regStatus();}
+function welcome(){
+  const w=$("#welcome");
+  w.innerHTML=`<form class="wcard" id="wform" role="dialog" aria-modal="true" aria-labelledby="wt" novalidate>
+    <div class="wsvg" id="wsvg" aria-hidden="true"></div>
+    <h2 id="wt">¡Bienvenido/a a la cancha!</h2>
+    <p>Antes de jugar, contanos quién sos. Tu nombre y tu número van a aparecer en la camiseta cada vez que hagas un gol.</p>
+    <div class="wrow"><div class="wf"><label for="w-nombre">Tu nombre</label><input id="w-nombre" maxlength="30" autocomplete="off" placeholder="Ej: Mateo Pérez"></div>
+      <div class="wf wn"><label for="w-num">N.° camiseta</label><input id="w-num" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="10"></div></div>
+    <div class="werr" id="werr" role="alert"></div>
+    <button class="btn go wgo" type="submit">¡A jugar!</button></form>`;
+  const n=$("#w-nombre"),u=$("#w-num"),er=$("#werr");
+  n.value=S.name||"";u.value=S.num||"";
+  const prev=()=>{const nm=n.value.trim().split(/\s+/)[0]||"";const num=/^\d{1,2}$/.test(u.value)&&+u.value>0?String(+u.value):"10";
+    $("#wsvg").innerHTML=`<svg viewBox="0 0 320 190"><defs>${KIT("kitW")}</defs>${field}<g transform="translate(160,182) scale(1.2)">${playerBack("kitW",nm?esc(nm.toUpperCase().slice(0,9)):"TU NOMBRE",num)}</g></svg>`;};
+  n.addEventListener("input",()=>{er.textContent="";prev();});
+  u.addEventListener("input",()=>{u.value=u.value.replace(/\D/g,"").slice(0,2);er.textContent="";prev();});
+  $("#wform").addEventListener("submit",ev=>{ev.preventDefault();
+    const nm=n.value.trim().replace(/\s+/g," "),num=u.value;
+    if(!nm){er.textContent="Escribí tu nombre para entrar.";n.focus();return;}
+    if(!/^\d{1,2}$/.test(num)||+num<1){er.textContent="Elegí un número de camiseta del 1 al 99.";u.focus();return;}
+    S.name=nm;S.num=String(+num);save();w.hidden=true;w.innerHTML="";document.body.style.overflow="";
+    updatePlayer();flushPend();sfx("whistle");toast(`¡A la cancha, ${nm.split(" ")[0]}!`);});
+  prev();w.hidden=false;document.body.style.overflow="hidden";setTimeout(()=>n.focus(),50);
+}
+$("#cambiar").onclick=()=>welcome();
+updatePlayer();welcome();
 render();
 </script>
 
