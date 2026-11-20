@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Manual del Profesor (Hernan)</title>
+<style>
+:root{--vio:#3B2A8C;--vio2:#2A1D6E;--mag:#E6197F;--teal:#3FB8A3;--ama:#F5B400;--rosa:#FDE7F1;--amac:#FFF4DA;--tealc:#E2F5F1;--txt:#1f1a3a;}
+@page{size:A4;margin:16mm 15mm 16mm 15mm}
+*{box-sizing:border-box}
+body{font-family:Inter,"DejaVu Sans",sans-serif;color:var(--txt);font-size:10.6pt;line-height:1.45;margin:0}
+h1,h2,h3,h4{font-family:"Inter Display",Inter,sans-serif;margin:0}
+b{color:var(--vio)}
+.mag{color:var(--mag);font-weight:700}
+/* portada */
+.cover{height:265mm;background:var(--vio);color:#fff;border-radius:6px;position:relative;overflow:hidden;padding:22mm 18mm;page-break-after:always}
+.cover .grid{position:absolute;left:0;right:0;bottom:0;height:70mm;background-image:linear-gradient(var(--teal) 1px,transparent 1px),linear-gradient(90deg,var(--teal) 1px,transparent 1px);background-size:12mm 12mm;opacity:.35}
+.cover .dots span{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff;opacity:.8}
+.cover .kicker{display:inline-block;background:var(--ama);color:var(--vio2);font-weight:900;padding:3px 10px;font-size:13pt;letter-spacing:.5px}
+.cover h1{font-size:46pt;font-weight:900;line-height:1;margin-top:10mm;letter-spacing:-1px}
+.cover h1 .who{display:block;color:var(--ama);font-size:30pt;margin-top:4mm}
+.cover .band{margin-top:14mm;background:var(--teal);color:var(--vio2);padding:6mm 8mm;font-weight:800;font-size:15pt}
+.cover .band small{display:block;font-weight:500;font-size:10.5pt;color:#13324a;margin-top:2mm}
+.cover .big1{position:absolute;right:20mm;top:142mm;width:60mm;height:60mm;border-radius:50%;background:radial-gradient(circle at 35% 35%,#8fd6ff,#3a6fd1 60%,#2a3c9a);border:3px solid var(--teal);display:flex;align-items:center;justify-content:center;font-size:72pt;font-weight:900;color:#fff}
+.cover .foot{position:absolute;bottom:18mm;left:18mm;right:18mm;font-size:10pt;color:#e9e6ff}
+/* índice */
+.idx h2{font-size:30pt;font-weight:900;color:var(--vio);margin-bottom:5mm}
+.idxcols{columns:2;column-gap:10mm;font-size:9.6pt}
+.idxcols .cap{break-inside:avoid;margin-bottom:4mm}
+.idxcols .cap h3{font-size:10.5pt;color:var(--mag);font-weight:900;border-bottom:2px solid var(--mag);padding-bottom:1mm;margin-bottom:1.5mm}
+.idxcols .cap h3 span{color:var(--vio)}
+.idxcols .cap div{padding:.4mm 0}
+.idxcols .cap div i{font-style:normal;font-weight:800;color:var(--vio);display:inline-block;width:7mm}
+.howto{margin-top:6mm;background:var(--amac);border-left:5px solid var(--ama);padding:4mm 5mm;font-size:9.8pt;break-inside:avoid}
+/* capítulo */
+.chap{page-break-before:always;display:flex;align-items:stretch;border-radius:6px;overflow:hidden;margin-bottom:6mm}
+.chap .num{background:var(--vio);color:#fff;padding:5mm 7mm;text-align:center}
+.chap .num small{display:block;color:var(--teal);font-weight:900;font-size:10pt;letter-spacing:1px}
+.chap .num span{font-size:40pt;font-weight:900;color:var(--mag);line-height:1}
+.chap .name{flex:1;background:linear-gradient(135deg,var(--vio) 0%,#4b3fa6 60%,var(--teal) 140%);color:#fff;display:flex;align-items:center;padding:0 8mm;font-size:21pt;font-weight:900;letter-spacing:.3px;text-transform:uppercase}
+/* tema */
+.tema{margin-bottom:6mm}
+.th{break-after:avoid}.tb>*{break-inside:avoid}.ej,.key,.tip,table,.two,svg{break-inside:avoid}
+.th{display:flex;align-items:flex-end;gap:3mm;background:linear-gradient(180deg,var(--vio) 0%,#3f4fa8 100%);padding:3mm 5mm;border-radius:5px 5px 0 0}
+.th .n{font-size:24pt;font-weight:900;color:#fff;line-height:.9}
+.th .t small{display:block;color:#fff;font-weight:900;font-size:9pt;letter-spacing:1.5px;opacity:.9}
+.th .t h2{display:inline-block;background:var(--mag);color:#fff;font-size:12.5pt;font-weight:900;padding:.6mm 3mm;text-transform:uppercase}
+.tb{border:1.5px solid #d9d3f2;border-top:none;border-radius:0 0 5px 5px;padding:3.5mm 5mm 4mm}
+.tb p{margin:0 0 2mm}
+.tb ul{margin:0 0 2mm;padding-left:5mm}
+.tb li{margin-bottom:.8mm}
+.tb li::marker{color:var(--mag)}
+.st{color:var(--vio);font-weight:800;font-size:10.8pt;margin:2.5mm 0 1mm}
+.key{background:var(--rosa);border-left:4px solid var(--mag);padding:2mm 4mm;margin:2mm 0;border-radius:0 4px 4px 0}
+.ej{background:var(--tealc);border:1.5px solid var(--teal);border-radius:5px;padding:2.5mm 4mm;margin-top:3mm}
+.ej h4{display:inline-block;background:var(--teal);color:#fff;font-size:9.5pt;font-weight:900;letter-spacing:1px;padding:.5mm 2.5mm;margin-bottom:1.5mm;text-transform:uppercase}
+.ej p:last-child{margin-bottom:0}
+.tip{background:var(--amac);border-left:4px solid var(--ama);padding:1.5mm 4mm;margin-top:2mm;font-size:9.8pt}
+.tip b{color:#9a6b00}
+table{border-collapse:collapse;margin:2mm 0;font-size:9.8pt}
+th{background:var(--rosa);color:var(--vio);border:1.3px solid var(--mag);padding:1mm 2.5mm;font-weight:800}
+td{border:1.3px solid var(--mag);padding:1mm 2.5mm;text-align:center}
+td.l{text-align:left}
+.c{text-align:center}
+.calc{font-family:Inter,sans-serif;color:var(--vio);font-weight:600;text-align:center;margin:1.5mm 0}
+.two{display:flex;gap:5mm;align-items:center}
+.two>div{flex:1}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.92em;line-height:1.05;margin:0 .15em}
+.fr>span:first-child{border-bottom:1.2px solid currentColor;padding:0 .15em}
+.rad{white-space:nowrap}.rad .ov{border-top:1.2px solid currentColor;padding:0 .1em}
+.per{border-top:1.2px solid currentColor}
+svg text{font-family:Inter,sans-serif}
+</style></head><body>
+
+<!-- PORTADA -->
+<section class="cover">
+ <div class="dots"><span style="left:30mm;top:14mm"></span><span style="left:70mm;top:30mm"></span><span style="left:120mm;top:12mm"></span><span style="left:150mm;top:40mm"></span><span style="left:95mm;top:52mm"></span><span style="left:40mm;top:150mm"></span><span style="left:160mm;top:140mm"></span></div>
+ <div class="grid"></div>
+ <span class="kicker">MATEMÁTICA 1 · NUEVO DINÁMICA</span>
+ <h1>MANUAL DEL<br>PROFESOR<span class="who">(Hernan)</span></h1>
+ <div class="big1">1</div>
+ <div class="band">Resumen teórico de los 49 temas del índice<small>Título, explicación teórica y un ejemplo bien básico de cada tema para explicarlo en clase. Capítulos 1 a 8.</small></div>
+ <div class="foot">Basado en el índice de <i>Matemática 1 – Nuevo Dinámica</i> (Puerto de Palos). Notación del libro: el punto ( . ) es “por”, los dos puntos ( : ) es “dividido”, y los miles se separan con un espacio.</div>
+</section>
+
+<!-- ÍNDICE -->
+<section class="idx">
+<h2>ÍNDICE</h2>
+<div class="idxcols">
+ <div class="cap"><h3>CAPÍTULO 1 <span>NÚMEROS NATURALES</span></h3>
+  <div><i>1.</i>Sistema de numeración decimal</div><div><i>2.</i>Multiplicación y división</div><div><i>3.</i>Potenciación y radicación</div><div><i>4.</i>Operaciones combinadas</div><div><i>5.</i>Divisibilidad</div><div><i>6.</i>Factorización</div><div><i>7.</i>Múltiplo común menor y divisor común mayor</div><div><i>8.</i>Lenguaje simbólico. Ecuaciones</div></div>
+ <div class="cap"><h3>CAPÍTULO 2 <span>FRACCIONES Y EXPRESIONES DECIMALES</span></h3>
+  <div><i>9.</i>Representación de fracciones. Número mixto</div><div><i>10.</i>Orden y comparación. Fracciones equivalentes</div><div><i>11.</i>Operaciones con fracciones</div><div><i>12.</i>Potenciación y radicación de fracciones</div><div><i>13.</i>Operaciones combinadas con fracciones</div><div><i>14.</i>Fracciones y expresiones decimales</div><div><i>15.</i>Operaciones con decimales. Operaciones combinadas</div><div><i>16.</i>Aproximación y porcentaje</div></div>
+ <div class="cap"><h3>CAPÍTULO 3 <span>FUNCIONES</span></h3>
+  <div><i>17.</i>Representación</div><div><i>18.</i>Las funciones</div><div><i>19.</i>Función de proporcionalidad directa</div><div><i>20.</i>Función de proporcionalidad inversa</div></div>
+ <div class="cap"><h3>CAPÍTULO 4 <span>CUERPOS Y ÁNGULOS</span></h3>
+  <div><i>21.</i>Clasificación de los cuerpos</div><div><i>22.</i>Poliedros regulares</div><div><i>23.</i>Desarrollo plano de cuerpos</div><div><i>24.</i>Punto, recta y plano</div><div><i>25.</i>Sistema sexagesimal y operaciones</div><div><i>26.</i>Ángulos. Clasificación de ángulos</div><div><i>27.</i>Mediatriz de un segmento</div><div><i>28.</i>Bisectriz de un ángulo</div></div>
+ <div class="cap"><h3>CAPÍTULO 5 <span>FIGURAS PLANAS</span></h3>
+  <div><i>29.</i>Triángulos. Elementos y propiedades</div><div><i>30.</i>Construcción de triángulos</div><div><i>31.</i>Cuadriláteros. Elementos y propiedades</div><div><i>32.</i>Construcción de cuadriláteros</div><div><i>33.</i>Círculo y circunferencia</div><div><i>34.</i>Construcción de circunferencias</div><div><i>35.</i>Polígonos y construcciones</div></div>
+ <div class="cap"><h3>CAPÍTULO 6 <span>PERÍMETRO, ÁREA Y VOLUMEN</span></h3>
+  <div><i>36.</i>Perímetro y área de figuras planas</div><div><i>37.</i>Área lateral y total de cuerpos</div><div><i>38.</i>Unidades de capacidad y de volumen</div><div><i>39.</i>Volumen de poliedros</div><div><i>40.</i>Volumen de cuerpos redondos</div></div>
+ <div class="cap"><h3>CAPÍTULO 7 <span>PROBABILIDAD Y ESTADÍSTICA</span></h3>
+  <div><i>41.</i>Variables, población y muestra</div><div><i>42.</i>Frecuencias absolutas y relativas</div><div><i>43.</i>Promedio, mediana y moda</div><div><i>44.</i>Experimentos aleatorios. Probabilidad simple</div><div><i>45.</i>Cálculo combinatorio</div></div>
+ <div class="cap"><h3>CAPÍTULO 8 <span>NÚMEROS ENTEROS</span></h3>
+  <div><i>46.</i>Números negativos. Orden y representación</div><div><i>47.</i>Adición y sustracción</div><div><i>48.</i>Multiplicación y división</div><div><i>49.</i>Operaciones combinadas</div></div>
+</div>
+<div class="howto"><b style="color:#9a6b00">Cómo usar este manual:</b> cada tema tiene su <b>teoría</b> resumida, un recuadro rosa con la <b>idea clave</b> para escribir en el pizarrón y un recuadro verde con un <b>ejemplo bien básico</b> para arrancar la explicación. Los recuadros amarillos marcan errores frecuentes de los chicos.</div>
+</section>
+
+<!-- ===================== CAPÍTULO 1 ===================== -->
+<div class="chap"><div class="num"><small>CAPÍTULO</small><span>1</span></div><div class="name">Números naturales</div></div>
+
+<div class="tema"><div class="th"><span class="n">1</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Sistema de numeración decimal</h2></div></div><div class="tb">
+<p>Los números naturales (ℕ) son los que usamos para contar: 1, 2, 3, 4… Nuestro sistema de numeración es:</p>
+<ul><li><b>Decimal:</b> usa diez símbolos (0, 1, 2, 3, 4, 5, 6, 7, 8, 9) y cada 10 unidades de un orden forman 1 del orden siguiente (10 unidades = 1 decena, 10 decenas = 1 centena…).</li>
+<li><b>Posicional:</b> el valor de cada cifra depende del lugar que ocupa. En 555, cada 5 vale distinto: 500, 50 y 5.</li></ul>
+<p>Para leer números grandes se agrupan las cifras de a tres (unidades, miles, millones…) separadas por un espacio: <b>2 724 315</b>.</p>
+<div class="st">Descomposición de un número</div>
+<table><tr><th>Tipo</th><th>Cómo se escribe 5 328</th></tr>
+<tr><td class="l">Aditiva</td><td>5 000 + 300 + 20 + 8</td></tr>
+<tr><td class="l">Multiplicativa</td><td>5 . 1 000 + 3 . 100 + 2 . 10 + 8</td></tr>
+<tr><td class="l">En potencias de 10</td><td>5 . 10<sup>3</sup> + 3 . 10<sup>2</sup> + 2 . 10<sup>1</sup> + 8 . 10<sup>0</sup></td></tr></table>
+<div class="key">Recordar: todo número elevado a la 0 da 1 → 10<sup>0</sup> = 1.</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>En el número <b>4 072</b>: el 4 vale 4 000 (unidades de mil), el 0 indica que no hay centenas, el 7 vale 70 y el 2 vale 2.</p><p class="calc">4 072 = 4 . 1 000 + 0 . 100 + 7 . 10 + 2 = 4 . 10<sup>3</sup> + 7 . 10<sup>1</sup> + 2 . 10<sup>0</sup></p><p>Se lee: “cuatro mil setenta y dos”.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">2</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Multiplicación y división</h2></div></div><div class="tb">
+<div class="two"><div><p><b>Multiplicación:</b> a . b = c → a y b son los <b>factores</b>, c es el <b>producto</b>.</p>
+<p><b>División:</b> D : d → D es el <b>dividendo</b>, d el <b>divisor</b>, c el <b>cociente</b> y r el <b>resto</b>.</p></div>
+<div class="key c"><b>D = d . c + r</b><br>con r &lt; d y d ≠ 0<br><small>(no se puede dividir por 0)</small></div></div>
+<div class="st">Propiedades de la multiplicación</div>
+<ul><li><b>Conmutativa:</b> el orden de los factores no cambia el producto. 7 . 5 = 5 . 7 = 35</li>
+<li><b>Asociativa:</b> se pueden agrupar de distintas formas. (2 . 4) . 6 = 2 . (4 . 6) = 48</li>
+<li><b>Disociativa:</b> un factor se puede descomponer. 15 . 2 = (5 . 3) . 2 = 30</li>
+<li><b>Elemento neutro:</b> el 1. 105 . 1 = 105</li>
+<li><b>Distributiva respecto de la suma y la resta:</b> (7 + 5 − 2) . 3 = 7 . 3 + 5 . 3 − 2 . 3 = 30</li></ul>
+<p>En la división, la distributiva <b>solo vale cuando la suma o resta está en el dividendo</b>: (12 + 6) : 3 = 12 : 3 + 6 : 3 = 6. Pero 12 : (3 + 3) ≠ 12 : 3 + 12 : 3.</p>
+<div class="ej"><h4>Ejemplo básico</h4><p>Repartimos 47 caramelos entre 5 chicos. 47 : 5 → cada uno recibe <b>9</b> (cociente) y sobran <b>2</b> (resto).</p><p class="calc">Comprobación: 47 = 5 . 9 + 2 → 47 = 45 + 2 ✔</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">3</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Potenciación y radicación</h2></div></div><div class="tb">
+<p><b>Potenciación:</b> es una multiplicación de factores iguales. En a<sup>n</sup>, <b>a</b> es la <b>base</b> y <b>n</b> el <b>exponente</b> (cuántas veces se multiplica la base).</p>
+<p class="calc">2<sup>4</sup> = 2 . 2 . 2 . 2 = 16 &nbsp;&nbsp;&nbsp; a<sup>1</sup> = a &nbsp;&nbsp;&nbsp; a<sup>0</sup> = 1</p>
+<div class="st">Propiedades de la potenciación</div>
+<table><tr><th>Propiedad</th><th>Regla</th><th>Ejemplo</th></tr>
+<tr><td class="l">Producto de igual base</td><td>a<sup>m</sup> . a<sup>n</sup> = a<sup>m+n</sup></td><td>2<sup>3</sup> . 2<sup>2</sup> = 2<sup>5</sup> = 32</td></tr>
+<tr><td class="l">Cociente de igual base</td><td>a<sup>m</sup> : a<sup>n</sup> = a<sup>m−n</sup></td><td>5<sup>4</sup> : 5<sup>2</sup> = 5<sup>2</sup> = 25</td></tr>
+<tr><td class="l">Potencia de potencia</td><td>(a<sup>m</sup>)<sup>n</sup> = a<sup>m.n</sup></td><td>(3<sup>2</sup>)<sup>2</sup> = 3<sup>4</sup> = 81</td></tr>
+<tr><td class="l">Distributiva (. y :)</td><td>(a . b)<sup>n</sup> = a<sup>n</sup> . b<sup>n</sup></td><td>(2 . 5)<sup>2</sup> = 4 . 25 = 100</td></tr></table>
+<p><b>Radicación:</b> es la operación inversa de la potenciación. En R(n|a) = b, <b>n</b> es el <b>índice</b>, <b>a</b> el <b>radicando</b> y <b>b</b> la <b>raíz</b>.</p>
+<div class="key c">R(n|a) = b &nbsp; ⇔ &nbsp; b<sup>n</sup> = a &nbsp;&nbsp;&nbsp;&nbsp; (si no se escribe el índice, es 2: raíz cuadrada)</div>
+<div class="tip"><b>¡Ojo!</b> La potencia NO es distributiva respecto de la suma: (3 + 4)<sup>2</sup> = 49, pero 3<sup>2</sup> + 4<sup>2</sup> = 25. Y 2<sup>3</sup> no es 2 . 3.</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Un cubo de 2 bloques por lado tiene 2 . 2 . 2 = 2<sup>3</sup> = <b>8</b> bloques. Al revés: si tengo 8 bloques, ¿de cuántos por lado es el cubo? R(3|8) = <b>2</b>, porque 2<sup>3</sup> = 8.</p><p class="calc">R(|25) = 5 porque 5<sup>2</sup> = 25</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">4</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Operaciones combinadas</h2></div></div><div class="tb">
+<p>Cuando hay varias operaciones juntas, hay un orden que respetar para que todos lleguemos al mismo resultado:</p>
+<ul><li><b>1.°</b> Se separa en <b>términos</b>: los signos + y − que no están dentro de paréntesis separan términos.</li>
+<li><b>2.°</b> Se resuelve lo que está entre <b>paréntesis</b> (o corchetes).</li>
+<li><b>3.°</b> Se resuelven <b>potencias y raíces</b>.</li>
+<li><b>4.°</b> Se resuelven <b>multiplicaciones y divisiones</b> (de izquierda a derecha).</li>
+<li><b>5.°</b> Por último, <b>sumas y restas</b>.</li></ul>
+<div class="key">“Primero se separa en términos y se resuelve cada término; recién al final se suma y se resta.”</div>
+<div class="tip"><b>Error frecuente:</b> hacer 35 + 4 = 39 y después 39 . 12. ¡La multiplicación va antes que la suma!</div>
+<div class="ej"><h4>Ejemplo básico</h4>
+<p class="calc">35 + 4 . 12 − 2 = 35 + 48 − 2 = <span class="mag">81</span></p>
+<p class="calc">2<sup>3</sup> + 18 : 3 − R(|16) = 8 + 6 − 4 = <span class="mag">10</span></p>
+<p class="calc">(5 + 3) . 2 − 4 = 8 . 2 − 4 = 16 − 4 = <span class="mag">12</span></p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">5</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Divisibilidad</h2></div></div><div class="tb">
+<p>Un número <b>a es divisible por b</b> cuando la división a : b es exacta (resto 0). En ese caso decimos que <b>a es múltiplo de b</b> y que <b>b es divisor de a</b>.</p>
+<p>Ej.: 12 : 3 = 4 resto 0 → 12 es múltiplo de 3 y 3 es divisor de 12.</p>
+<ul><li><b>Múltiplos</b> de un número: se obtienen multiplicándolo por 0, 1, 2, 3… Son infinitos. Múltiplos de 4: 0, 4, 8, 12, 16…</li>
+<li><b>Divisores</b> de un número: son finitos. Divisores de 12: 1, 2, 3, 4, 6, 12.</li>
+<li><b>Número primo:</b> tiene solo dos divisores, el 1 y él mismo (2, 3, 5, 7, 11, 13…). <b>Número compuesto:</b> tiene más de dos divisores. El 1 no es primo ni compuesto.</li></ul>
+<div class="st">Criterios de divisibilidad</div>
+<table><tr><th>Por</th><th>Un número es divisible si…</th></tr>
+<tr><td>2</td><td class="l">termina en 0 o en cifra par.</td></tr>
+<tr><td>3</td><td class="l">la suma de sus cifras es múltiplo de 3.</td></tr>
+<tr><td>4</td><td class="l">sus dos últimas cifras forman un múltiplo de 4 o son 00.</td></tr>
+<tr><td>5</td><td class="l">termina en 0 o en 5.</td></tr>
+<tr><td>6</td><td class="l">es divisible por 2 y por 3 a la vez.</td></tr>
+<tr><td>9</td><td class="l">la suma de sus cifras es múltiplo de 9.</td></tr>
+<tr><td>10</td><td class="l">termina en 0.</td></tr></table>
+<div class="ej"><h4>Ejemplo básico</h4><p>¿Por cuáles números es divisible <b>156</b>? Termina en 6 (par) → por <b>2</b> sí. 1 + 5 + 6 = 12 → por <b>3</b> sí, por 9 no. 56 es múltiplo de 4 → por <b>4</b> sí. Por 2 y por 3 → por <b>6</b> sí. No termina en 0 ni en 5 → por 5 y por 10 no.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">6</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Factorización</h2></div></div><div class="tb">
+<p><b>Factorizar</b> un número compuesto es escribirlo como una multiplicación de <b>números primos</b>. Todo número compuesto tiene una única factorización (sin importar el orden).</p>
+<p><b>Procedimiento:</b> se divide el número por el menor primo posible (2, 3, 5, 7…) y se repite con el cociente hasta llegar a 1. Los primos usados son los factores.</p>
+<div class="key">Usar los criterios de divisibilidad del tema 5 para saber por qué primo dividir.</div>
+<div class="ej"><h4>Ejemplo básico</h4>
+<div class="two"><div><table style="margin:0 auto"><tr><td style="border:none;border-right:2px solid #3B2A8C;text-align:right">60</td><td style="border:none">2</td></tr><tr><td style="border:none;border-right:2px solid #3B2A8C;text-align:right">30</td><td style="border:none">2</td></tr><tr><td style="border:none;border-right:2px solid #3B2A8C;text-align:right">15</td><td style="border:none">3</td></tr><tr><td style="border:none;border-right:2px solid #3B2A8C;text-align:right">5</td><td style="border:none">5</td></tr><tr><td style="border:none;border-right:2px solid #3B2A8C;text-align:right">1</td><td style="border:none"></td></tr></table></div>
+<div><p class="calc" style="font-size:13pt">60 = 2 . 2 . 3 . 5<br>60 = 2<sup>2</sup> . 3 . 5</p><p>Verificamos: 4 . 3 . 5 = 60 ✔</p></div></div></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">7</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Múltiplo común menor y divisor común mayor</h2></div></div><div class="tb">
+<ul><li><b>Múltiplo común menor (mcm):</b> es el menor múltiplo (distinto de 0) que tienen en común dos o más números. Se usa cuando algo “vuelve a coincidir”.</li>
+<li><b>Divisor común mayor (dcm):</b> es el mayor divisor que tienen en común dos o más números. Se usa para “repartir en partes iguales lo más grandes posible”.</li></ul>
+<div class="st">Cálculo con factorización</div>
+<div class="key"><b>mcm:</b> se multiplican los factores <b>comunes y no comunes</b> con su <b>mayor</b> exponente.<br><b>dcm:</b> se multiplican solo los factores <b>comunes</b> con su <b>menor</b> exponente.</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>12 = 2<sup>2</sup> . 3 &nbsp;&nbsp; y &nbsp;&nbsp; 18 = 2 . 3<sup>2</sup></p>
+<p class="calc">mcm (12; 18) = 2<sup>2</sup> . 3<sup>2</sup> = <span class="mag">36</span> &nbsp;&nbsp;&nbsp; dcm (12; 18) = 2 . 3 = <span class="mag">6</span></p>
+<p><b>Problema:</b> un colectivo pasa cada 12 minutos y otro cada 18. Si salieron juntos, vuelven a coincidir a los <b>36 minutos</b> (mcm). Si tengo 12 lápices y 18 gomas y quiero armar la mayor cantidad de kits iguales, armo <b>6 kits</b> (dcm).</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">8</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Lenguaje simbólico. Ecuaciones</h2></div></div><div class="tb">
+<p>El <b>lenguaje simbólico</b> traduce frases a expresiones matemáticas usando una letra (por ejemplo <b>x</b>) para el número desconocido.</p>
+<table><tr><th>Lenguaje coloquial</th><th>Simbólico</th><th>Lenguaje coloquial</th><th>Simbólico</th></tr>
+<tr><td class="l">Un número</td><td>x</td><td class="l">El siguiente de un número</td><td>x + 1</td></tr>
+<tr><td class="l">El doble de un número</td><td>2 . x</td><td class="l">El anterior de un número</td><td>x − 1</td></tr>
+<tr><td class="l">El triple de un número</td><td>3 . x</td><td class="l">La mitad de un número</td><td>x : 2</td></tr>
+<tr><td class="l">El cuadrado de un número</td><td>x<sup>2</sup></td><td class="l">Un número aumentado en 5</td><td>x + 5</td></tr></table>
+<p>Una <b>ecuación</b> es una igualdad con un valor desconocido (la <b>incógnita</b>). <b>Resolverla</b> es encontrar el valor que hace verdadera la igualdad. Para despejar, se “pasa” cada número al otro lado con la <b>operación inversa</b>: lo que suma pasa restando, lo que multiplica pasa dividiendo (y viceversa).</p>
+<div class="key">Siempre <b>verificar</b>: reemplazar x por el resultado y comprobar que se cumple la igualdad.</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>“El triple de un número disminuido en 7 es 17”.</p>
+<p class="calc">3 . x − 7 = 17 → 3 . x = 17 + 7 → 3 . x = 24 → x = 24 : 3 → <span class="mag">x = 8</span></p>
+<p>Verificación: 3 . 8 − 7 = 24 − 7 = 17 ✔</p></div>
+</div></div>
+
+<!-- ===================== CAPÍTULO 2 ===================== -->
+<div class="chap"><div class="num"><small>CAPÍTULO</small><span>2</span></div><div class="name">Fracciones y expresiones decimales</div></div>
+
+<div class="tema"><div class="th"><span class="n">9</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Representación de fracciones. Número mixto</h2></div></div><div class="tb">
+<p>Una <b>fracción</b> F(a|b) representa partes de un entero dividido en partes iguales. El <b>denominador</b> (b) indica en cuántas partes iguales se divide el entero y el <b>numerador</b> (a), cuántas se toman. El denominador nunca puede ser 0.</p>
+<ul><li><b>Fracción propia:</b> numerador menor que el denominador (es menor que 1): F(3|4).</li>
+<li><b>Fracción impropia:</b> numerador mayor que el denominador (es mayor que 1): F(7|4).</li>
+<li><b>Fracción aparente:</b> el numerador es múltiplo del denominador (es un número natural): F(8|4) = 2.</li></ul>
+<p>Las fracciones se pueden representar en gráficos (círculos, rectángulos) o en la <b>recta numérica</b>, dividiendo cada unidad en tantas partes como indica el denominador.</p>
+<div class="key"><b>Número mixto:</b> una fracción impropia se puede escribir como un entero más una fracción propia. Se divide numerador : denominador → el cociente es la parte entera y el resto, el nuevo numerador.</div>
+<div class="ej"><h4>Ejemplo básico</h4>
+<div class="two"><div><p>Tenemos 7 porciones de pizzas cortadas en 4. Eso es F(7|4) de pizza. 7 : 4 = 1, resto 3 → <b>1 pizza entera y F(3|4)</b>.</p><p class="calc">F(7|4) = 1 F(3|4)</p></div>
+<div>
+<svg width="200" height="90" viewBox="0 0 200 90"><g stroke="#3B2A8C" stroke-width="2"><circle cx="45" cy="42" r="36" fill="#F5B400"/><line x1="45" y1="6" x2="45" y2="78"/><line x1="9" y1="42" x2="81" y2="42"/>
+<circle cx="140" cy="42" r="36" fill="#fff"/><path d="M140 42 L140 6 A36 36 0 1 1 104 42 Z" fill="#F5B400"/><line x1="140" y1="6" x2="140" y2="78"/><line x1="104" y1="42" x2="176" y2="42"/></g>
+<text x="45" y="89" text-anchor="middle" font-size="10" fill="#3B2A8C">1 entero</text><text x="140" y="89" text-anchor="middle" font-size="10" fill="#3B2A8C">3/4</text></svg></div></div></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">10</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Orden y comparación. Fracciones equivalentes</h2></div></div><div class="tb">
+<p><b>Fracciones equivalentes:</b> representan la misma cantidad aunque se escriban distinto. F(1|2) = F(2|4) = F(4|8).</p>
+<ul><li><b>Amplificar:</b> multiplicar numerador y denominador por el mismo número. F(2|3) = F(2 . 4|3 . 4) = F(8|12).</li>
+<li><b>Simplificar:</b> dividir numerador y denominador por el mismo número. F(12|18) = F(12 : 6|18 : 6) = F(2|3). Cuando ya no se puede simplificar, la fracción es <b>irreducible</b>.</li></ul>
+<div class="st">¿Cómo comparar fracciones?</div>
+<ul><li><b>Igual denominador:</b> es mayor la de mayor numerador. F(5|7) &gt; F(3|7).</li>
+<li><b>Igual numerador:</b> es mayor la de menor denominador. F(1|3) &gt; F(1|5) (las partes son más grandes).</li>
+<li><b>Distintos:</b> se buscan fracciones equivalentes con el mismo denominador (usando el mcm).</li></ul>
+<div class="ej"><h4>Ejemplo básico</h4><p>¿Qué es más: F(2|3) o F(3|4) de un chocolate? Buscamos denominador común 12:</p>
+<p class="calc">F(2|3) = F(8|12) &nbsp;&nbsp;&nbsp; F(3|4) = F(9|12) &nbsp;&nbsp; → &nbsp;&nbsp; F(8|12) &lt; F(9|12), entonces <span class="mag">F(2|3) &lt; F(3|4)</span></p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">11</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Operaciones con fracciones</h2></div></div><div class="tb">
+<table><tr><th>Operación</th><th>Cómo se hace</th><th>Ejemplo</th></tr>
+<tr><td class="l">Suma y resta con igual denominador</td><td class="l">Se suman/restan los numeradores y se deja el mismo denominador.</td><td>F(2|7) + F(3|7) = F(5|7)</td></tr>
+<tr><td class="l">Suma y resta con distinto denominador</td><td class="l">Se buscan fracciones equivalentes con denominador común (mcm) y luego se opera.</td><td>F(3|4) − F(1|6) = F(9|12) − F(2|12) = F(7|12)</td></tr>
+<tr><td class="l">Multiplicación</td><td class="l">Numerador por numerador y denominador por denominador.</td><td>F(2|3) . F(4|5) = F(8|15)</td></tr>
+<tr><td class="l">División</td><td class="l">Se multiplica la primera por la <b>inversa</b> de la segunda (se “da vuelta”).</td><td>F(3|4) : F(1|2) = F(3|4) . F(2|1) = F(6|4) = F(3|2)</td></tr></table>
+<div class="key">Conviene <b>simplificar</b> antes de multiplicar y siempre dar el resultado como fracción irreducible.</div>
+<div class="tip"><b>Error frecuente:</b> sumar numeradores y denominadores: F(1|2) + F(1|3) ≠ F(2|5).</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Juan comió F(1|2) de una torta y Ana F(1|3). ¿Cuánto comieron entre los dos?</p><p class="calc">F(1|2) + F(1|3) = F(3|6) + F(2|6) = <span class="mag">F(5|6)</span> &nbsp;&nbsp; → sobra F(1|6) de torta.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">12</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Potenciación y radicación de fracciones</h2></div></div><div class="tb">
+<p>Para elevar una fracción a una potencia, se elevan <b>el numerador y el denominador</b> por separado. Lo mismo para la raíz: se calcula la raíz del numerador y la del denominador.</p>
+<div class="key c">( F(a|b) )<sup>n</sup> = F(a<sup>n</sup>|b<sup>n</sup>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; R(n|F(a|b)) = F(R(n|a)|R(n|b))</div>
+<p>Se cumplen las mismas propiedades que con los naturales (producto y cociente de igual base, potencia de potencia), y también: cualquier fracción elevada a la 0 da 1.</p>
+<div class="ej"><h4>Ejemplo básico</h4>
+<p class="calc">( F(2|3) )<sup>2</sup> = F(2|3) . F(2|3) = F(4|9) &nbsp;&nbsp;&nbsp;&nbsp; ( F(1|2) )<sup>3</sup> = F(1|8)</p>
+<p class="calc">R(|F(9|16)) = F(3|4) porque ( F(3|4) )<sup>2</sup> = F(9|16) &nbsp;&nbsp;&nbsp;&nbsp; R(3|F(8|27)) = F(2|3)</p>
+<p>Idea visual: un cuadrado de lado F(1|2) m tiene un área de ( F(1|2) )<sup>2</sup> = F(1|4) m².</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">13</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Operaciones combinadas con fracciones</h2></div></div><div class="tb">
+<p>Se aplican <b>las mismas reglas que con números naturales</b> (tema 4):</p>
+<ul><li>Separar en términos.</li><li>Resolver paréntesis, potencias y raíces.</li><li>Resolver multiplicaciones y divisiones.</li><li>Por último, sumas y restas (buscando denominador común).</li></ul>
+<div class="key">Simplificar en cada paso hace las cuentas más chicas y evita errores.</div>
+<div class="ej"><h4>Ejemplo básico</h4>
+<p class="calc">F(1|2) + F(3|4) . F(2|3) = F(1|2) + F(6|12) = F(1|2) + F(1|2) = <span class="mag">1</span></p>
+<p class="calc">( F(1|2) )<sup>2</sup> + F(3|5) : F(6|5) = F(1|4) + F(3|5) . F(5|6) = F(1|4) + F(1|2) = F(1|4) + F(2|4) = <span class="mag">F(3|4)</span></p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">14</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Fracciones y expresiones decimales</h2></div></div><div class="tb">
+<p>Toda fracción se puede escribir como expresión decimal <b>dividiendo el numerador por el denominador</b>.</p>
+<ul><li><b>Decimal exacta:</b> la división termina. F(1|4) = 0,25. Las <b>fracciones decimales</b> tienen denominador 10, 100, 1 000…: F(7|10) = 0,7; F(35|100) = 0,35.</li>
+<li><b>Decimal periódica:</b> una o más cifras se repiten infinitamente (el <b>período</b>, que se marca con un arco arriba). <b>Pura</b>: F(1|3) = 0,PER(3). <b>Mixta</b>: F(1|6) = 0,1PER(6).</li></ul>
+<div class="st">De decimal a fracción</div>
+<table><tr><th>Tipo</th><th>Regla</th><th>Ejemplo</th></tr>
+<tr><td class="l">Exacta</td><td class="l">Número sin coma sobre 1 seguido de tantos ceros como cifras decimales.</td><td>0,25 = F(25|100) = F(1|4)</td></tr>
+<tr><td class="l">Periódica pura</td><td class="l">Número sin coma menos la parte entera, sobre tantos 9 como cifras tiene el período.</td><td>0,PER(3) = F(3|9) = F(1|3)</td></tr>
+<tr><td class="l">Periódica mixta</td><td class="l">Número sin coma menos lo que no es período, sobre tantos 9 como cifras del período y tantos 0 como cifras no periódicas.</td><td>0,1PER(6) = F(16 − 1|90) = F(15|90) = F(1|6)</td></tr></table>
+<div class="ej"><h4>Ejemplo básico</h4><p>F(3|4) de litro de leche: 3 : 4 = <b>0,75 litros</b>. Y al revés: 1,5 kg = F(15|10) = F(3|2) kg, o sea un kilo y medio.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">15</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Operaciones con decimales. Operaciones combinadas</h2></div></div><div class="tb">
+<ul><li><b>Suma y resta:</b> se encolumnan los números <b>alineando la coma</b> (se pueden agregar ceros a la derecha) y se opera como con naturales.</li>
+<li><b>Multiplicación:</b> se multiplica sin tener en cuenta la coma; el resultado lleva <b>tantas cifras decimales como la suma</b> de las cifras decimales de los factores. 1,2 . 0,3 = 0,36.</li>
+<li><b>División:</b> si el divisor es decimal, se multiplican dividendo y divisor por 10, 100… hasta que el divisor sea natural. 4,5 : 0,5 = 45 : 5 = 9.</li>
+<li><b>Por la unidad seguida de ceros:</b> multiplicar por 10, 100, 1 000 corre la coma a la derecha; dividir, la corre a la izquierda. 3,25 . 100 = 325; 3,25 : 10 = 0,325.</li></ul>
+<div class="key">En las operaciones combinadas con decimales se respeta el mismo orden: términos → paréntesis → potencias y raíces → . y : → + y −.</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Compro un cuaderno de $2,5 (miles) y 3 lapiceras de $1,2 cada una:</p><p class="calc">2,5 + 1,2 . 3 = 2,5 + 3,6 = <span class="mag">6,1</span></p><p class="calc" style="font-family:monospace;font-size:11pt">&nbsp;&nbsp;2,50<br>+ 3,60<br>——————<br>&nbsp;&nbsp;6,10</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">16</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Aproximación y porcentaje</h2></div></div><div class="tb">
+<p>Cuando un número tiene muchas cifras decimales, se puede <b>aproximar</b> a un orden (décimos, centésimos…):</p>
+<ul><li><b>Truncamiento:</b> se “cortan” las cifras después del orden elegido. 3,476 → 3,47.</li>
+<li><b>Redondeo:</b> se mira la cifra siguiente: si es <b>5 o más</b>, se suma 1 a la última cifra que queda; si es menor que 5, queda igual. 3,476 → 3,48; 3,472 → 3,47.</li></ul>
+<p>El <b>porcentaje</b> (%) es una fracción con denominador 100: 25 % = F(25|100) = F(1|4) = 0,25.</p>
+<div class="key c">x % de N = F(x|100) . N</div>
+<table><tr><th>Porcentaje</th><th>10 %</th><th>25 %</th><th>50 %</th><th>75 %</th><th>100 %</th></tr>
+<tr><td>Es lo mismo que…</td><td>F(1|10)</td><td>F(1|4)</td><td>F(1|2) (la mitad)</td><td>F(3|4)</td><td>el total</td></tr></table>
+<div class="ej"><h4>Ejemplo básico</h4><p>Una remera cuesta $150 (miles) y tiene <b>20 % de descuento</b>.</p><p class="calc">20 % de 150 = F(20|100) . 150 = 30 &nbsp;→&nbsp; precio final: 150 − 30 = <span class="mag">$120</span></p></div>
+</div></div>
+
+<!-- ===================== CAPÍTULO 3 ===================== -->
+<div class="chap"><div class="num"><small>CAPÍTULO</small><span>3</span></div><div class="name">Funciones</div></div>
+
+<div class="tema"><div class="th"><span class="n">17</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Representación</h2></div></div><div class="tb">
+<div class="two"><div>
+<p>Para ubicar puntos en el plano se usan los <b>ejes cartesianos</b>: dos rectas numéricas perpendiculares que se cortan en el <b>origen (0; 0)</b>.</p>
+<ul><li><b>Eje x</b> (horizontal): eje de las <b>abscisas</b>.</li><li><b>Eje y</b> (vertical): eje de las <b>ordenadas</b>.</li></ul>
+<p>Cada punto se nombra con un <b>par ordenado (x; y)</b>: primero cuánto se avanza en horizontal y después cuánto en vertical. El orden importa: (2; 3) ≠ (3; 2).</p>
+<p>Los datos que relacionan dos cantidades se pueden mostrar en <b>tablas</b> y luego volcar en un <b>gráfico</b> cartesiano.</p></div>
+<div><svg width="190" height="180" viewBox="0 0 190 180"><g stroke="#ddd">
+<line x1="40" y1="20" x2="40" y2="150"/><line x1="65" y1="20" x2="65" y2="150"/><line x1="90" y1="20" x2="90" y2="150"/><line x1="115" y1="20" x2="115" y2="150"/><line x1="140" y1="20" x2="140" y2="150"/><line x1="165" y1="20" x2="165" y2="150"/>
+<line x1="15" y1="125" x2="180" y2="125"/><line x1="15" y1="100" x2="180" y2="100"/><line x1="15" y1="75" x2="180" y2="75"/><line x1="15" y1="50" x2="180" y2="50"/><line x1="15" y1="25" x2="180" y2="25"/></g>
+<g stroke="#3B2A8C" stroke-width="2"><line x1="15" y1="150" x2="182" y2="150"/><line x1="15" y1="10" x2="15" y2="150"/></g>
+<text x="184" y="160" font-size="11" fill="#3B2A8C" font-weight="700">x</text><text x="6" y="12" font-size="11" fill="#3B2A8C" font-weight="700">y</text>
+<g font-size="9" fill="#555"><text x="38" y="162">1</text><text x="63" y="162">2</text><text x="88" y="162">3</text><text x="113" y="162">4</text><text x="5" y="128">1</text><text x="5" y="103">2</text><text x="5" y="78">3</text><text x="5" y="53">4</text><text x="8" y="162">0</text></g>
+<line x1="65" y1="150" x2="65" y2="75" stroke="#E6197F" stroke-dasharray="3 2"/><line x1="15" y1="75" x2="65" y2="75" stroke="#E6197F" stroke-dasharray="3 2"/>
+<circle cx="65" cy="75" r="4.5" fill="#E6197F"/><text x="71" y="70" font-size="11" fill="#E6197F" font-weight="700">A (2; 3)</text>
+<circle cx="115" cy="125" r="4.5" fill="#3FB8A3"/><text x="121" y="120" font-size="11" fill="#2a8f7d" font-weight="700">B (4; 1)</text></svg></div></div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Para ubicar <b>A (2; 3)</b>: desde el origen avanzo 2 hacia la derecha y subo 3. Para <b>B (4; 1)</b>: avanzo 4 y subo 1. Es como jugar a la “batalla naval”.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">18</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Las funciones</h2></div></div><div class="tb">
+<p>Una <b>función</b> es una relación entre dos variables en la que <b>a cada valor de la primera le corresponde un único valor</b> de la segunda.</p>
+<ul><li><b>Variable independiente (x):</b> la que elegimos libremente (se ubica en el eje x).</li>
+<li><b>Variable dependiente (y):</b> la que depende de la otra (se ubica en el eje y).</li>
+<li><b>Dominio:</b> todos los valores que puede tomar x. <b>Imagen:</b> todos los valores que toma y.</li></ul>
+<p>Una función se puede expresar con una <b>tabla</b>, un <b>gráfico</b>, una <b>fórmula</b> o en <b>palabras</b>.</p>
+<div class="key">Si a un mismo valor de x le corresponden dos valores de y, <b>no es función</b>. En el gráfico: una recta vertical no puede cortar a la curva en dos puntos.</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Un remís cobra $2 (miles) de bajada de bandera más $1 por cada km. El precio <b>depende</b> de los km recorridos:</p>
+<table><tr><th>km (x)</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>Precio (y)</th><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr></table>
+<p>Fórmula: <b>y = x + 2</b>. Para cada distancia hay un único precio → es una función.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">19</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Función de proporcionalidad directa</h2></div></div><div class="tb">
+<div class="two"><div>
+<p>Dos magnitudes son <b>directamente proporcionales</b> cuando, si una se duplica, triplica o se reduce a la mitad, la otra también lo hace en la misma proporción.</p>
+<ul><li>El <b>cociente</b> entre y y x es siempre el mismo: es la <b>constante de proporcionalidad (k)</b>.</li>
+<li>Fórmula: <b>y = k . x</b></li>
+<li>Su gráfico es una <b>recta que pasa por el origen</b> (0; 0).</li></ul>
+<div class="key c">k = F(y|x) &nbsp;(siempre igual)</div></div>
+<div><svg width="170" height="150" viewBox="0 0 170 150"><g stroke="#3B2A8C" stroke-width="2"><line x1="20" y1="130" x2="165" y2="130"/><line x1="20" y1="5" x2="20" y2="130"/></g>
+<line x1="20" y1="130" x2="150" y2="15" stroke="#E6197F" stroke-width="2.5"/>
+<g fill="#E6197F"><circle cx="20" cy="130" r="3.5"/><circle cx="60" cy="94.6" r="3.5"/><circle cx="100" cy="59.2" r="3.5"/><circle cx="140" cy="23.8" r="3.5"/></g>
+<text x="150" y="145" font-size="10" fill="#3B2A8C">alfajores</text><text x="24" y="12" font-size="10" fill="#3B2A8C">$</text></svg></div></div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Cada alfajor cuesta $500.</p><table><tr><th>Alfajores (x)</th><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>Precio (y)</th><td>500</td><td>1 000</td><td>1 500</td><td>2 000</td></tr></table><p>500 : 1 = 1 000 : 2 = 1 500 : 3 = 500 → <b>k = 500</b> y la fórmula es <b>y = 500 . x</b>. Si compro el doble, pago el doble.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">20</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Función de proporcionalidad inversa</h2></div></div><div class="tb">
+<div class="two"><div>
+<p>Dos magnitudes son <b>inversamente proporcionales</b> cuando, si una se duplica, la otra se reduce a la mitad; si una se triplica, la otra se reduce a la tercera parte, etc.</p>
+<ul><li>El <b>producto</b> entre x e y es siempre el mismo: la <b>constante k</b>.</li>
+<li>Fórmula: <b>y = k : x</b> (x ≠ 0)</li>
+<li>Su gráfico es una curva llamada <b>hipérbola</b>; no pasa por el origen ni toca los ejes.</li></ul>
+<div class="key c">k = x . y &nbsp;(siempre igual)</div></div>
+<div><svg width="170" height="150" viewBox="0 0 170 150"><g stroke="#3B2A8C" stroke-width="2"><line x1="20" y1="130" x2="165" y2="130"/><line x1="20" y1="5" x2="20" y2="130"/></g>
+<path d="M30 10 Q45 95 80 108 T160 122" fill="none" stroke="#3FB8A3" stroke-width="2.5"/>
+<text x="140" y="145" font-size="10" fill="#3B2A8C">pintores</text><text x="24" y="12" font-size="10" fill="#3B2A8C">días</text></svg></div></div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Pintar un aula le lleva 12 días a 1 pintor.</p><table><tr><th>Pintores (x)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>6</td></tr><tr><th>Días (y)</th><td>12</td><td>6</td><td>4</td><td>3</td><td>2</td></tr></table><p>1 . 12 = 2 . 6 = 3 . 4 = 12 → <b>k = 12</b>. Más pintores → menos días.</p></div>
+<div class="tip"><b>Error frecuente:</b> pensar que “si una aumenta y la otra disminuye” ya es inversa. Hay que comprobar que el <b>producto</b> sea constante.</div>
+</div></div>
+
+<!-- ===================== CAPÍTULO 4 ===================== -->
+<div class="chap"><div class="num"><small>CAPÍTULO</small><span>4</span></div><div class="name">Cuerpos y ángulos</div></div>
+
+<div class="tema"><div class="th"><span class="n">21</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Clasificación de los cuerpos</h2></div></div><div class="tb">
+<p>Los <b>cuerpos geométricos</b> son figuras de tres dimensiones (largo, ancho y alto). Se clasifican en:</p>
+<ul><li><b>Poliedros:</b> todas sus caras son planas (polígonos). Ej.: <b>prismas</b> (dos bases iguales y paralelas, caras laterales rectangulares: cubo, caja de zapatos) y <b>pirámides</b> (una base y caras laterales triangulares que se juntan en un vértice).</li>
+<li><b>Cuerpos redondos:</b> tienen al menos una superficie curva. Ej.: <b>cilindro</b> (lata), <b>cono</b> (cucurucho), <b>esfera</b> (pelota).</li></ul>
+<p><b>Elementos de un poliedro:</b> <b>caras</b> (los polígonos), <b>aristas</b> (los segmentos donde se juntan dos caras) y <b>vértices</b> (los puntos donde se juntan las aristas).</p>
+<div class="key c"><b>Fórmula de Euler</b> (para poliedros convexos): &nbsp; Caras + Vértices = Aristas + 2</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Un <b>cubo</b> (un dado) tiene 6 caras, 8 vértices y 12 aristas.</p><p class="calc">6 + 8 = 12 + 2 → 14 = 14 ✔</p><p>Una pelota no tiene caras planas → es un cuerpo redondo.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">22</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Poliedros regulares</h2></div></div><div class="tb">
+<p>Un <b>poliedro regular</b> cumple dos condiciones: todas sus caras son <b>polígonos regulares iguales</b> y en cada vértice concurre <b>la misma cantidad de caras</b>. Existen solo <b>cinco</b> (los sólidos platónicos):</p>
+<table><tr><th>Poliedro</th><th>Forma de las caras</th><th>Caras</th><th>Vértices</th><th>Aristas</th></tr>
+<tr><td class="l">Tetraedro</td><td>triángulos equiláteros</td><td>4</td><td>4</td><td>6</td></tr>
+<tr><td class="l">Hexaedro (cubo)</td><td>cuadrados</td><td>6</td><td>8</td><td>12</td></tr>
+<tr><td class="l">Octaedro</td><td>triángulos equiláteros</td><td>8</td><td>6</td><td>12</td></tr>
+<tr><td class="l">Dodecaedro</td><td>pentágonos regulares</td><td>12</td><td>20</td><td>30</td></tr>
+<tr><td class="l">Icosaedro</td><td>triángulos equiláteros</td><td>20</td><td>12</td><td>30</td></tr></table>
+<div class="key">El nombre indica la cantidad de caras: tetra = 4, hexa = 6, octa = 8, dodeca = 12, icosa = 20.</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>El <b>dado común</b> es un hexaedro regular (6 caras cuadradas iguales). Los dados de 4, 8, 12 y 20 caras de los juegos de rol son los otros poliedros regulares. Una caja de zapatos es un poliedro, pero <b>no</b> regular: sus caras son rectángulos distintos.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">23</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Desarrollo plano de cuerpos</h2></div></div><div class="tb">
+<p>El <b>desarrollo plano</b> de un cuerpo es la figura que se obtiene al “desarmarlo” y extender todas sus caras sobre un plano, sin que se superpongan. Al plegarlo, se vuelve a formar el cuerpo.</p>
+<ul><li><b>Cubo:</b> 6 cuadrados iguales (hay 11 desarrollos distintos posibles).</li>
+<li><b>Prisma:</b> 2 bases iguales + tantos rectángulos como lados tenga la base.</li>
+<li><b>Pirámide:</b> 1 base + tantos triángulos como lados tenga la base.</li>
+<li><b>Cilindro:</b> 2 círculos + 1 rectángulo (su largo es la longitud de la circunferencia de la base).</li>
+<li><b>Cono:</b> 1 círculo + 1 sector circular. (La esfera no tiene desarrollo plano.)</li></ul>
+<div class="ej"><h4>Ejemplo básico</h4><div class="two"><div><p>Desarmamos una caja con forma de cubo: queda una “cruz” de 6 cuadrados. Si la recortamos en cartulina y doblamos por las líneas, volvemos a armar el cubo.</p></div>
+<div><svg width="170" height="130" viewBox="0 0 170 130"><g fill="#FDE7F1" stroke="#E6197F" stroke-width="2">
+<rect x="45" y="5" width="30" height="30"/><rect x="15" y="35" width="30" height="30"/><rect x="45" y="35" width="30" height="30" fill="#F5B400"/><rect x="75" y="35" width="30" height="30"/><rect x="105" y="35" width="30" height="30"/><rect x="45" y="65" width="30" height="30"/></g>
+<text x="85" y="120" text-anchor="middle" font-size="10" fill="#3B2A8C">desarrollo del cubo</text></svg></div></div></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">24</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Punto, recta y plano</h2></div></div><div class="tb">
+<p>Son los <b>elementos fundamentales</b> de la geometría (no se definen, se representan):</p>
+<ul><li><b>Punto:</b> indica una posición, no tiene tamaño. Se nombra con letra mayúscula: A.</li>
+<li><b>Recta:</b> sucesión infinita de puntos en una misma dirección; no tiene principio ni fin. Se nombra con minúscula (r) o con dos de sus puntos.</li>
+<li><b>Plano:</b> superficie plana e ilimitada. Se nombra con letras griegas (α, β).</li></ul>
+<p>Un punto en una recta la divide en dos <b>semirrectas</b> (tienen origen pero no fin). Dos puntos de una recta determinan un <b>segmento</b> (tiene principio y fin, se puede medir): <b>AB</b>.</p>
+<div class="st">Posiciones entre dos rectas en el plano</div>
+<div class="two"><div><ul><li><b>Paralelas</b> (a // b): no se cortan nunca.</li><li><b>Secantes:</b> se cortan en un punto.</li><li><b>Perpendiculares</b> (a ⊥ b): son secantes y forman 4 ángulos rectos.</li></ul></div>
+<div><svg width="230" height="80" viewBox="0 0 230 80"><g stroke-width="2.2"><line x1="5" y1="25" x2="65" y2="25" stroke="#3B2A8C"/><line x1="5" y1="50" x2="65" y2="50" stroke="#3B2A8C"/>
+<line x1="85" y1="10" x2="145" y2="60" stroke="#E6197F"/><line x1="85" y1="55" x2="145" y2="15" stroke="#E6197F"/>
+<line x1="165" y1="37" x2="225" y2="37" stroke="#3FB8A3"/><line x1="195" y1="5" x2="195" y2="65" stroke="#3FB8A3"/></g><rect x="195" y="29" width="8" height="8" fill="none" stroke="#3FB8A3"/>
+<g font-size="9" fill="#3B2A8C"><text x="13" y="76">paralelas</text><text x="95" y="76">secantes</text><text x="160" y="76">perpendiculares</text></g></svg></div></div>
+<div class="ej"><h4>Ejemplo básico</h4><p>En el aula: una esquina del pizarrón es un <b>punto</b>; el borde del pizarrón “estirado” sin fin sería una <b>recta</b>; la superficie del piso, un <b>plano</b>. Las vías del tren son <b>paralelas</b>; las líneas de una cuadrícula son <b>perpendiculares</b>.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">25</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Sistema sexagesimal y operaciones</h2></div></div><div class="tb">
+<p>Los ángulos se miden en el <b>sistema sexagesimal</b>, que agrupa de a <b>60</b> (como las horas y los minutos).</p>
+<div class="key c">1 grado (1°) = 60 minutos (60') &nbsp;&nbsp;&nbsp;&nbsp; 1 minuto (1') = 60 segundos (60'')</div>
+<ul><li><b>Suma:</b> se suman grados con grados, minutos con minutos y segundos con segundos. Si los segundos o minutos pasan de 60, se convierten: 60'' = 1' y 60' = 1°.</li>
+<li><b>Resta:</b> si al minuendo no le alcanza, se “pide prestado”: 1° = 60' o 1' = 60''.</li>
+<li><b>Multiplicación por un natural:</b> se multiplica cada parte y luego se convierte lo que exceda de 60.</li>
+<li><b>División por un natural:</b> se dividen los grados; el resto se pasa a minutos (× 60) y se suma a los minutos, y así sucesivamente.</li></ul>
+<div class="ej"><h4>Ejemplo básico</h4>
+<p class="calc">35° 40' + 20° 30' = 55° 70' = 55° + 1° 10' = <span class="mag">56° 10'</span></p>
+<p class="calc">90° − 35° 20' = 89° 60' − 35° 20' = <span class="mag">54° 40'</span></p>
+<p>Es igual que con el reloj: 1 h 40 min + 30 min = 2 h 10 min.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">26</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Ángulos. Clasificación de ángulos</h2></div></div><div class="tb">
+<p>Un <b>ángulo</b> es la región del plano comprendida entre dos semirrectas (los <b>lados</b>) que tienen el mismo origen (el <b>vértice</b>). Se mide con el <b>transportador</b>.</p>
+<table><tr><th>Nulo</th><th>Agudo</th><th>Recto</th><th>Obtuso</th><th>Llano</th><th>Cóncavo</th><th>De un giro</th></tr>
+<tr><td>0°</td><td>entre 0° y 90°</td><td>90°</td><td>entre 90° y 180°</td><td>180°</td><td>entre 180° y 360°</td><td>360°</td></tr></table>
+<div class="st">Relaciones entre ángulos</div>
+<ul><li><b>Complementarios:</b> suman 90°. <b>Suplementarios:</b> suman 180°.</li>
+<li><b>Consecutivos:</b> comparten el vértice y un lado. <b>Adyacentes:</b> consecutivos y suplementarios (forman un ángulo llano).</li>
+<li><b>Opuestos por el vértice:</b> los lados de uno son las semirrectas opuestas del otro. <b>Son iguales.</b></li></ul>
+<div class="ej"><h4>Ejemplo básico</h4><p>Las agujas del reloj a las 3 en punto forman un ángulo <b>recto</b> (90°); a las 6, un ángulo <b>llano</b> (180°); a la 1, un ángulo <b>agudo</b> (30°).</p><p class="calc">Complemento de 35° = 90° − 35° = 55° &nbsp;&nbsp;&nbsp; Suplemento de 35° = 180° − 35° = 145°</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">27</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Mediatriz de un segmento</h2></div></div><div class="tb">
+<div class="two"><div>
+<p>La <b>mediatriz</b> de un segmento es la <b>recta perpendicular</b> al segmento que pasa por su <b>punto medio</b>.</p>
+<div class="key"><b>Propiedad:</b> todos los puntos de la mediatriz están a la <b>misma distancia</b> de los dos extremos del segmento.</div>
+<p><b>Construcción con regla y compás:</b></p>
+<ul><li>Con centro en A y abertura mayor que la mitad de AB, trazar un arco arriba y otro abajo.</li>
+<li>Con la misma abertura y centro en B, trazar otros dos arcos que corten a los anteriores.</li>
+<li>Unir los dos puntos de corte: esa recta es la mediatriz. Donde corta a AB está el punto medio M.</li></ul></div>
+<div><svg width="170" height="170" viewBox="0 0 170 170"><path d="M60 30 A70 70 0 0 1 60 140" fill="none" stroke="#bbb" stroke-dasharray="3 3"/><path d="M110 30 A70 70 0 0 0 110 140" fill="none" stroke="#bbb" stroke-dasharray="3 3"/>
+<line x1="25" y1="85" x2="145" y2="85" stroke="#3B2A8C" stroke-width="2.5"/><line x1="85" y1="10" x2="85" y2="160" stroke="#E6197F" stroke-width="2.2"/>
+<rect x="85" y="77" width="8" height="8" fill="none" stroke="#E6197F"/>
+<g fill="#3B2A8C"><circle cx="25" cy="85" r="3.5"/><circle cx="145" cy="85" r="3.5"/></g><circle cx="85" cy="85" r="3.5" fill="#F5B400"/>
+<g font-size="11" font-weight="700"><text x="12" y="100" fill="#3B2A8C">A</text><text x="148" y="100" fill="#3B2A8C">B</text><text x="72" y="100" fill="#b07f00">M</text><text x="90" y="20" fill="#E6197F">mediatriz</text></g></svg></div></div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Ana vive en A y Bruno en B. Quieren encontrarse en un lugar que quede <b>a la misma distancia</b> de las dos casas: cualquier punto de la mediatriz de AB sirve. Si AB mide 8 cm, el punto medio M está a 4 cm de cada extremo.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">28</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Bisectriz de un ángulo</h2></div></div><div class="tb">
+<div class="two"><div>
+<p>La <b>bisectriz</b> de un ángulo es la <b>semirrecta</b> que, partiendo del vértice, lo divide en <b>dos ángulos iguales</b>.</p>
+<div class="key"><b>Propiedad:</b> todos los puntos de la bisectriz están a la <b>misma distancia</b> de los dos lados del ángulo.</div>
+<p><b>Construcción con compás:</b></p>
+<ul><li>Con centro en el vértice O, trazar un arco que corte a los dos lados (puntos P y Q).</li>
+<li>Con centro en P y en Q, y la misma abertura, trazar dos arcos que se corten en un punto R.</li>
+<li>Unir O con R: es la bisectriz.</li></ul></div>
+<div><svg width="170" height="150" viewBox="0 0 170 150"><g stroke="#3B2A8C" stroke-width="2.5"><line x1="15" y1="130" x2="165" y2="130"/><line x1="15" y1="130" x2="110" y2="15"/></g>
+<line x1="15" y1="130" x2="165" y2="58" stroke="#E6197F" stroke-width="2.2"/>
+<path d="M85 130 A70 70 0 0 0 59.6 76" fill="none" stroke="#bbb" stroke-dasharray="3 3"/>
+<path d="M45 130 A30 30 0 0 0 42 117" fill="none" stroke="#3FB8A3" stroke-width="2"/><path d="M42 117 A30 30 0 0 0 34 107" fill="none" stroke="#F5B400" stroke-width="2"/>
+<text x="4" y="145" font-size="11" font-weight="700" fill="#3B2A8C">O</text><text x="120" y="70" font-size="11" font-weight="700" fill="#E6197F">bisectriz</text></svg></div></div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Si un ángulo mide <b>80°</b>, su bisectriz lo divide en dos ángulos de <b>40°</b> cada uno. Es como doblar una porción de pizza justo por la mitad: los dos bordes quedan uno sobre otro.</p></div>
+</div></div>
+
+<!-- ===================== CAPÍTULO 5 ===================== -->
+<div class="chap"><div class="num"><small>CAPÍTULO</small><span>5</span></div><div class="name">Figuras planas</div></div>
+
+<div class="tema"><div class="th"><span class="n">29</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Triángulos. Elementos y propiedades</h2></div></div><div class="tb">
+<p>Un <b>triángulo</b> es un polígono de 3 lados. <b>Elementos:</b> 3 vértices (A, B, C), 3 lados (AB, BC, CA) y 3 ángulos interiores.</p>
+<table><tr><th colspan="2">Según sus lados</th><th colspan="2">Según sus ángulos</th></tr>
+<tr><td class="l"><b>Equilátero</b></td><td class="l">3 lados iguales</td><td class="l"><b>Acutángulo</b></td><td class="l">3 ángulos agudos</td></tr>
+<tr><td class="l"><b>Isósceles</b></td><td class="l">2 lados iguales</td><td class="l"><b>Rectángulo</b></td><td class="l">1 ángulo recto</td></tr>
+<tr><td class="l"><b>Escaleno</b></td><td class="l">3 lados distintos</td><td class="l"><b>Obtusángulo</b></td><td class="l">1 ángulo obtuso</td></tr></table>
+<div class="st">Propiedades</div>
+<ul><li>Los ángulos interiores <b>suman 180°</b>.</li>
+<li><b>Propiedad triangular:</b> cada lado es <b>menor que la suma de los otros dos</b>. Si no se cumple, el triángulo no se puede construir.</li>
+<li>Un <b>ángulo exterior</b> es igual a la suma de los dos interiores no adyacentes a él.</li></ul>
+<div class="ej"><h4>Ejemplo básico</h4><p>Un triángulo tiene ángulos de 50° y 60°. ¿Cuánto mide el tercero?</p><p class="calc">180° − 50° − 60° = <span class="mag">70°</span> → como los tres son agudos, es acutángulo.</p><p>¿Existe un triángulo de lados 3 cm, 4 cm y 8 cm? 3 + 4 = 7 y 7 &lt; 8 → <b>no</b> se puede construir.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">30</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Construcción de triángulos</h2></div></div><div class="tb">
+<p>Para construir un triángulo único alcanza con conocer algunos de sus elementos:</p>
+<ul><li><b>Tres lados (LLL):</b> se usa regla y compás.</li>
+<li><b>Dos lados y el ángulo comprendido entre ellos (LAL):</b> regla y transportador.</li>
+<li><b>Un lado y los dos ángulos adyacentes a él (ALA):</b> regla y transportador.</li></ul>
+<div class="key">Antes de construir, verificar la <b>propiedad triangular</b> (con lados) o que los ángulos sumen menos de 180°.</div>
+<div class="ej"><h4>Ejemplo básico — triángulo de lados 5 cm, 4 cm y 3 cm</h4>
+<div class="two"><div><ul><li>Trazar el lado AB de 5 cm.</li><li>Con centro en A y abertura 4 cm, trazar un arco.</li><li>Con centro en B y abertura 3 cm, trazar otro arco.</li><li>El punto donde se cortan es C. Unir A con C y B con C.</li></ul><p>(Este triángulo resulta rectángulo: el ángulo en C mide 90°.)</p></div>
+<div><svg width="160" height="120" viewBox="0 0 160 120"><path d="M40 20 A80 80 0 0 1 125 60" fill="none" stroke="#bbb" stroke-dasharray="3 3"/><path d="M80 25 A60 60 0 0 0 85 70" fill="none" stroke="#bbb" stroke-dasharray="3 3"/>
+<polygon points="15,100 140,100 95,36" fill="#FDE7F1" stroke="#3B2A8C" stroke-width="2"/>
+<g font-size="10" font-weight="700" fill="#3B2A8C"><text x="3" y="114">A</text><text x="140" y="114">B</text><text x="92" y="30">C</text><text x="70" y="114">5 cm</text><text x="30" y="65">4 cm</text><text x="122" y="70">3 cm</text></g></svg></div></div></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">31</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Cuadriláteros. Elementos y propiedades</h2></div></div><div class="tb">
+<p>Un <b>cuadrilátero</b> es un polígono de 4 lados. Tiene 4 vértices, 4 ángulos interiores y 2 <b>diagonales</b> (segmentos que unen vértices no consecutivos). Sus ángulos interiores <b>suman 360°</b>.</p>
+<table><tr><th>Grupo</th><th>Característica</th><th>Ejemplos</th></tr>
+<tr><td class="l"><b>Paralelogramos</b></td><td class="l">2 pares de lados paralelos. Lados y ángulos opuestos iguales; las diagonales se cortan en su punto medio.</td><td class="l">Cuadrado, rectángulo, rombo, romboide</td></tr>
+<tr><td class="l"><b>Trapecios</b></td><td class="l">1 solo par de lados paralelos (las bases).</td><td class="l">Trapecio isósceles, rectángulo, escaleno</td></tr>
+<tr><td class="l"><b>Trapezoides</b></td><td class="l">Ningún par de lados paralelos.</td><td class="l">Romboide (“barrilete”), trapezoide común</td></tr></table>
+<ul><li><b>Rectángulo:</b> 4 ángulos rectos; diagonales iguales.</li><li><b>Rombo:</b> 4 lados iguales; diagonales perpendiculares.</li><li><b>Cuadrado:</b> es rectángulo y rombo a la vez: 4 lados iguales y 4 ángulos rectos.</li></ul>
+<div class="tip"><b>Ojo con los nombres:</b> en algunos libros “romboide” es el paralelogramo no rectángulo ni rombo, y “deltoide” o “barrilete” el trapezoide con dos pares de lados consecutivos iguales. Usar el criterio del libro de los chicos.</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Un cuadrilátero tiene ángulos de 90°, 80° y 110°. El cuarto mide:</p><p class="calc">360° − 90° − 80° − 110° = <span class="mag">80°</span></p><p>Una hoja A4 es un <b>rectángulo</b>; un cuadrado de la cuadrícula es un <b>cuadrado</b>.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">32</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Construcción de cuadriláteros</h2></div></div><div class="tb">
+<p>Para construir cuadriláteros se usan <b>regla, escuadra, compás y transportador</b>, apoyándose en sus propiedades:</p>
+<ul><li><b>Cuadrado y rectángulo:</b> lados y ángulos rectos (escuadra).</li>
+<li><b>Paralelogramo:</b> dos lados consecutivos y el ángulo entre ellos; los otros lados se trazan paralelos.</li>
+<li><b>Rombo:</b> a partir de sus diagonales, que son <b>perpendiculares y se cortan en su punto medio</b>.</li>
+<li><b>Rectángulo desde las diagonales:</b> son iguales y se cortan en su punto medio.</li></ul>
+<div class="ej"><h4>Ejemplo básico — rectángulo de 5 cm × 3 cm</h4>
+<div class="two"><div><ul><li>Trazar el lado AB de 5 cm.</li><li>Con la escuadra, trazar perpendiculares en A y en B.</li><li>Marcar 3 cm sobre cada perpendicular: puntos D y C.</li><li>Unir C con D. ¡Listo!</li></ul></div>
+<div><svg width="170" height="100" viewBox="0 0 170 100"><rect x="20" y="20" width="125" height="60" fill="#E2F5F1" stroke="#3B2A8C" stroke-width="2"/>
+<rect x="20" y="72" width="8" height="8" fill="none" stroke="#E6197F"/><rect x="137" y="72" width="8" height="8" fill="none" stroke="#E6197F"/>
+<g font-size="10" font-weight="700" fill="#3B2A8C"><text x="8" y="94">A</text><text x="148" y="94">B</text><text x="148" y="18">C</text><text x="8" y="18">D</text><text x="70" y="94">5 cm</text><text x="150" y="54">3 cm</text></g></svg></div></div></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">33</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Círculo y circunferencia</h2></div></div><div class="tb">
+<div class="two"><div>
+<ul><li><b>Circunferencia:</b> es la <b>línea</b> curva cerrada formada por todos los puntos que están a la <b>misma distancia</b> (radio) de un punto fijo (el centro). Es “el borde”.</li>
+<li><b>Círculo:</b> es la <b>región</b> formada por la circunferencia y todos sus puntos interiores. Es “la parte de adentro”.</li></ul>
+<p><b>Elementos:</b></p>
+<ul><li><b>Centro (O)</b> y <b>radio (r):</b> segmento del centro a un punto de la circunferencia.</li>
+<li><b>Cuerda:</b> une dos puntos de la circunferencia. <b>Diámetro:</b> la cuerda que pasa por el centro (d = 2 . r).</li>
+<li><b>Arco:</b> parte de la circunferencia entre dos puntos.</li>
+<li><b>Recta secante:</b> la corta en 2 puntos. <b>Tangente:</b> la toca en 1 solo punto y es perpendicular al radio. <b>Exterior:</b> no la toca.</li></ul></div>
+<div><svg width="170" height="170" viewBox="0 0 170 170"><circle cx="85" cy="85" r="60" fill="#FFF4DA" stroke="#3B2A8C" stroke-width="2.5"/>
+<line x1="85" y1="85" x2="145" y2="85" stroke="#E6197F" stroke-width="2"/><line x1="43" y1="42" x2="127" y2="128" stroke="#3FB8A3" stroke-width="2"/>
+<line x1="40" y1="25" x2="130" y2="25" stroke="#F5B400" stroke-width="2"/><circle cx="85" cy="85" r="3" fill="#3B2A8C"/>
+<g font-size="10" font-weight="700"><text x="72" y="82" fill="#3B2A8C">O</text><text x="108" y="80" fill="#E6197F">r</text><text x="100" y="118" fill="#2a8f7d">d</text><text x="135" y="22" fill="#b07f00">tangente</text></g></svg></div></div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Un aro de básquet es una <b>circunferencia</b>; una moneda o una pizza es un <b>círculo</b>. Si el radio de una pizza es 15 cm, su diámetro es 2 . 15 = <b>30 cm</b>.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">34</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Construcción de circunferencias</h2></div></div><div class="tb">
+<ul><li><b>Dado el centro y el radio:</b> se abre el compás con la medida del radio, se apoya la punta en el centro y se gira.</li>
+<li><b>Que pase por tres puntos no alineados (A, B, C):</b> se trazan las <b>mediatrices</b> de AB y de BC. Donde se cortan está el centro O. El radio es OA.</li>
+<li><b>Circunferencia circunscripta a un triángulo</b> (pasa por sus 3 vértices): su centro es el <b>circuncentro</b>, punto donde se cortan las 3 mediatrices de los lados.</li>
+<li><b>Circunferencia inscripta en un triángulo</b> (toca sus 3 lados por dentro): su centro es el <b>incentro</b>, punto donde se cortan las 3 bisectrices de los ángulos.</li></ul>
+<div class="key">Mediatrices → <b>circuncentro</b> (circunferencia que pasa por los vértices). Bisectrices → <b>incentro</b> (circunferencia que toca los lados).</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Hay tres casas (A, B y C) y se quiere poner una antena que esté a la <b>misma distancia</b> de las tres. Se trazan las mediatrices de AB y de BC: donde se cortan va la antena. Con centro ahí y radio hasta A, la circunferencia pasa también por B y C.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">35</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Polígonos y construcciones</h2></div></div><div class="tb">
+<p>Un <b>polígono</b> es una figura plana cerrada limitada por segmentos (lados). Se nombra según su cantidad de lados: triángulo (3), cuadrilátero (4), pentágono (5), hexágono (6), heptágono (7), octógono (8)… Es <b>regular</b> si tiene todos sus lados y ángulos iguales.</p>
+<table><tr><th>Para un polígono de n lados</th><th>Fórmula</th></tr>
+<tr><td class="l">Cantidad de diagonales</td><td>n . (n − 3) : 2</td></tr>
+<tr><td class="l">Suma de los ángulos interiores</td><td>180° . (n − 2)</td></tr>
+<tr><td class="l">Ángulo interior (si es regular)</td><td>180° . (n − 2) : n</td></tr>
+<tr><td class="l">Ángulo central (si es regular)</td><td>360° : n</td></tr></table>
+<p><b>Construcción de un polígono regular:</b> se traza una circunferencia, se divide el ángulo de 360° en n partes iguales (ángulo central) con el transportador, se marcan los puntos sobre la circunferencia y se unen.</p>
+<div class="ej"><h4>Ejemplo básico — hexágono regular (n = 6)</h4>
+<p class="calc">Diagonales: 6 . 3 : 2 = 9 &nbsp;·&nbsp; Suma de ángulos: 180° . 4 = 720° &nbsp;·&nbsp; Ángulo interior: 720° : 6 = 120° &nbsp;·&nbsp; Ángulo central: 360° : 6 = 60°</p>
+<p>Truco: en el hexágono regular el lado mide igual que el radio, así que con el compás abierto en el radio se “camina” 6 veces sobre la circunferencia.</p></div>
+</div></div>
+
+<!-- ===================== CAPÍTULO 6 ===================== -->
+<div class="chap"><div class="num"><small>CAPÍTULO</small><span>6</span></div><div class="name">Perímetro, área y volumen</div></div>
+
+<div class="tema"><div class="th"><span class="n">36</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Perímetro y área de figuras planas</h2></div></div><div class="tb">
+<ul><li><b>Perímetro (P):</b> es la medida del <b>contorno</b> de la figura (suma de sus lados). Se mide en cm, m, etc.</li>
+<li><b>Área (A):</b> es la medida de la <b>superficie</b> que ocupa. Se mide en unidades cuadradas: cm², m²…</li></ul>
+<table><tr><th>Figura</th><th>Área</th><th>Figura</th><th>Área</th></tr>
+<tr><td class="l">Cuadrado</td><td>l . l = l<sup>2</sup></td><td class="l">Rombo</td><td>D . d : 2</td></tr>
+<tr><td class="l">Rectángulo</td><td>b . h</td><td class="l">Trapecio</td><td>(B + b) . h : 2</td></tr>
+<tr><td class="l">Paralelogramo</td><td>b . h</td><td class="l">Polígono regular</td><td>P . ap : 2</td></tr>
+<tr><td class="l">Triángulo</td><td>b . h : 2</td><td class="l">Círculo</td><td>π . r<sup>2</sup></td></tr></table>
+<p>Longitud de la circunferencia: <b>2 . π . r</b> (π ≈ 3,14).</p>
+<div class="tip"><b>Error frecuente:</b> confundir perímetro (borde, cm) con área (superficie, cm²). Una figura puede tener más perímetro y menos área que otra.</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Un patio rectangular mide 5 m de largo y 3 m de ancho.</p><p class="calc">P = 5 + 3 + 5 + 3 = <span class="mag">16 m</span> (para el alambrado) &nbsp;&nbsp;&nbsp; A = 5 . 3 = <span class="mag">15 m²</span> (para las baldosas)</p><p>Un triángulo de base 6 cm y altura 4 cm: A = 6 . 4 : 2 = 12 cm².</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">37</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Área lateral y total de cuerpos</h2></div></div><div class="tb">
+<p>El <b>área lateral (AL)</b> es la suma de las áreas de las caras laterales. El <b>área total (AT)</b> es el área lateral más el área de la base (o las bases). Conviene pensar en el <b>desarrollo plano</b>.</p>
+<table><tr><th>Cuerpo</th><th>Área lateral</th><th>Área total</th></tr>
+<tr><td class="l">Prisma</td><td>Perímetro de la base . h</td><td>AL + 2 . Ab</td></tr>
+<tr><td class="l">Cubo (arista a)</td><td>4 . a<sup>2</sup></td><td>6 . a<sup>2</sup></td></tr>
+<tr><td class="l">Pirámide</td><td>Perímetro de la base . ap : 2</td><td>AL + Ab</td></tr>
+<tr><td class="l">Cilindro</td><td>2 . π . r . h</td><td>AL + 2 . π . r<sup>2</sup></td></tr>
+<tr><td class="l">Cono (g = generatriz)</td><td>π . r . g</td><td>AL + π . r<sup>2</sup></td></tr>
+<tr><td class="l">Esfera</td><td>—</td><td>4 . π . r<sup>2</sup></td></tr></table>
+<div class="ej"><h4>Ejemplo básico</h4><p>¿Cuánto papel hace falta para forrar un cubo de 3 cm de arista? Tiene 6 caras cuadradas de 3 cm . 3 cm = 9 cm².</p><p class="calc">AT = 6 . 3<sup>2</sup> = 6 . 9 = <span class="mag">54 cm²</span></p><p>Si no lleva tapa ni base (solo los costados): AL = 4 . 9 = 36 cm².</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">38</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Unidades de capacidad y unidades de volumen</h2></div></div><div class="tb">
+<p>La <b>capacidad</b> es lo que puede contener un recipiente (se mide en <b>litros</b>). El <b>volumen</b> es el espacio que ocupa un cuerpo (se mide en unidades cúbicas: cm³, dm³, m³).</p>
+<p><b>Capacidad</b> (cada unidad es 10 veces la siguiente):</p>
+<p class="calc">kl → hl → dal → <span class="mag">l</span> → dl → cl → ml &nbsp;&nbsp; (× 10 hacia la derecha, : 10 hacia la izquierda)</p>
+<p><b>Volumen</b> (cada unidad es <b>1 000</b> veces la siguiente):</p>
+<p class="calc">m³ → dm³ → cm³ → mm³ &nbsp;&nbsp; (× 1 000 hacia la derecha)</p>
+<div class="key c"><b>Equivalencias clave:</b> &nbsp; 1 dm³ = 1 l &nbsp;&nbsp;·&nbsp;&nbsp; 1 cm³ = 1 ml &nbsp;&nbsp;·&nbsp;&nbsp; 1 m³ = 1 000 l</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Una botella de gaseosa de <b>2,5 l</b>:</p><p class="calc">2,5 l = 2 500 ml = 2 500 cm³ = 2,5 dm³</p><p>Una pileta de 10 m³ se llena con 10 . 1 000 = <b>10 000 litros</b> de agua.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">39</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Volumen de poliedros</h2></div></div><div class="tb">
+<p>El <b>volumen</b> indica cuántos cubitos unidad (de 1 cm³, 1 m³…) entran en el cuerpo.</p>
+<table><tr><th>Cuerpo</th><th>Volumen</th></tr>
+<tr><td class="l">Prisma (cualquier base)</td><td>Área de la base . altura → V = Ab . h</td></tr>
+<tr><td class="l">Prisma rectangular (ortoedro)</td><td>largo . ancho . alto</td></tr>
+<tr><td class="l">Cubo (arista a)</td><td>a . a . a = a<sup>3</sup></td></tr>
+<tr><td class="l">Pirámide</td><td>Ab . h : 3</td></tr></table>
+<div class="key">Una pirámide tiene <b>la tercera parte</b> del volumen de un prisma con la misma base y altura (se comprueba llenándolos con arena).</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Una caja de 4 cm de largo, 3 cm de ancho y 2 cm de alto:</p><p class="calc">V = 4 . 3 . 2 = <span class="mag">24 cm³</span> → entran 24 cubitos de 1 cm de lado.</p><p>Una pirámide de base cuadrada de 3 cm de lado y 4 cm de altura: V = 3<sup>2</sup> . 4 : 3 = 9 . 4 : 3 = 12 cm³.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">40</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Volumen de cuerpos redondos</h2></div></div><div class="tb">
+<table><tr><th>Cuerpo</th><th>Volumen</th><th>Cómo pensarlo</th></tr>
+<tr><td class="l">Cilindro</td><td>π . r<sup>2</sup> . h</td><td class="l">Como un prisma: área de la base (círculo) por la altura.</td></tr>
+<tr><td class="l">Cono</td><td>π . r<sup>2</sup> . h : 3</td><td class="l">La tercera parte del cilindro de igual base y altura.</td></tr>
+<tr><td class="l">Esfera</td><td>F(4|3) . π . r<sup>3</sup></td><td class="l">—</td></tr></table>
+<div class="key">Se usa π ≈ 3,14. El resultado va en unidades cúbicas (cm³, m³…), que después se pueden pasar a litros.</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Un vaso cilíndrico tiene 2 cm de radio y 5 cm de altura.</p><p class="calc">V = 3,14 . 2<sup>2</sup> . 5 = 3,14 . 4 . 5 = <span class="mag">62,8 cm³</span> ≈ 62,8 ml</p><p>Un cucurucho (cono) con la misma base y altura tendría 62,8 : 3 ≈ 20,9 cm³.</p></div>
+</div></div>
+
+<!-- ===================== CAPÍTULO 7 ===================== -->
+<div class="chap"><div class="num"><small>CAPÍTULO</small><span>7</span></div><div class="name">Probabilidad y estadística</div></div>
+
+<div class="tema"><div class="th"><span class="n">41</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Variables, población y muestra</h2></div></div><div class="tb">
+<p>La <b>estadística</b> recolecta, organiza y analiza datos para sacar conclusiones.</p>
+<ul><li><b>Población:</b> el conjunto de todos los elementos que se quieren estudiar.</li>
+<li><b>Muestra:</b> una parte de la población que se elige para estudiar (debe ser representativa).</li>
+<li><b>Variable:</b> la característica que se estudia.</li></ul>
+<table><tr><th colspan="2">Tipos de variables</th></tr>
+<tr><td class="l"><b>Cualitativa</b> (no numérica)</td><td class="l">Se expresa con palabras: color favorito, deporte, mes de nacimiento.</td></tr>
+<tr><td class="l"><b>Cuantitativa discreta</b></td><td class="l">Toma números “enteros”, se cuenta: cantidad de hermanos, goles.</td></tr>
+<tr><td class="l"><b>Cuantitativa continua</b></td><td class="l">Puede tomar cualquier valor en un intervalo, se mide: altura, peso, temperatura.</td></tr></table>
+<div class="ej"><h4>Ejemplo básico</h4><p>Queremos saber qué deporte prefieren los 600 alumnos de la escuela y le preguntamos a 30.</p><p><b>Población:</b> los 600 alumnos. <b>Muestra:</b> los 30 encuestados. <b>Variable:</b> deporte preferido → <b>cualitativa</b>. Si preguntamos “¿cuántas horas por semana entrenás?” → cuantitativa.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">42</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Frecuencias absolutas y relativas</h2></div></div><div class="tb">
+<ul><li><b>Frecuencia absoluta (f):</b> cantidad de veces que aparece un valor. La suma de todas es el total de datos (n).</li>
+<li><b>Frecuencia relativa (fr):</b> la frecuencia absoluta dividida por el total: <b>fr = f : n</b>. Todas suman 1.</li>
+<li><b>Frecuencia porcentual:</b> fr . 100. Todas suman 100 %.</li>
+<li><b>Frecuencia acumulada:</b> se van sumando las frecuencias hasta ese valor.</li></ul>
+<p>Los datos se organizan en <b>tablas de frecuencias</b> y se muestran en <b>gráficos</b> de barras, circulares o pictogramas.</p>
+<div class="ej"><h4>Ejemplo básico</h4><p>Se preguntó a 20 alumnos su color favorito:</p>
+<table><tr><th>Color</th><th>f</th><th>fr</th><th>%</th></tr>
+<tr><td>Azul</td><td>8</td><td>8 : 20 = 0,40</td><td>40 %</td></tr><tr><td>Rojo</td><td>5</td><td>0,25</td><td>25 %</td></tr><tr><td>Verde</td><td>4</td><td>0,20</td><td>20 %</td></tr><tr><td>Amarillo</td><td>3</td><td>0,15</td><td>15 %</td></tr><tr><th>Total</th><th>20</th><th>1</th><th>100 %</th></tr></table></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">43</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Promedio, mediana y moda</h2></div></div><div class="tb">
+<p>Son <b>medidas de tendencia central</b>: un solo número que resume un conjunto de datos.</p>
+<ul><li><b>Promedio (media):</b> se suman todos los datos y se divide por la cantidad de datos.</li>
+<li><b>Mediana:</b> el valor que queda <b>en el medio</b> cuando los datos se ordenan de menor a mayor. Si la cantidad de datos es par, es el promedio de los dos del centro.</li>
+<li><b>Moda:</b> el valor que <b>más se repite</b> (puede haber más de una o ninguna).</li></ul>
+<div class="key">Para la mediana, ¡primero hay que <b>ordenar</b> los datos!</div>
+<div class="ej"><h4>Ejemplo básico</h4><p>Notas de Lucía: 7, 4, 9, 6, 7. Ordenadas: 4, 6, <b>7</b>, 7, 9.</p>
+<p class="calc">Promedio = (4 + 6 + 7 + 7 + 9) : 5 = 33 : 5 = <span class="mag">6,6</span> &nbsp;&nbsp; Mediana = <span class="mag">7</span> &nbsp;&nbsp; Moda = <span class="mag">7</span></p>
+<p>Si los datos fueran 3, 5, 8, 10 (par): mediana = (5 + 8) : 2 = 6,5.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">44</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Experimentos aleatorios. Probabilidad simple</h2></div></div><div class="tb">
+<ul><li><b>Experimento determinístico:</b> se sabe el resultado antes de hacerlo (soltar una piedra: cae).</li>
+<li><b>Experimento aleatorio:</b> no se puede predecir el resultado, depende del azar (tirar un dado).</li>
+<li><b>Espacio muestral:</b> todos los resultados posibles. Dado: {1, 2, 3, 4, 5, 6}.</li>
+<li><b>Suceso:</b> uno o varios resultados que nos interesan (“sale par” = {2, 4, 6}).</li></ul>
+<div class="key c"><b>Regla de Laplace:</b> &nbsp; P(suceso) = F(casos favorables|casos posibles)</div>
+<p>La probabilidad está siempre <b>entre 0 y 1</b>: <b>suceso imposible</b> = 0; <b>suceso seguro</b> = 1. También se puede expresar en porcentaje.</p>
+<div class="ej"><h4>Ejemplo básico</h4><p>Al tirar un dado:</p><p class="calc">P(sale par) = F(3|6) = F(1|2) = 0,5 = 50 % &nbsp;&nbsp;·&nbsp;&nbsp; P(sale 5) = F(1|6) &nbsp;&nbsp;·&nbsp;&nbsp; P(sale 7) = 0 (imposible)</p><p>En una bolsa con 3 caramelos de menta y 2 de frutilla: P(menta) = F(3|5).</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">45</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Cálculo combinatorio</h2></div></div><div class="tb">
+<p>El <b>cálculo combinatorio</b> permite contar de cuántas formas distintas se pueden combinar u ordenar elementos, sin tener que escribirlas todas.</p>
+<ul><li><b>Diagrama de árbol:</b> se dibujan “ramas” con todas las opciones de cada paso; al final se cuentan las ramas.</li>
+<li><b>Principio de multiplicación:</b> si una elección tiene m opciones y otra tiene n, juntas tienen <b>m . n</b> opciones.</li>
+<li><b>Ordenar n elementos</b> (permutaciones): n . (n − 1) . (n − 2) . … . 1 (se escribe n! y se lee “n factorial”).</li></ul>
+<div class="ej"><h4>Ejemplo básico</h4><div class="two"><div><p>Tengo <b>3 remeras</b> (blanca, negra, roja) y <b>2 pantalones</b> (jean, jogging). ¿Cuántos conjuntos distintos puedo armar?</p><p class="calc">3 . 2 = <span class="mag">6 conjuntos</span></p><p>¿De cuántas formas se pueden ubicar 3 amigos en una fila? 3 . 2 . 1 = 6.</p></div>
+<div><svg width="190" height="130" viewBox="0 0 190 130"><g stroke="#3B2A8C" stroke-width="1.5"><line x1="10" y1="65" x2="60" y2="20"/><line x1="10" y1="65" x2="60" y2="65"/><line x1="10" y1="65" x2="60" y2="110"/>
+<line x1="80" y1="20" x2="130" y2="8"/><line x1="80" y1="20" x2="130" y2="32"/><line x1="80" y1="65" x2="130" y2="53"/><line x1="80" y1="65" x2="130" y2="77"/><line x1="80" y1="110" x2="130" y2="98"/><line x1="80" y1="110" x2="130" y2="122"/></g>
+<g font-size="9" font-weight="700" fill="#E6197F"><text x="62" y="23">B</text><text x="62" y="68">N</text><text x="62" y="113">R</text></g>
+<g font-size="8.5" fill="#2a8f7d"><text x="133" y="11">jean</text><text x="133" y="35">jogging</text><text x="133" y="56">jean</text><text x="133" y="80">jogging</text><text x="133" y="101">jean</text><text x="133" y="125">jogging</text></g></svg></div></div></div>
+</div></div>
+
+<!-- ===================== CAPÍTULO 8 ===================== -->
+<div class="chap"><div class="num"><small>CAPÍTULO</small><span>8</span></div><div class="name">Números enteros</div></div>
+
+<div class="tema"><div class="th"><span class="n">46</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Números negativos. Orden y representación</h2></div></div><div class="tb">
+<p>Los <b>números enteros (ℤ)</b> están formados por los <b>negativos</b> (−1, −2, −3…), el <b>cero</b> y los <b>positivos</b> (1, 2, 3…). Sirven para expresar temperaturas bajo cero, deudas, pisos de subsuelo, alturas bajo el nivel del mar.</p>
+<svg width="600" height="50" viewBox="0 0 600 50"><line x1="15" y1="22" x2="585" y2="22" stroke="#3B2A8C" stroke-width="2"/><polygon points="585,17 595,22 585,27" fill="#3B2A8C"/><polygon points="15,17 5,22 15,27" fill="#3B2A8C"/>
+<g font-size="11" text-anchor="middle"><g stroke="#3B2A8C" stroke-width="2"><line x1="50" y1="16" x2="50" y2="28"/><line x1="100" y1="16" x2="100" y2="28"/><line x1="150" y1="16" x2="150" y2="28"/><line x1="200" y1="16" x2="200" y2="28"/><line x1="250" y1="16" x2="250" y2="28"/><line x1="300" y1="14" x2="300" y2="30"/><line x1="350" y1="16" x2="350" y2="28"/><line x1="400" y1="16" x2="400" y2="28"/><line x1="450" y1="16" x2="450" y2="28"/><line x1="500" y1="16" x2="500" y2="28"/><line x1="550" y1="16" x2="550" y2="28"/></g>
+<g fill="#E6197F" font-weight="700"><text x="50" y="44">−5</text><text x="100" y="44">−4</text><text x="150" y="44">−3</text><text x="200" y="44">−2</text><text x="250" y="44">−1</text></g><text x="300" y="44" fill="#3B2A8C" font-weight="700">0</text>
+<g fill="#2a8f7d" font-weight="700"><text x="350" y="44">1</text><text x="400" y="44">2</text><text x="450" y="44">3</text><text x="500" y="44">4</text><text x="550" y="44">5</text></g></g>
+<text x="150" y="10" font-size="9" fill="#E6197F" text-anchor="middle">negativos</text><text x="450" y="10" font-size="9" fill="#2a8f7d" text-anchor="middle">positivos</text></svg>
+<ul><li><b>Opuesto:</b> el que está a la misma distancia del 0 pero del otro lado. El opuesto de 3 es −3.</li>
+<li><b>Módulo o valor absoluto</b> |a|: la distancia al 0 (siempre positiva). |−5| = 5; |5| = 5.</li>
+<li><b>Orden:</b> en la recta, es mayor el que está más a la derecha. Todo positivo es mayor que cualquier negativo. <b>Entre dos negativos, es mayor el de menor módulo.</b></li></ul>
+<div class="ej"><h4>Ejemplo básico</h4><p>Hoy hace −3 °C en Ushuaia y 2 °C en Bariloche. −3 &lt; 2: hace más frío en Ushuaia. ¿Qué es más frío, −7 °C o −2 °C? −7 &lt; −2, porque −7 está más a la izquierda.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">47</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Adición y sustracción</h2></div></div><div class="tb">
+<div class="st">Suma de enteros</div>
+<ul><li><b>Igual signo:</b> se suman los módulos y se conserva el signo. (−4) + (−6) = −10</li>
+<li><b>Distinto signo:</b> se restan los módulos y se pone el signo del de mayor módulo. (−5) + (+8) = +3</li></ul>
+<div class="st">Resta de enteros</div>
+<div class="key c">Restar es <b>sumar el opuesto</b>: &nbsp; a − b = a + (−b) &nbsp;&nbsp;&nbsp;&nbsp; 4 − (−6) = 4 + 6 = 10</div>
+<p><b>Supresión de paréntesis:</b> si el paréntesis tiene un <b>+</b> adelante, los signos de adentro quedan igual; si tiene un <b>−</b> adelante, todos los signos de adentro cambian. −(3 − 5) = −3 + 5.</p>
+<div class="ej"><h4>Ejemplo básico</h4><p>Pensarlo con plata: tener es +, deber es −.</p><p class="calc">Debo $5 y me dan $8: (−5) + 8 = <span class="mag">+3</span> (me sobran 3) &nbsp;&nbsp;·&nbsp;&nbsp; Debo $4 y debo $6 más: (−4) + (−6) = <span class="mag">−10</span></p><p>Con temperaturas: a las 6 h había −2 °C y subió 5 °C: −2 + 5 = 3 °C.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">48</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Multiplicación y división</h2></div></div><div class="tb">
+<p>Se multiplican (o dividen) los módulos y el signo se obtiene con la <b>regla de los signos</b>:</p>
+<div class="two"><div><table style="margin:0 auto;font-size:11pt"><tr><th>.  y  :</th><th>+</th><th>−</th></tr><tr><th>+</th><td>+</td><td>−</td></tr><tr><th>−</th><td>−</td><td>+</td></tr></table></div>
+<div class="key"><b>Signos iguales</b> → resultado <b>positivo</b>.<br><b>Signos distintos</b> → resultado <b>negativo</b>.</div></div>
+<p><b>Potencias de base negativa:</b> si el exponente es <b>par</b>, el resultado es positivo; si es <b>impar</b>, es negativo. (−2)<sup>4</sup> = 16; (−2)<sup>3</sup> = −8.</p>
+<div class="tip"><b>¡Ojo!</b> (−3)<sup>2</sup> = 9, pero −3<sup>2</sup> = −9 (sin paréntesis, el exponente afecta solo al 3).</div>
+<div class="ej"><h4>Ejemplo básico</h4><p class="calc">(−3) . (+4) = <span class="mag">−12</span> &nbsp;&nbsp;·&nbsp;&nbsp; (−3) . (−4) = <span class="mag">+12</span> &nbsp;&nbsp;·&nbsp;&nbsp; (−20) : (−5) = <span class="mag">+4</span> &nbsp;&nbsp;·&nbsp;&nbsp; 18 : (−6) = <span class="mag">−3</span></p><p>Si pierdo $3 por día durante 4 días: 4 . (−3) = −12 → perdí $12.</p></div>
+</div></div>
+
+<div class="tema"><div class="th"><span class="n">49</span><div class="t"><small>SABERES DINÁMICOS</small><h2>Operaciones combinadas</h2></div></div><div class="tb">
+<p>Con números enteros se respeta <b>el mismo orden</b> que con los naturales, prestando mucha atención a los signos:</p>
+<ul><li><b>1.°</b> Separar en términos (los + y − que no están dentro de paréntesis).</li>
+<li><b>2.°</b> Resolver paréntesis, potencias y raíces.</li>
+<li><b>3.°</b> Resolver multiplicaciones y divisiones (con regla de signos).</li>
+<li><b>4.°</b> Sumar y restar los resultados de cada término.</li></ul>
+<div class="key">Truco para el final: juntar todos los positivos por un lado y todos los negativos por el otro, y después restar.</div>
+<div class="ej"><h4>Ejemplo básico</h4>
+<p class="calc">−3 + 2 . (−4) − (−10) : 5 = −3 + (−8) − (−2) = −3 − 8 + 2 = <span class="mag">−9</span></p>
+<p class="calc">(−2)<sup>2</sup> + 15 : (−3) = 4 + (−5) = <span class="mag">−1</span></p></div>
+</div></div>
+
+</body></html>

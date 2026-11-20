@@ -1,0 +1,11 @@
+Registro en Google Sheets y mail diario sin cuentas de Claude
+
+- docs/index.html: la web manda cada intento a una app web de Apps Script
+  (REGISTRO_URL), pide el nombre antes de enviar y reenvía lo pendiente si
+  no hubo conexión. Se mueve a docs/ para publicarla con GitHub Pages.
+- apps-script/: anota cada intento en la hoja "Intentos" y manda el resumen
+  diario por mail a las 23:59.
+- README: guía de puesta en marcha (planilla, Apps Script y GitHub Pages).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01C7qzxvbqCKuG9uuySDaxhs

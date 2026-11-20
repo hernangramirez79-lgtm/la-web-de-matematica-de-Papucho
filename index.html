@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Matemática 1 en Juego</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800;900&family=Work+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: banda violeta tipo tapa del libro con puntaje → pestañas de capítulos → tarjetas de tema con ejercicios → panel de premios */
+:root{
+  --bg:#F6F4FC; --surface:#FFFFFF; --surface2:#EFEBFA; --ink:#211A4A; --muted:#5E5785; --line:#DCD5F2;
+  --vio:#3B2A8C; --vio-ink:#FFFFFF; --mag:#D9157A; --mag-soft:#FDE6F1; --teal:#18917D; --teal-soft:#DFF4EF;
+  --yel:#F5B400; --yel-soft:#FFF3D3; --bad:#C62D3A; --bad-soft:#FCE4E6;
+  --display:"Rubik","Arial Rounded MT Bold",system-ui,sans-serif; --body:"Work Sans",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#130F2B; --surface:#1D1742; --surface2:#262055; --ink:#EEEBFF; --muted:#B0A8DA; --line:#362E6E;
+  --vio:#4A39A8; --vio-ink:#FFFFFF; --mag:#FF4FA3; --mag-soft:#3A1838; --teal:#4FD3BC; --teal-soft:#123A3A;
+  --yel:#FFC93C; --yel-soft:#3A3115; --bad:#FF6B76; --bad-soft:#3E1A22; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#130F2B; --surface:#1D1742; --surface2:#262055; --ink:#EEEBFF; --muted:#B0A8DA; --line:#362E6E;
+  --vio:#4A39A8; --vio-ink:#FFFFFF; --mag:#FF4FA3; --mag-soft:#3A1838; --teal:#4FD3BC; --teal-soft:#123A3A;
+  --yel:#FFC93C; --yel-soft:#3A3115; --bad:#FF6B76; --bad-soft:#3E1A22; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+button,input{font:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
+
+/* Banda superior */
+.top{background:#3B2A8C;color:#fff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:auto 0 0 0;height:70%;background-image:linear-gradient(rgba(79,211,188,.28) 1px,transparent 1px),linear-gradient(90deg,rgba(79,211,188,.28) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(transparent,#000)}
+.top .wrap{position:relative;padding-block:22px 20px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end}
+.kick{display:inline-block;background:#F5B400;color:#241A63;font-family:var(--display);font-weight:800;font-size:.78rem;letter-spacing:.08em;padding:3px 9px;text-transform:uppercase}
+.top h1{font-size:clamp(1.9rem,5vw,2.9rem);font-weight:900;line-height:1;margin-top:10px;letter-spacing:-.01em}
+.top h1 span{color:#FF5BAA}
+.who{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.92rem;color:#E4DEFF}
+.who input{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:6px 10px;width:210px;max-width:100%}
+.who input::placeholder{color:#C9C0F5}
+.reg{font-size:.8rem;margin-top:8px;font-weight:600}
+.reg.on{color:#9FF0DD}
+.reg.off{color:#FFC6E0}
+.ptab{overflow-x:auto}
+.ptab table{width:100%;border-collapse:collapse;font-size:.86rem;font-variant-numeric:tabular-nums}
+.ptab th{background:var(--surface2);color:var(--ink);text-align:left;padding:7px 10px;font-family:var(--display);font-size:.78rem;letter-spacing:.04em;white-space:nowrap}
+.ptab td{border-top:1px solid var(--line);padding:7px 10px;white-space:nowrap}
+.ptab td.l{white-space:normal;min-width:180px}
+.stt{font-weight:700;font-size:.78rem;border-radius:999px;padding:2px 8px}
+.stt.y{background:var(--teal-soft);color:var(--teal)}
+.stt.n{background:var(--bad-soft);color:var(--bad)}
+.who input#numero{width:58px;text-align:center;font-weight:700}
+.score{background:#fff;color:#241A63;border-radius:14px;padding:12px 16px;min-width:250px;box-shadow:0 6px 0 #F5B400}
+.score .pts{font-family:var(--display);font-weight:900;font-size:2.4rem;line-height:1;font-variant-numeric:tabular-nums;color:#D9157A}
+.score .pts small{font-size:.9rem;color:#241A63;font-weight:700;margin-left:4px}
+.score .lvl{font-size:.82rem;font-weight:600;margin-top:4px}
+.bar{height:10px;background:#E9E4FA;border-radius:6px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#18917D,#4FD3BC);width:0;transition:width .5s}
+.score .next{font-size:.78rem;color:#5E5785;margin-top:5px}
+
+/* Pestañas */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.tabs .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:thin}
+.tab{flex:0 0 auto;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px 6px 6px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:.88rem}
+.tab b{font-family:var(--display);background:var(--surface2);color:var(--mag);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.85rem}
+.tab .pc{font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.tab[aria-selected="true"]{background:var(--vio);border-color:var(--vio);color:#fff}
+.tab[aria-selected="true"] b{background:var(--mag);color:#fff}
+.tab[aria-selected="true"] .pc{color:#D8D0FF}
+.tab.premios b{color:#8a6300;background:var(--yel-soft)}
+
+main .wrap{padding-block:22px 48px}
+.chead{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.chead small{display:block;font-family:var(--display);font-weight:800;color:var(--mag);letter-spacing:.1em;font-size:.8rem}
+.chead h2{font-size:clamp(1.5rem,3.5vw,2rem);font-weight:900;color:var(--ink);text-transform:uppercase}
+.medal{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--muted)}
+.medal .m{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:900;border:2px dashed var(--line);color:var(--muted)}
+.medal.on .m{border:none;background:var(--yel);color:#3a2a00}
+
+.temas{display:grid;gap:16px}
+.tema{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+.th{display:flex;align-items:center;gap:12px;padding:10px 14px;background:linear-gradient(90deg,var(--vio),#4b4fb0);color:#fff}
+.th .n{font-family:var(--display);font-weight:900;font-size:1.6rem;line-height:1;min-width:1.6em}
+.th h3{font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.02em;background:var(--mag);padding:2px 8px}
+.th .tp{margin-left:auto;font-size:.8rem;font-weight:600;font-variant-numeric:tabular-nums;background:rgba(255,255,255,.15);padding:2px 8px;border-radius:999px;white-space:nowrap}
+.ejs{display:grid;gap:0}
+.fb .help{margin-top:6px}
+.sol{background:var(--surface2);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:6px;font-size:.94rem}
+.sol .tag{font-family:var(--display);font-weight:800;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--vio);justify-self:start;padding:1px 8px;border-radius:4px}
+.sol ol{margin:0;padding-left:22px;display:grid;gap:5px}
+.sol li::marker{color:var(--mag);font-weight:800}
+.tipx{background:var(--yel-soft);border-left:4px solid var(--yel);padding:6px 10px;border-radius:0 6px 6px 0}
+.rec{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0;border-bottom:1.5px solid var(--line)}
+.rec>div{padding:12px 14px;display:grid;gap:6px;align-content:start;min-width:0}
+.rec-r{background:var(--yel-soft)}
+.rec-x{background:var(--teal-soft)}
+.rec p{margin:0;font-size:.94rem;max-width:65ch}
+.rec .tag{font-family:var(--display);font-weight:800;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;justify-self:start;padding:1px 8px;border-radius:4px;color:#fff}
+.rec-r .tag{background:#B07F00}
+.rec-x .tag{background:#18917D}
+.rec .xl{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;overflow-x:auto}
+@media (max-width:640px){.rec{grid-template-columns:1fr}}
+.ej{padding:14px;border-top:1px solid var(--line);display:grid;gap:10px}
+.ej:first-child{border-top:none}
+.q{display:flex;gap:10px;align-items:baseline}
+.q .l{font-family:var(--display);font-weight:800;color:var(--mag)}
+.q .tx{min-width:0}
+.ans{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ans input{width:150px;max-width:100%;border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:7px 10px;font-weight:600;font-variant-numeric:tabular-nums}
+.ans input:focus{border-color:var(--vio)}
+.btn{border:none;border-radius:8px;padding:8px 14px;font-weight:700;font-family:var(--display)}
+.btn.go{background:var(--teal);color:#fff}
+:root:not([data-theme="light"]) .btn.go{color:#0b2a26}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .btn.go{color:#fff}}
+:root[data-theme="light"] .btn.go{color:#fff}
+.btn.ghost{background:transparent;color:var(--muted);border:1.5px solid var(--line);font-family:var(--body);font-weight:600;font-size:.85rem;padding:6px 10px}
+.opt{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 12px;font-weight:600}
+.opt:hover{border-color:var(--vio)}
+.fb{font-size:.92rem;border-radius:8px;padding:8px 12px;display:none}
+.fb.ok{display:block;background:var(--teal-soft);color:var(--ink);border-left:4px solid var(--teal)}
+.fb.no{display:block;background:var(--bad-soft);color:var(--ink);border-left:4px solid var(--bad)}
+.fb.hint{display:block;background:var(--yel-soft);color:var(--ink);border-left:4px solid var(--yel)}
+.fb b{color:var(--ink)}
+.ej.solved input{border-color:var(--teal);background:var(--teal-soft)}
+.ej.solved .opt.sel{border-color:var(--teal);background:var(--teal-soft)}
+.badge{font-family:var(--display);font-weight:800;font-size:.8rem;color:var(--teal);white-space:nowrap}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.05;font-size:.9em;margin:0 .12em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .15em}
+.rad .ov{border-top:1.5px solid currentColor;padding:0 .1em}
+.mth{font-weight:600;color:var(--vio)}
+:root:not([data-theme="light"]) .mth{color:inherit}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .mth{color:var(--vio)}}
+:root[data-theme="light"] .mth{color:var(--vio)}
+
+/* Premios */
+.prizes{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.prize{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px;align-content:start;position:relative}
+.prize .tier{display:flex;align-items:center;gap:10px}
+.prize .coin{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:1.1rem;color:#2a1d00}
+.prize h3{font-size:1.15rem;font-weight:900}
+.prize .need{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.prize .state{font-family:var(--display);font-weight:800;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+.prize.won{border-color:var(--teal);box-shadow:0 4px 0 var(--teal)}
+.prize.won .state{color:var(--teal)}
+.prize .state{color:var(--muted)}
+.tbd{background:var(--surface2);border:1.5px dashed var(--line);border-radius:8px;padding:8px 10px;font-size:.88rem}
+.tbd strong{display:block;font-family:var(--display);font-size:.75rem;letter-spacing:.08em;color:var(--mag);text-transform:uppercase}
+.ideas{display:flex;flex-wrap:wrap;gap:6px}
+.ideas span{font-size:.8rem;background:var(--yel-soft);border-radius:999px;padding:3px 9px}
+.rules{margin-top:22px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:8px;max-width:70ch}
+.rules h3{font-size:1.05rem}
+.rules ul{margin:0;padding-left:20px}
+.rules li::marker{color:var(--mag)}
+.reset{margin-top:16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.9rem}
+.btn.danger{background:var(--bad);color:#fff}
+/* Foto de la hoja */
+.photo{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.photo label.pick{display:inline-flex;align-items:center;gap:8px;border:2px dashed var(--mag);color:var(--mag);background:var(--mag-soft);border-radius:8px;padding:7px 12px;font-weight:700;font-family:var(--display);cursor:pointer;font-size:.92rem}
+.photo label.pick:focus-within{outline:3px solid var(--yel);outline-offset:2px}
+.photo input[type=file]{position:absolute;width:1px;height:1px;opacity:0}
+.photo img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:2px solid var(--line)}
+.photo .pn{font-size:.82rem;color:var(--muted)}
+.req{font-size:.82rem;color:var(--muted)}
+.req b{color:var(--mag)}
+.btn.go[disabled]{opacity:.45;cursor:not-allowed}
+.review{display:none;font-size:.92rem;border-radius:8px;padding:10px 12px;background:var(--surface2);border:1.5px solid var(--line)}
+.review.show{display:grid;gap:6px}
+.review h4{margin:0;font-family:var(--display);font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--vio)}
+.review ul{margin:0;padding-left:18px}
+.chk{display:flex;flex-wrap:wrap;gap:6px}
+.chk span{font-size:.78rem;font-weight:700;border-radius:999px;padding:2px 9px}
+.chk .y{background:var(--teal-soft);color:var(--teal)}
+.chk .n{background:var(--bad-soft);color:var(--bad)}
+.howto{background:var(--yel-soft);border-left:5px solid var(--yel);border-radius:0 10px 10px 0;padding:10px 14px;margin-bottom:16px;font-size:.92rem;display:flex;gap:14px;flex-wrap:wrap}
+.howto span b{font-family:var(--display);color:var(--mag);margin-right:4px}
+.unavail{background:var(--bad-soft);border-left:5px solid var(--bad);border-radius:0 10px 10px 0;padding:10px 14px;margin-bottom:16px;font-size:.92rem}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--vio);border-radius:50%;animation:sp 1s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+/* Sonido y festejos */
+.sndbtn{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:6px 10px;font-weight:600;font-size:.88rem}
+.scene{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:rgba(14,10,38,.6);padding:16px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));overflow:hidden;cursor:pointer}
+.scard{background:var(--surface);color:var(--ink);border-radius:18px;padding:14px 14px 18px;width:min(440px,100%);text-align:center;display:grid;gap:4px;animation:pop .35s cubic-bezier(.2,1.6,.4,1);position:relative;z-index:2}
+.scard svg{width:100%;height:auto;border-radius:12px;display:block}
+.stitle{font-family:var(--display);font-weight:900;font-size:clamp(2rem,8vw,2.8rem);line-height:1.05;letter-spacing:-.01em}
+.scene.ok .stitle{color:var(--mag)}
+.scene.no .stitle{color:var(--bad);font-size:clamp(1.5rem,6vw,2rem)}
+.ssub{font-weight:600;color:var(--muted)}
+.jump{animation:jump .42s ease-in-out infinite alternate}
+.jump.d2{animation-delay:.21s}
+.sob{animation:sob 1.1s ease-in-out infinite}
+.ballin{animation:ballin .6s ease-out both}
+.netw{animation:netw .6s ease-out .3s both;transform-box:fill-box;transform-origin:center}
+.conf{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;z-index:1;animation:fall linear forwards}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+@keyframes jump{to{transform:translateY(-16px)}}
+@keyframes sob{50%{transform:translateY(3px)}}
+@keyframes ballin{from{transform:translate(-120px,-30px)}}
+@keyframes netw{40%{transform:scaleX(1.06)}}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+@media (prefers-reduced-motion:reduce){.jump,.sob,.ballin,.netw,.scard{animation:none}.conf{display:none}}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(120px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:700;font-family:var(--display);transition:transform .35s;z-index:20;max-width:calc(100% - 32px);text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media (max-width:640px){.top .wrap{grid-template-columns:1fr}.score{min-width:0}.th h3{font-size:.82rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top"><div class="wrap">
+  <div>
+    <span class="kick">Matemática 1 · Nuevo Dinámica</span>
+    <h1>Matemática 1 <span>en Juego</span></h1>
+    <div class="who"><label for="alumno">Alumno/a:</label><input id="alumno" placeholder="Escribí tu nombre" autocomplete="off"><label for="numero">N.° camiseta:</label><input id="numero" placeholder="10" inputmode="numeric" maxlength="2" autocomplete="off"><button class="sndbtn" id="snd" type="button">🔊 Sonido: sí</button></div>
+    <div class="reg" id="reg" hidden></div>
+  </div>
+  <div class="score" aria-live="polite">
+    <div class="pts"><span id="pts">0</span><small>puntos</small></div>
+    <div class="lvl" id="lvl">Nivel: Inicial</div>
+    <div class="bar"><i id="barfill"></i></div>
+    <div class="next" id="next"></div>
+  </div>
+</div></header>
+
+<nav class="tabs" aria-label="Capítulos"><div class="wrap" id="tabs" role="tablist"></div></nav>
+<main><div class="wrap" id="view"></div></main>
+<div class="toast" id="toast" role="status"></div>
+<div class="scene" id="scene" hidden role="dialog" aria-live="assertive"></div>
+
+<script>
+const F=(a,b)=>`<span class="fr"><span>${a}</span><span>${b}</span></span>`;
+const R=(x,i='')=>`<span class="rad">${i?`<sup>${i}</sup>`:''}√<span class="ov">${x}</span></span>`;
+const M=s=>`<span class="mth">${s}</span>`;
+
+/* ---------- Ejercicios por tema del índice ---------- */
+const CAPS=[
+{n:1,name:"Números naturales",temas:[
+ {n:1,t:"Sistema de numeración decimal",ej:[
+  {q:`¿Cuánto vale el 7 en el número ${M("47 315")}?`,a:7000,h:"Mirá la posición: unidades, decenas, centenas, unidades de mil…",s:"El 7 está en las unidades de mil: vale 7 000."},
+  {q:`Escribí con cifras: ${M("5 . 10³ + 2 . 10² + 4 . 10⁰")}`,a:5204,h:"10³ = 1 000, 10² = 100, 10⁰ = 1. No hay decenas.",s:"5 000 + 200 + 4 = 5 204"}]},
+ {n:2,t:"Multiplicación y división",ej:[
+  {q:`En ${M("47 : 5")}, ¿cuál es el resto?`,a:2,h:"¿Cuántas veces entra el 5 en 47? ¿Cuánto sobra?",s:"47 = 5 . 9 + 2 → resto 2."},
+  {q:`Resolvé usando la distributiva: ${M("(7 + 5 − 2) . 3")}`,a:30,h:"7 . 3 + 5 . 3 − 2 . 3",s:"21 + 15 − 6 = 30"}]},
+ {n:3,t:"Potenciación y radicación",ej:[
+  {q:`${M("2⁵")} =`,a:32,h:"2 . 2 . 2 . 2 . 2",s:"2⁵ = 32"},
+  {q:`Hallá x: ${M("2<sup>x</sup> . 2⁶ = 2¹⁰")}`,a:4,h:"En un producto de igual base, los exponentes se suman.",s:"x + 6 = 10 → x = 4"},
+  {q:`${M(R("125","3"))} =`,a:5,h:"¿Qué número multiplicado 3 veces por sí mismo da 125?",s:"5 . 5 . 5 = 125"}]},
+ {n:4,t:"Operaciones combinadas",ej:[
+  {q:`${M("35 + 4 . 12 − 2")} =`,a:81,h:"Primero la multiplicación.",s:"35 + 48 − 2 = 81"},
+  {q:`${M(`(${R("14 400")} : ${R("100")} − 6) . ${R("2³","3")}`)} =`,a:12,h:"√14 400 = 120 y ∛2³ = 2.",s:"(120 : 10 − 6) . 2 = 6 . 2 = 12"},
+  {q:`${M(`[(${R("5⁰")} + ${R("1 + 6 . 4")})² : ${R("144")} − 2]²⁰`)} =`,a:1,h:"5⁰ = 1. Resolvé de adentro hacia afuera.",s:"[(1 + 5)² : 12 − 2]²⁰ = [3 − 2]²⁰ = 1²⁰ = 1"}]},
+ {n:5,t:"Divisibilidad",ej:[
+  {q:`¿${M("156")} es divisible por 9?`,opt:["Sí","No"],a:"No",h:"Sumá sus cifras.",s:"1 + 5 + 6 = 12, que no es múltiplo de 9."},
+  {q:`¿Cuál es el menor número primo mayor que 20?`,a:23,h:"21 = 3 . 7 y 22 = 2 . 11.",s:"23 solo es divisible por 1 y por 23."}]},
+ {n:6,t:"Factorización",ej:[
+  {q:`${M("60 = 2<sup>a</sup> . 3 . 5")}. ¿Cuánto vale a?`,a:2,h:"60 : 2 = 30, 30 : 2 = 15…",s:"60 = 2 . 2 . 3 . 5 = 2² . 3 . 5"},
+  {q:`¿Cuál es la factorización de ${M("36")}?`,opt:["2² . 3²","2 . 3³","2³ . 3"],a:"2² . 3²",h:"36 = 4 . 9",s:"36 = 2² . 3² = 4 . 9"}]},
+ {n:7,t:"Múltiplo común menor y divisor común mayor",ej:[
+  {q:`mcm (12; 18) =`,a:36,h:"12 = 2² . 3 y 18 = 2 . 3². Comunes y no comunes, mayor exponente.",s:"2² . 3² = 36"},
+  {q:`dcm (12; 18) =`,a:6,h:"Solo los comunes, con el menor exponente.",s:"2 . 3 = 6"},
+  {q:`Un colectivo pasa cada 15 minutos y otro cada 20. Salen juntos. ¿A los cuántos minutos vuelven a coincidir?`,a:60,h:"¿Es un problema de mcm o de dcm?",s:"mcm (15; 20) = 60 minutos."}]},
+ {n:8,t:"Lenguaje simbólico. Ecuaciones",ej:[
+  {q:`${M("3 . x − 7 = 17")} → x =`,a:8,h:"Pasá el 7 sumando y después el 3 dividiendo.",s:"3x = 24 → x = 8"},
+  {q:`“El doble de un número, aumentado en 4, es 20”. ¿Cuál es el número?`,a:8,h:"2 . x + 4 = 20",s:"2x = 16 → x = 8"}]}
+]},
+{n:2,name:"Fracciones y expresiones decimales",temas:[
+ {n:9,t:"Representación de fracciones. Número mixto",ej:[
+  {q:`${M(F(7,4))} = 1 entero y ${M(F("?",4))}. ¿Qué número va en el lugar del “?”`,a:3,h:"7 : 4 = 1 y sobra…",s:"7 : 4 = 1, resto 3 → 1 y 3/4"},
+  {q:`La fracción ${M(F(8,4))} es…`,opt:["propia","impropia","aparente"],a:"aparente",h:"¿8 es múltiplo de 4?",s:"8/4 = 2, un número natural: es aparente."}]},
+ {n:10,t:"Orden y comparación. Fracciones equivalentes",ej:[
+  {q:`Simplificá ${M(F(12,18))} hasta que sea irreducible (escribí a/b).`,a:"2/3",irr:true,h:"Dividí arriba y abajo por 6.",s:"12 : 6 = 2 y 18 : 6 = 3 → 2/3"},
+  {q:`¿Cuál es mayor?`,opt:["2/3","3/4"],a:"3/4",h:"Pasá las dos a denominador 12.",s:"2/3 = 8/12 y 3/4 = 9/12."}]},
+ {n:11,t:"Operaciones con fracciones",ej:[
+  {q:`${M(F(1,2)+" + "+F(1,3))} =`,a:"5/6",irr:true,h:"Denominador común 6.",s:"3/6 + 2/6 = 5/6"},
+  {q:`${M(F(2,3)+" . "+F(4,5))} =`,a:"8/15",irr:true,h:"Numerador por numerador, denominador por denominador.",s:"8/15"},
+  {q:`${M(F(3,4)+" : "+F(1,2))} =`,a:"3/2",irr:true,h:"Multiplicá por la inversa de 1/2.",s:"3/4 . 2/1 = 6/4 = 3/2"}]},
+ {n:12,t:"Potenciación y radicación de fracciones",ej:[
+  {q:`${M("("+F(2,3)+")²")} =`,a:"4/9",irr:true,h:"Elevá numerador y denominador.",s:"2² / 3² = 4/9"},
+  {q:`${M(R(F(9,16)))} =`,a:"3/4",irr:true,h:"Raíz de arriba y raíz de abajo.",s:"√9 / √16 = 3/4"}]},
+ {n:13,t:"Operaciones combinadas con fracciones",ej:[
+  {q:`${M(F(1,2)+" + "+F(3,4)+" . "+F(2,3))} =`,a:1,h:"Primero la multiplicación.",s:"1/2 + 6/12 = 1/2 + 1/2 = 1"}]},
+ {n:14,t:"Fracciones y expresiones decimales",ej:[
+  {q:`Escribí ${M(F(3,4))} como número decimal.`,a:0.75,h:"Dividí 3 : 4.",s:"3 : 4 = 0,75"},
+  {q:`Escribí ${M("0,25")} como fracción irreducible (a/b).`,a:"1/4",irr:true,h:"0,25 = 25/100. Simplificá.",s:"25/100 = 1/4"}]},
+ {n:15,t:"Operaciones con decimales. Operaciones combinadas",ej:[
+  {q:`${M("2,5 + 1,2 . 3")} =`,a:6.1,h:"Primero 1,2 . 3.",s:"2,5 + 3,6 = 6,1"},
+  {q:`${M("4,5 : 0,5")} =`,a:9,h:"Multiplicá los dos por 10: 45 : 5.",s:"45 : 5 = 9"}]},
+ {n:16,t:"Aproximación y porcentaje",ej:[
+  {q:`¿Cuánto es el 20 % de 150?`,a:30,h:"20/100 . 150",s:"0,2 . 150 = 30"},
+  {q:`Redondeá ${M("3,476")} a los centésimos.`,a:3.48,h:"Mirá la cifra de los milésimos: 6.",s:"Como 6 ≥ 5, sube: 3,48"}]}
+]},
+{n:3,name:"Funciones",temas:[
+ {n:17,t:"Representación",ej:[
+  {q:`Desde el origen avanzo 4 hacia la derecha y subo 1. ¿Qué punto es?`,opt:["(4; 1)","(1; 4)"],a:"(4; 1)",h:"Primero va x (horizontal), después y (vertical).",s:"(x; y) = (4; 1)"}]},
+ {n:18,t:"Las funciones",ej:[
+  {q:`Un remís cobra ${M("y = x + 2")} (en miles), con x = km recorridos. ¿Cuánto cobra por 5 km?`,a:7,h:"Reemplazá x por 5.",s:"y = 5 + 2 = 7"}]},
+ {n:19,t:"Función de proporcionalidad directa",ej:[
+  {q:`Si 1 alfajor cuesta $500, ¿cuánto cuestan 6?`,a:3000,h:"y = 500 . x",s:"500 . 6 = 3 000"},
+  {q:`3 kg de pan cuestan $2 400. ¿Cuál es la constante de proporcionalidad (precio por kg)?`,a:800,h:"k = y : x",s:"2 400 : 3 = 800"}]},
+ {n:20,t:"Función de proporcionalidad inversa",ej:[
+  {q:`1 pintor tarda 12 días en pintar un aula. ¿Cuántos días tardan 4 pintores?`,a:3,h:"x . y = 12",s:"12 : 4 = 3 días"}]}
+]},
+{n:4,name:"Cuerpos y ángulos",temas:[
+ {n:21,t:"Clasificación de los cuerpos",ej:[
+  {q:`Un poliedro tiene 6 caras y 8 vértices. ¿Cuántas aristas tiene?`,a:12,h:"Caras + Vértices = Aristas + 2",s:"6 + 8 = A + 2 → A = 12"},
+  {q:`Una lata de gaseosa tiene forma de…`,opt:["poliedro","cuerpo redondo"],a:"cuerpo redondo",h:"¿Tiene superficies curvas?",s:"Es un cilindro: cuerpo redondo."}]},
+ {n:22,t:"Poliedros regulares",ej:[
+  {q:`¿Cuántas caras tiene un octaedro?`,a:8,h:"Octa = …",s:"8 caras (triángulos equiláteros)."}]},
+ {n:23,t:"Desarrollo plano de cuerpos",ej:[
+  {q:`¿Cuántos círculos tiene el desarrollo plano de un cilindro?`,a:2,h:"Pensá en la tapa y la base de una lata.",s:"2 círculos + 1 rectángulo."}]},
+ {n:24,t:"Punto, recta y plano",ej:[
+  {q:`Dos rectas que se cortan formando 4 ángulos rectos son…`,opt:["paralelas","perpendiculares","secantes oblicuas"],a:"perpendiculares",h:"4 ángulos de 90°.",s:"Son perpendiculares (a ⊥ b)."}]},
+ {n:25,t:"Sistema sexagesimal y operaciones",ej:[
+  {q:`¿Cuántos minutos hay en 3°?`,a:180,h:"1° = 60'",s:"3 . 60 = 180'"},
+  {q:`${M("35° 40' + 20° 30' = 56° ?'")} ¿Cuántos minutos?`,a:10,h:"40' + 30' = 70' = 1° 10'",s:"55° 70' = 56° 10'"}]},
+ {n:26,t:"Ángulos. Clasificación de ángulos",ej:[
+  {q:`¿Cuánto mide el complemento de 35°?`,a:55,h:"Complementarios suman 90°.",s:"90° − 35° = 55°"},
+  {q:`Un ángulo de 120° es…`,opt:["agudo","obtuso","llano"],a:"obtuso",h:"Está entre 90° y 180°.",s:"Obtuso."}]},
+ {n:27,t:"Mediatriz de un segmento",ej:[
+  {q:`El segmento AB mide 8 cm. ¿A cuántos cm de A corta la mediatriz?`,a:4,h:"La mediatriz pasa por el punto medio.",s:"8 : 2 = 4 cm"}]},
+ {n:28,t:"Bisectriz de un ángulo",ej:[
+  {q:`La bisectriz de un ángulo de 80° forma dos ángulos de…`,a:40,h:"Lo divide en dos partes iguales.",s:"80° : 2 = 40°"}]}
+]},
+{n:5,name:"Figuras planas",temas:[
+ {n:29,t:"Triángulos. Elementos y propiedades",ej:[
+  {q:`Un triángulo tiene ángulos de 50° y 60°. ¿Cuánto mide el tercero?`,a:70,h:"Los tres suman 180°.",s:"180° − 50° − 60° = 70°"},
+  {q:`¿Existe un triángulo de lados 3 cm, 4 cm y 8 cm?`,opt:["Sí","No"],a:"No",h:"Cada lado debe ser menor que la suma de los otros dos.",s:"3 + 4 = 7 < 8: no se puede."}]},
+ {n:30,t:"Construcción de triángulos",ej:[
+  {q:`Dos lados miden 5 cm y 4 cm. ¿Cuál es el mayor número entero de cm que puede medir el tercer lado?`,a:8,h:"Tiene que ser menor que 5 + 4.",s:"Menor que 9 → como máximo 8 cm."}]},
+ {n:31,t:"Cuadriláteros. Elementos y propiedades",ej:[
+  {q:`Un cuadrilátero tiene ángulos de 90°, 80° y 110°. ¿Cuánto mide el cuarto?`,a:80,h:"Los cuatro suman 360°.",s:"360° − 280° = 80°"},
+  {q:`Un cuadrilátero con un solo par de lados paralelos es un…`,opt:["paralelogramo","trapecio","trapezoide"],a:"trapecio",h:"Las bases son paralelas.",s:"Trapecio."}]},
+ {n:32,t:"Construcción de cuadriláteros",ej:[
+  {q:`¿Qué ángulo forman entre sí las diagonales de un rombo?`,a:90,h:"Son perpendiculares.",s:"90°"}]},
+ {n:33,t:"Círculo y circunferencia",ej:[
+  {q:`El radio de una pizza es 15 cm. ¿Cuánto mide su diámetro?`,a:30,h:"d = 2 . r",s:"2 . 15 = 30 cm"},
+  {q:`Una recta que toca a la circunferencia en un solo punto es…`,opt:["secante","tangente","exterior"],a:"tangente",h:"La “toca” apenas.",s:"Tangente."}]},
+ {n:34,t:"Construcción de circunferencias",ej:[
+  {q:`El centro de la circunferencia que pasa por los 3 vértices de un triángulo se encuentra con las…`,opt:["mediatrices","bisectrices"],a:"mediatrices",h:"Sus puntos están a igual distancia de los extremos.",s:"Mediatrices → circuncentro."}]},
+ {n:35,t:"Polígonos y construcciones",ej:[
+  {q:`¿Cuántas diagonales tiene un hexágono?`,a:9,h:"n . (n − 3) : 2",s:"6 . 3 : 2 = 9"},
+  {q:`¿Cuánto suman los ángulos interiores de un pentágono?`,a:540,h:"180° . (n − 2)",s:"180° . 3 = 540°"}]}
+]},
+{n:6,name:"Perímetro, área y volumen",temas:[
+ {n:36,t:"Perímetro y área de figuras planas",ej:[
+  {q:`Un patio rectangular mide 5 m por 3 m. ¿Cuál es su área en m²?`,a:15,h:"b . h",s:"5 . 3 = 15 m²"},
+  {q:`¿Y su perímetro en m?`,a:16,h:"Sumá los 4 lados.",s:"5 + 3 + 5 + 3 = 16 m"}]},
+ {n:37,t:"Área lateral y total de cuerpos",ej:[
+  {q:`¿Cuál es el área total de un cubo de 3 cm de arista (en cm²)?`,a:54,h:"6 caras cuadradas.",s:"6 . 3² = 54 cm²"}]},
+ {n:38,t:"Unidades de capacidad y unidades de volumen",ej:[
+  {q:`2,5 litros, ¿cuántos ml son?`,a:2500,h:"1 l = 1 000 ml",s:"2,5 . 1 000 = 2 500 ml"},
+  {q:`Una pileta de 10 m³, ¿cuántos litros tiene?`,a:10000,h:"1 m³ = 1 000 l",s:"10 000 litros"}]},
+ {n:39,t:"Volumen de poliedros",ej:[
+  {q:`Volumen de una caja de 4 cm × 3 cm × 2 cm (en cm³):`,a:24,h:"largo . ancho . alto",s:"4 . 3 . 2 = 24 cm³"}]},
+ {n:40,t:"Volumen de cuerpos redondos",ej:[
+  {q:`Cilindro de radio 2 cm y altura 5 cm (π = 3,14). Volumen en cm³:`,a:62.8,h:"π . r² . h",s:"3,14 . 4 . 5 = 62,8 cm³"}]}
+]},
+{n:7,name:"Probabilidad y estadística",temas:[
+ {n:41,t:"Variables, población y muestra",ej:[
+  {q:`La altura de los alumnos es una variable…`,opt:["cualitativa","cuantitativa discreta","cuantitativa continua"],a:"cuantitativa continua",h:"Se mide y puede tener decimales.",s:"Cuantitativa continua."}]},
+ {n:42,t:"Frecuencias absolutas y relativas",ej:[
+  {q:`8 de 20 alumnos eligieron azul. ¿Cuál es la frecuencia relativa?`,a:0.4,h:"f : n",s:"8 : 20 = 0,4"},
+  {q:`¿Y en porcentaje?`,a:40,h:"Multiplicá por 100.",s:"0,4 . 100 = 40 %"}]},
+ {n:43,t:"Promedio, mediana y moda",ej:[
+  {q:`Notas: 7, 4, 9, 6, 7. ¿Cuál es el promedio?`,a:6.6,h:"Sumá y dividí por 5.",s:"33 : 5 = 6,6"},
+  {q:`¿Y la mediana?`,a:7,h:"Ordenalas: 4, 6, 7, 7, 9.",s:"El del medio es 7."}]},
+ {n:44,t:"Experimentos aleatorios. Probabilidad simple",ej:[
+  {q:`Al tirar un dado, ¿cuál es la probabilidad de que salga par? (a/b)`,a:"1/2",h:"Casos favorables: 2, 4, 6.",s:"3/6 = 1/2"},
+  {q:`¿Y la probabilidad de que salga 7?`,a:0,h:"¿Puede salir?",s:"Suceso imposible: 0."}]},
+ {n:45,t:"Cálculo combinatorio",ej:[
+  {q:`Tengo 3 remeras y 2 pantalones. ¿Cuántos conjuntos distintos puedo armar?`,a:6,h:"3 . 2",s:"6 conjuntos."},
+  {q:`¿De cuántas formas se pueden ordenar 4 amigos en una fila?`,a:24,h:"4 . 3 . 2 . 1",s:"24 formas."}]}
+]},
+{n:8,name:"Números enteros",temas:[
+ {n:46,t:"Números negativos. Orden y representación",ej:[
+  {q:`¿Cuál es mayor?`,opt:["−7","−2"],a:"−2",h:"¿Cuál está más a la derecha en la recta?",s:"−2 > −7"},
+  {q:`${M("|−5|")} =`,a:5,h:"Distancia al cero.",s:"5"}]},
+ {n:47,t:"Adición y sustracción",ej:[
+  {q:`${M("(−5) + (+8)")} =`,a:3,h:"Distinto signo: restá y poné el signo del mayor.",s:"+3"},
+  {q:`${M("4 − (−6)")} =`,a:10,h:"Restar es sumar el opuesto.",s:"4 + 6 = 10"}]},
+ {n:48,t:"Multiplicación y división",ej:[
+  {q:`${M("(−3) . (+4)")} =`,a:-12,h:"Signos distintos → negativo.",s:"−12"},
+  {q:`${M("(−2)³")} =`,a:-8,h:"Exponente impar → negativo.",s:"(−2)(−2)(−2) = −8"}]},
+ {n:49,t:"Operaciones combinadas",ej:[
+  {q:`${M("−3 + 2 . (−4) − (−10) : 5")} =`,a:-9,h:"Resolvé cada término por separado.",s:"−3 − 8 + 2 = −9"},
+  {q:`${M("(−2)² + 15 : (−3)")} =`,a:-1,h:"(−2)² = 4",s:"4 − 5 = −1"}]}
+]}
+];
+
+/* ---------- Recordá: explicación corta + ejemplo por tema ---------- */
+const REC={
+1:{r:"Cada cifra vale según el lugar que ocupa: unidades, decenas (10), centenas (100), unidades de mil (1 000)… Las potencias de 10 marcan el lugar: 10³ = 1 000, 10² = 100, 10¹ = 10, 10⁰ = 1.",x:["En 63 528, el 3 está en las unidades de mil → vale 3 000.","4 . 10³ + 6 . 10¹ + 9 . 10⁰ = 4 000 + 60 + 9 = 4 069"]},
+2:{r:"En una división se cumple D = d . c + r, y el resto siempre es menor que el divisor. Distributiva: el número de afuera multiplica a cada término del paréntesis.",x:["38 : 7 → 7 . 5 = 35 y sobran 3 → cociente 5, resto 3","(4 + 6 − 1) . 2 = 8 + 12 − 2 = 18"]},
+3:{r:"Potencia: la base se multiplica por sí misma tantas veces como dice el exponente. Raíz: buscás el número que, elevado al índice, da el de adentro. Si multiplicás potencias de igual base, los exponentes se suman.",x:["3⁴ = 3 . 3 . 3 . 3 = 81",`${R("64","3")} = 4 porque 4 . 4 . 4 = 64`,"5<sup>x</sup> . 5² = 5⁷ → x + 2 = 7 → x = 5"]},
+4:{r:"1) Separá en términos con los + y − que están fuera de los paréntesis. 2) Resolvé paréntesis, potencias y raíces. 3) Multiplicaciones y divisiones. 4) Al final, sumas y restas.",x:[`20 − 3 . 4 + ${R("9")} = 20 − 12 + 3 = 11`,"(2 + 4)² : 4 = 6² : 4 = 36 : 4 = 9"]},
+5:{r:"Por 2: termina en número par. Por 3: la suma de sus cifras es múltiplo de 3. Por 5: termina en 0 o 5. Por 9: la suma de sus cifras es múltiplo de 9. Un número primo solo se divide por 1 y por sí mismo.",x:["234 → 2 + 3 + 4 = 9 → es divisible por 3 y por 9","29 es primo: no lo divide ni 2, ni 3, ni 5"]},
+6:{r:"Dividí siempre por el primo más chico posible (2, 3, 5, 7…) hasta llegar a 1. Los primos que usaste, multiplicados, dan el número.",x:["72 : 2 = 36 → 36 : 2 = 18 → 18 : 2 = 9 → 9 : 3 = 3 → 3 : 3 = 1","72 = 2³ . 3²"]},
+7:{r:"Factorizá los dos números. mcm: comunes y no comunes con el mayor exponente (sirve cuando algo vuelve a coincidir). dcm: solo los comunes con el menor exponente (sirve para repartir en partes iguales).",x:["8 = 2³ y 10 = 2 . 5","mcm (8; 10) = 2³ . 5 = 40","dcm (8; 10) = 2"]},
+8:{r:"Para despejar x, pasá cada número al otro lado con la operación contraria: lo que suma pasa restando y lo que multiplica pasa dividiendo. Al final, verificá.",x:["2 . x + 5 = 19 → 2 . x = 14 → x = 14 : 2 = 7","Verificación: 2 . 7 + 5 = 19 ✔"]},
+9:{r:"El denominador dice en cuántas partes se divide el entero y el numerador cuántas tomás. Para pasar a número mixto, dividí numerador : denominador: el cociente son los enteros y el resto, la fracción.",x:[`${F(11,3)} → 11 : 3 = 3, resto 2 → 3 enteros y ${F(2,3)}`,`Si el numerador es múltiplo del denominador, es aparente: ${F(6,3)} = 2`]},
+10:{r:"Para simplificar, dividí numerador y denominador por el mismo número hasta que no se pueda más. Para comparar, pasalas a igual denominador: es mayor la de mayor numerador.",x:[`${F(10,15)} = ${F("10 : 5","15 : 5")} = ${F(2,3)}`,`¿${F(3,5)} o ${F(1,2)}? → ${F(6,10)} y ${F(5,10)} → es mayor ${F(3,5)}`]},
+11:{r:"Suma y resta: buscá denominador común. Multiplicación: numerador por numerador y denominador por denominador. División: multiplicá por la segunda fracción dada vuelta.",x:[`${F(1,4)} + ${F(2,3)} = ${F(3,12)} + ${F(8,12)} = ${F(11,12)}`,`${F(3,5)} : ${F(2,7)} = ${F(3,5)} . ${F(7,2)} = ${F(21,10)}`]},
+12:{r:"Elevá a la potencia (o sacá la raíz) del numerador y del denominador por separado.",x:[`(${F(3,5)})² = ${F(9,25)}`,`${R(F(4,25))} = ${F(2,5)}`]},
+13:{r:"Se usa el mismo orden que con los números naturales: primero multiplicaciones y divisiones, después sumas y restas. Simplificá en cada paso.",x:[`${F(1,5)} + ${F(1,2)} . ${F(2,5)} = ${F(1,5)} + ${F(2,10)} = ${F(1,5)} + ${F(1,5)} = ${F(2,5)}`]},
+14:{r:"Fracción a decimal: dividí numerador : denominador. Decimal a fracción: el número sin coma sobre 10, 100 o 1 000 (tantos ceros como decimales) y después simplificá.",x:[`${F(2,5)} → 2 : 5 = 0,4`,`0,6 = ${F(6,10)} = ${F(3,5)}`]},
+15:{r:"Sumas y restas: encolumná alineando la coma. Multiplicación: multiplicá sin coma y poné tantos decimales como tengan los dos factores juntos. División por un decimal: multiplicá los dos números por 10 o por 100 hasta que el divisor no tenga coma.",x:["1,5 + 0,4 . 2 = 1,5 + 0,8 = 2,3","3,6 : 0,4 = 36 : 4 = 9"]},
+16:{r:"Porcentaje: el x % de un número es x : 100 . número. Redondeo: mirá la cifra siguiente; si es 5 o más, subí uno; si es menos de 5, queda igual.",x:["15 % de 200 = 15 : 100 . 200 = 30","2,734 redondeado a los centésimos → 2,73 (porque 4 es menor que 5)"]},
+17:{r:"Un punto se escribe (x; y): primero cuánto avanzás en horizontal y después cuánto subís en vertical.",x:["C (3; 5): avanzo 3 a la derecha y subo 5","D (0; 2): no avanzo y subo 2 (está sobre el eje y)"]},
+18:{r:"Con la fórmula, reemplazá x por el número que te dan y hacé la cuenta para encontrar y.",x:["y = 3 . x + 1, con x = 4 → y = 3 . 4 + 1 = 13"]},
+19:{r:"Proporcionalidad directa: si una cantidad se duplica, la otra también. La constante es k = y : x (el precio de 1). Para calcular: y = k . x.",x:["4 cuadernos cuestan $2 000 → k = 2 000 : 4 = 500 por cuaderno","7 cuadernos → 500 . 7 = $3 500"]},
+20:{r:"Proporcionalidad inversa: si una cantidad se duplica, la otra se reduce a la mitad. Lo que se mantiene igual es el producto: x . y = k.",x:["2 canillas llenan un tanque en 6 h → k = 2 . 6 = 12","3 canillas → 12 : 3 = 4 h"]},
+21:{r:"Poliedros: todas sus caras son planas. Cuerpos redondos: tienen alguna parte curva. Fórmula de Euler: Caras + Vértices = Aristas + 2.",x:["Pirámide de base cuadrada: 5 caras + 5 vértices = A + 2 → A = 8 aristas"]},
+22:{r:"Hay 5 poliedros regulares y el nombre dice cuántas caras tienen: tetra = 4, hexa = 6 (el cubo), octa = 8, dodeca = 12, icosa = 20.",x:["Dodecaedro → dodeca = 12 → 12 caras (pentágonos)"]},
+23:{r:"El desarrollo plano es el cuerpo “desarmado”. Prisma: 2 bases + rectángulos. Pirámide: 1 base + triángulos. Cilindro: 2 círculos + 1 rectángulo. Cono: 1 círculo + 1 sector circular.",x:["Prisma de base triangular → 2 triángulos + 3 rectángulos"]},
+24:{r:"Paralelas: nunca se cortan. Secantes: se cortan en un punto. Perpendiculares: se cortan formando ángulos rectos (90°).",x:["Las vías del tren son paralelas; los bordes de una hoja en la esquina son perpendiculares"]},
+25:{r:"1° = 60' y 1' = 60''. Para pasar grados a minutos, multiplicá por 60. Si al sumar los minutos llegan a 60 o más, cambiá 60' por 1°.",x:["5° = 5 . 60 = 300'","12° 50' + 3° 20' = 15° 70' = 16° 10'"]},
+26:{r:"Complementarios: suman 90°. Suplementarios: suman 180°. Agudo: menos de 90°. Recto: 90°. Obtuso: entre 90° y 180°. Llano: 180°.",x:["Complemento de 25° = 90° − 25° = 65°","Suplemento de 25° = 180° − 25° = 155°"]},
+27:{r:"La mediatriz es la recta perpendicular que pasa por el punto medio del segmento: lo corta en dos partes iguales.",x:["Si AB = 10 cm, el punto medio está a 10 : 2 = 5 cm de A"]},
+28:{r:"La bisectriz sale del vértice y divide al ángulo en dos ángulos iguales.",x:["Bisectriz de 60° → dos ángulos de 60° : 2 = 30°"]},
+29:{r:"Los 3 ángulos de un triángulo suman 180°. Para que el triángulo exista, cada lado tiene que ser menor que la suma de los otros dos.",x:["Ángulos de 40° y 75° → 180° − 40° − 75° = 65°","¿Lados 2, 3 y 4? 2 + 3 = 5, que es mayor que 4 → sí existe"]},
+30:{r:"Si conocés dos lados, el tercero tiene que ser menor que la suma de los dos y mayor que su diferencia.",x:["Lados de 6 cm y 2 cm → el tercero tiene que estar entre 4 cm y 8 cm, sin llegar a esos valores"]},
+31:{r:"Los 4 ángulos de un cuadrilátero suman 360°. Paralelogramo: 2 pares de lados paralelos. Trapecio: 1 solo par. Trapezoide: ninguno.",x:["Ángulos de 100°, 70° y 95° → 360° − 265° = 95°"]},
+32:{r:"Usá las propiedades: el rectángulo y el cuadrado tienen ángulos rectos. Las diagonales del rombo y del cuadrado son perpendiculares (forman 90°) y se cortan en su punto medio.",x:["Cuadrado de 4 cm: trazá un lado de 4 cm, perpendiculares con la escuadra en cada punta, marcá 4 cm y uní"]},
+33:{r:"El diámetro es el doble del radio: d = 2 . r. Secante: corta a la circunferencia en 2 puntos. Tangente: la toca en 1 punto. Exterior: no la toca.",x:["Radio de 7 cm → diámetro 2 . 7 = 14 cm","Diámetro de 20 cm → radio 20 : 2 = 10 cm"]},
+34:{r:"Mediatrices → circuncentro: el centro de la circunferencia que pasa por los 3 vértices. Bisectrices → incentro: el centro de la circunferencia que toca los 3 lados por dentro.",x:["Tres pueblos y una antena a la misma distancia de los tres → se usan las mediatrices"]},
+35:{r:"En un polígono de n lados: diagonales = n . (n − 3) : 2. Suma de los ángulos interiores = 180° . (n − 2).",x:["Cuadrado (n = 4): diagonales 4 . 1 : 2 = 2 · ángulos 180° . 2 = 360°","Octógono (n = 8): diagonales 8 . 5 : 2 = 20"]},
+36:{r:"Perímetro: sumá todos los lados (el borde). Área: lo de adentro, en unidades cuadradas. Rectángulo: base . altura. Triángulo: base . altura : 2.",x:["Rectángulo de 6 m por 2 m → P = 6 + 2 + 6 + 2 = 16 m","Área = 6 . 2 = 12 m²"]},
+37:{r:"El área total es la suma de las áreas de todas las caras. Un cubo tiene 6 cuadrados iguales: 6 . lado².",x:["Cubo de 2 cm → 6 . 2² = 6 . 4 = 24 cm²"]},
+38:{r:"1 l = 1 000 ml. 1 dm³ = 1 l, 1 cm³ = 1 ml y 1 m³ = 1 000 l. De litros a ml, multiplicá por 1 000.",x:["1,5 l = 1,5 . 1 000 = 1 500 ml","3 m³ = 3 . 1 000 = 3 000 l"]},
+39:{r:"Volumen de una caja (prisma rectangular) = largo . ancho . alto. Cubo = lado³. Pirámide = área de la base . altura : 3.",x:["Caja de 5 cm × 2 cm × 3 cm → 5 . 2 . 3 = 30 cm³"]},
+40:{r:"Volumen del cilindro = π . r² . h (usá π = 3,14). Primero elevá el radio al cuadrado y después multiplicá todo.",x:["r = 1 cm y h = 10 cm → 3,14 . 1² . 10 = 31,4 cm³"]},
+41:{r:"Cualitativa: se responde con palabras (color, deporte). Cuantitativa discreta: se cuenta (hermanos, goles). Cuantitativa continua: se mide y puede tener decimales (altura, peso, tiempo).",x:["“¿Cuántas mascotas tenés?” → cuantitativa discreta","“¿Cuánto pesás?” → cuantitativa continua"]},
+42:{r:"Frecuencia relativa = cuántas veces aparece : total de datos. Para pasarla a porcentaje, multiplicá por 100.",x:["5 de 25 eligieron fútbol → 5 : 25 = 0,2 → 0,2 . 100 = 20 %"]},
+43:{r:"Promedio: sumá todos los datos y dividí por la cantidad. Mediana: ordenalos de menor a mayor y elegí el del medio. Moda: el que más se repite.",x:["Datos 3, 8, 5, 8, 6 → ordenados: 3, 5, 6, 8, 8","Promedio = 30 : 5 = 6 · Mediana = 6 · Moda = 8"]},
+44:{r:"Probabilidad = casos favorables : casos posibles. Va de 0 (imposible) a 1 (seguro).",x:[`Bolsa con 2 bolitas rojas y 3 azules → P(roja) = ${F(2,5)}`,`Dado → P(sale 1 o 2) = ${F(2,6)} = ${F(1,3)}`]},
+45:{r:"Si elegís una cosa de un grupo y otra de otro grupo, multiplicá las opciones. Para ordenar n cosas en fila: n . (n − 1) . … . 1.",x:["2 gustos de helado y 4 toppings → 2 . 4 = 8 combinaciones","3 libros en un estante → 3 . 2 . 1 = 6 formas"]},
+46:{r:"En la recta numérica, es mayor el que está más a la derecha. Entre dos negativos, es mayor el que está más cerca del 0. El módulo |a| es la distancia al 0 (siempre es positivo).",x:["−3 > −9 porque −3 está más cerca del 0","|−12| = 12"]},
+47:{r:"Igual signo: sumá y dejá el mismo signo. Distinto signo: restá y poné el signo del número más grande (sin mirar el signo). Restar un negativo es sumar: a − (−b) = a + b.",x:["(−9) + (+4) = −5","7 − (−2) = 7 + 2 = 9"]},
+48:{r:"Regla de los signos: signos iguales dan +, signos distintos dan −. Potencia de base negativa: con exponente par da +, con exponente impar da −.",x:["(−5) . (−2) = +10","(+12) : (−4) = −3","(−3)² = 9 y (−3)³ = −27"]},
+49:{r:"Separá en términos y resolvé cada uno con la regla de los signos. Al final, juntá los positivos por un lado y los negativos por el otro.",x:["−4 + 2 . (−3) − (−6) : 2 = −4 − 6 + 3 = −7"]}
+};
+
+/* ---------- Paso a paso de cada ejercicio (p: pasos, t: consejo) ---------- */
+const EXPL={
+"1-0":{p:["Ubicá cada cifra en su lugar, de derecha a izquierda: 5 → unidades, 1 → decenas, 3 → centenas, 7 → unidades de mil, 4 → decenas de mil.","El 7 está en las unidades de mil, y cada unidad de mil vale 1 000.","Entonces el 7 vale 7 . 1 000 = 7 000."],t:"Mirá el lugar de la cifra, no solo la cifra: el mismo 7 vale 7, 70, 700 o 7 000 según dónde esté."},
+"1-1":{p:["Calculá cada potencia de 10: 10³ = 10 . 10 . 10 = 1 000 (un 1 y 3 ceros); 10² = 10 . 10 = 100; 10⁰ = 1 (todo número elevado a la 0 da 1).","Multiplicá cada una: 5 . 1 000 = 5 000; 2 . 100 = 200; 4 . 1 = 4.","Sumá: 5 000 + 200 + 4 = 5 204. Como no hay decenas, en ese lugar va un 0."],t:"El exponente del 10 dice cuántos ceros lleva: 10³ tiene 3 ceros (1 000). 10³ NO es 10 . 3 = 30."},
+"2-0":{p:["Buscá cuántas veces entra el 5 en 47 sin pasarte: 5 . 9 = 45 (5 . 10 = 50 ya se pasa).","Lo que sobra es el resto: 47 − 45.","47 − 45 = 2. Comprobá: 5 . 9 + 2 = 47 ✔. El resto (2) es menor que el divisor (5), así que está bien."],t:"El resto siempre tiene que ser más chico que el divisor. Si te da más grande, el cociente puede ser mayor."},
+"2-1":{p:["Distributiva: el 3 multiplica a cada número del paréntesis, respetando los signos: 7 . 3 + 5 . 3 − 2 . 3.","Hacé las multiplicaciones: 21 + 15 − 6.","21 + 15 = 36 y 36 − 6 = 30. (Comprobación: 7 + 5 − 2 = 10 y 10 . 3 = 30.)"],t:"No te olvides de multiplicar también el número que está restando."},
+"3-0":{p:["2⁵ quiere decir multiplicar el 2 por sí mismo 5 veces: 2 . 2 . 2 . 2 . 2.","Andá de a pasos: 2 . 2 = 4; 4 . 2 = 8; 8 . 2 = 16; 16 . 2 = …","El último paso da 32."],t:"2⁵ NO es 2 . 5 = 10. El exponente dice cuántas veces se repite la base."},
+"3-1":{p:["Cuando se multiplican potencias de la misma base, se deja la base y se suman los exponentes: 2<sup>x</sup> . 2⁶ = 2<sup>x + 6</sup>.","Como 2<sup>x + 6</sup> = 2¹⁰ y las bases son iguales, los exponentes también: x + 6 = 10.","Despejá: x = 10 − 6 = 4. Comprobá: 2⁴ . 2⁶ = 2¹⁰ ✔"],t:"En un producto de igual base, los exponentes se SUMAN, no se multiplican."},
+"3-2":{p:["La raíz cúbica pregunta: ¿qué número, multiplicado 3 veces por sí mismo, da 125?","Probá: 3 . 3 . 3 = 27 (poco); 4 . 4 . 4 = 64 (poco); 5 . 5 . 5 = 125 ✔","Entonces la raíz cúbica de 125 es 5."],t:"Raíz cúbica: el número se repite 3 veces. Raíz cuadrada: 2 veces."},
+"4-0":{p:["Separá en términos con los + y −: 35 | + 4 . 12 | − 2.","Resolvé primero la multiplicación: 4 . 12 = 48.","Sumá y restá de izquierda a derecha: 35 + 48 = 83; 83 − 2 = 81."],t:"Si hacés 35 + 4 primero, te da mal: la multiplicación va antes que la suma."},
+"4-1":{p:["Empezá por las raíces de adentro del paréntesis: √14 400 = 120 (porque 120 . 120 = 14 400) y √100 = 10.","Dentro del paréntesis, primero la división y después la resta: 120 : 10 = 12; 12 − 6 = 6.","La raíz de afuera: la raíz cúbica de 2³ es 2 (la raíz cúbica y el cubo se cancelan).","Multiplicá: 6 . 2 = 12."],t:"14 400 es 144 con dos ceros: como √144 = 12, entonces √14 400 = 120."},
+"4-2":{p:["Adentro de las raíces: 5⁰ = 1 (todo número elevado a la 0 da 1) y 1 + 6 . 4 = 1 + 24 = 25.","Las raíces: √1 = 1, √25 = 5 y √144 = 12.","El paréntesis al cuadrado: (1 + 5)² = 6² = 36.","Dentro del corchete: 36 : 12 = 3; 3 − 2 = 1.","Por último: 1²⁰ = 1, porque 1 multiplicado por sí mismo siempre da 1."],t:"5⁰ no es 0, es 1. Y resolvé siempre de adentro hacia afuera."},
+"5-0":{p:["Criterio del 9: un número es divisible por 9 si la suma de sus cifras es múltiplo de 9.","Sumá las cifras de 156: 1 + 5 + 6 = 12.","12 no es múltiplo de 9 (los múltiplos son 9, 18, 27…), así que 156 NO es divisible por 9. Sí lo es por 3, porque 12 es múltiplo de 3."],t:"No confundas el criterio del 3 con el del 9: los dos suman las cifras, pero el del 9 pide un múltiplo de 9."},
+"5-1":{p:["Un número primo solo se puede dividir por 1 y por sí mismo. Probá los números que siguen al 20, uno por uno.","21 = 3 . 7 → no es primo. 22 = 2 . 11 → no es primo.","23 no se puede dividir por 2, ni por 3, ni por 5 → es primo. La respuesta es 23."],t:"Para saber si un número es primo, probá dividirlo por 2, 3, 5 y 7. Si ninguna división da exacta, es primo."},
+"6-0":{p:["Factorizá 60 dividiendo por primos: 60 : 2 = 30; 30 : 2 = 15; 15 : 3 = 5; 5 : 5 = 1.","Usaste el 2 dos veces, el 3 una vez y el 5 una vez: 60 = 2 . 2 . 3 . 5.","2 . 2 se escribe 2², así que 60 = 2² . 3 . 5 y a = 2."],t:"El exponente cuenta cuántas veces aparece ese primo en la factorización."},
+"6-1":{p:["Factorizá 36: 36 : 2 = 18; 18 : 2 = 9; 9 : 3 = 3; 3 : 3 = 1.","Usaste el 2 dos veces y el 3 dos veces: 36 = 2 . 2 . 3 . 3.","Con potencias: 36 = 2² . 3². Comprobá: 4 . 9 = 36 ✔"],t:"Verificá siempre multiplicando: 2 . 3³ = 54 y 2³ . 3 = 24, ninguno da 36."},
+"7-0":{p:["Factorizá los dos números: 12 = 2² . 3 y 18 = 2 . 3².","Para el mcm se toman TODOS los factores (comunes y no comunes) con el MAYOR exponente: del 2, el mayor es 2²; del 3, el mayor es 3².","mcm = 2² . 3² = 4 . 9 = 36. Comprobá: 36 es múltiplo de 12 y de 18 ✔"],t:"mcm → todos los factores, con el mayor exponente. dcm → solo los comunes, con el menor."},
+"7-1":{p:["Factorizá los dos números: 12 = 2² . 3 y 18 = 2 . 3².","Para el dcm se toman solo los factores COMUNES con el MENOR exponente: del 2, el menor es 2¹; del 3, el menor es 3¹.","dcm = 2 . 3 = 6. Comprobá: 12 : 6 = 2 y 18 : 6 = 3, las dos divisiones son exactas ✔"],t:"El dcm nunca puede ser más grande que el número más chico."},
+"7-2":{p:["Pensá qué pide el problema: un momento en que los dos colectivos coincidan otra vez. Eso es un múltiplo de 15 y de 20 → se busca el mcm.","Factorizá: 15 = 3 . 5 y 20 = 2² . 5. Tomá todos los factores con el mayor exponente: 2² . 3 . 5.","mcm = 4 . 3 . 5 = 60. Vuelven a coincidir a los 60 minutos (1 hora)."],t:"Si algo “vuelve a coincidir”, es mcm. Si hay que “repartir en partes iguales”, es dcm."},
+"8-0":{p:["Queremos dejar la x sola. El 7 está restando: pasa al otro lado sumando → 3 . x = 17 + 7.","Hacé la cuenta: 3 . x = 24.","El 3 está multiplicando: pasa dividiendo → x = 24 : 3 = 8. Verificá: 3 . 8 − 7 = 24 − 7 = 17 ✔"],t:"Primero se pasa lo que suma o resta, y después lo que multiplica o divide."},
+"8-1":{p:["Traducí a lenguaje simbólico: “el doble de un número” es 2 . x; “aumentado en 4” es + 4; “es 20” es = 20. Queda 2 . x + 4 = 20.","El 4 pasa restando: 2 . x = 20 − 4 = 16.","El 2 pasa dividiendo: x = 16 : 2 = 8. Verificá: 2 . 8 + 4 = 20 ✔"],t:"“El doble” es multiplicar por 2; “aumentado en” es sumar."},
+"9-0":{p:[`${F(7,4)} quiere decir 7 cuartos. Para ver cuántos enteros hay, dividí 7 : 4.`,"7 : 4 = 1 y sobran 3 (porque 4 . 1 = 4 y 7 − 4 = 3).",`El cociente (1) son los enteros y el resto (3) va arriba de la fracción: 1 entero y ${F(3,4)}. El número que falta es 3.`],t:"El denominador no cambia: si eran cuartos, siguen siendo cuartos."},
+"9-1":{p:["Fijate si el numerador es múltiplo del denominador: ¿el 8 se puede dividir exacto por 4?",`Sí: 8 : 4 = 2. Entonces ${F(8,4)} es igual a 2, un número entero.`,"Cuando una fracción es igual a un número entero, se llama aparente."],t:"Propia: el numerador es menor (vale menos de 1). Impropia: el numerador es mayor (vale más de 1). Aparente: da un número entero."},
+"10-0":{p:["Buscá un número que divida al 12 y al 18 a la vez. El más grande es 6 (es su dcm).",`Dividí arriba y abajo por 6: 12 : 6 = 2 y 18 : 6 = 3 → ${F(2,3)}.`,`2 y 3 no tienen divisores en común, así que ${F(2,3)} es irreducible.`],t:`Si no ves el 6, podés ir de a poco: primero por 2 (${F(6,9)}) y después por 3 (${F(2,3)}).`},
+"10-1":{p:["Para comparar, pasá las dos fracciones al mismo denominador. El mcm de 3 y 4 es 12.",`${F(2,3)} = ${F(8,12)} (multiplicaste arriba y abajo por 4) y ${F(3,4)} = ${F(9,12)} (por 3).`,`Con igual denominador, es mayor la de mayor numerador: 9 es mayor que 8, entonces ${F(3,4)} es mayor.`],t:"No alcanza con mirar el numerador o el denominador por separado: primero hay que igualar los denominadores."},
+"11-0":{p:["Los denominadores son distintos (2 y 3): buscá un denominador común. El mcm de 2 y 3 es 6.",`Convertí: ${F(1,2)} = ${F(3,6)} y ${F(1,3)} = ${F(2,6)}.`,`Sumá los numeradores y dejá el denominador: ${F(3,6)} + ${F(2,6)} = ${F(5,6)}.`],t:`Nunca sumes los denominadores: ${F(1,2)} + ${F(1,3)} NO es ${F(2,5)}.`},
+"11-1":{p:["En la multiplicación de fracciones se multiplica numerador por numerador y denominador por denominador.","Numeradores: 2 . 4 = 8. Denominadores: 3 . 5 = 15.",`Resultado: ${F(8,15)}. No se puede simplificar porque 8 y 15 no tienen divisores en común.`],t:"Para multiplicar fracciones NO hace falta un denominador común."},
+"11-2":{p:[`Para dividir fracciones, se multiplica la primera por la segunda dada vuelta (su inversa): ${F(1,2)} dada vuelta es ${F(2,1)}.`,`${F(3,4)} . ${F(2,1)} = ${F("3 . 2","4 . 1")} = ${F(6,4)}.`,`Simplificá por 2: ${F(6,4)} = ${F(3,2)}.`],t:"Se da vuelta solo la segunda fracción, la que divide."},
+"12-0":{p:[`Elevar al cuadrado es multiplicar la fracción por sí misma: ${F(2,3)} . ${F(2,3)}.`,"Se eleva el numerador y el denominador por separado: 2² = 4 y 3² = 9.",`Resultado: ${F(4,9)}.`],t:`(${F(2,3)})² no es ${F(4,6)}: el denominador también se eleva al cuadrado.`},
+"12-1":{p:["La raíz de una fracción es la raíz del numerador sobre la raíz del denominador.","√9 = 3 (porque 3 . 3 = 9) y √16 = 4 (porque 4 . 4 = 16).",`Resultado: ${F(3,4)}. Comprobá: ${F(3,4)} . ${F(3,4)} = ${F(9,16)} ✔`],t:"La raíz se aplica a los dos números, arriba y abajo."},
+"13-0":{p:[`Separá en términos: ${F(1,2)} | + ${F(3,4)} . ${F(2,3)}. Primero va la multiplicación.`,`${F(3,4)} . ${F(2,3)} = ${F(6,12)}, y simplificando: ${F(6,12)} = ${F(1,2)}.`,`Ahora sumá: ${F(1,2)} + ${F(1,2)} = ${F(2,2)} = 1.`],t:"Igual que con los números naturales: primero se multiplica y después se suma."},
+"14-0":{p:[`Una fracción es una división: ${F(3,4)} = 3 : 4.`,"Como 3 es menor que 4, ponés 0 y coma, y seguís: 30 : 4 = 7 (sobran 2); después 20 : 4 = 5.",`Resultado: 0,75. (También sirve: ${F(3,4)} = ${F(75,100)} = 0,75.)`],t:`Pensalo con plata: ${F(3,4)} de $1 son 75 centavos → 0,75.`},
+"14-1":{p:[`0,25 tiene 2 cifras después de la coma: se escribe ${F(25,100)}.`,"Simplificá: 25 y 100 se pueden dividir por 25 → 25 : 25 = 1 y 100 : 25 = 4.",`Resultado: ${F(1,4)}.`],t:"1 cifra decimal → sobre 10; 2 cifras → sobre 100; 3 cifras → sobre 1 000."},
+"15-0":{p:["Separá en términos: 2,5 | + 1,2 . 3. Primero va la multiplicación.","1,2 . 3: hacé 12 . 3 = 36 y poné 1 decimal (porque 1,2 tiene una cifra después de la coma) → 3,6.","Sumá alineando la coma: 2,5 + 3,6 = 6,1."],t:"Si sumás primero (2,5 + 1,2 = 3,7) y después multiplicás, te da mal."},
+"15-1":{p:["Para dividir por un número con coma, multiplicá los dos por 10 hasta que el divisor no tenga coma: 4,5 . 10 = 45 y 0,5 . 10 = 5.","La división queda 45 : 5.","45 : 5 = 9. (Tiene sentido: en 4,5 entran 9 medios.)"],t:"Dividir por 0,5 es lo mismo que multiplicar por 2: el resultado da MÁS grande."},
+"16-0":{p:[`El 20 % es ${F(20,100)}, o sea 0,2 (también es la quinta parte).`,"Multiplicá: 0,2 . 150. (O también: 150 : 100 = 1,5 y 1,5 . 20.)","El resultado es 30."],t:"Truco: el 10 % se saca corriendo la coma un lugar (15), y el 20 % es el doble (30)."},
+"16-1":{p:["Los centésimos son la segunda cifra después de la coma: en 3,476 es el 7.","Mirá la cifra que sigue, el 6. Como 6 es 5 o más, el 7 sube a 8.","Resultado: 3,48."],t:"Si la cifra siguiente es 0, 1, 2, 3 o 4, queda igual. Si es 5 o más, se sube uno."},
+"17-0":{p:["Un punto se escribe (x; y): primero va el movimiento horizontal y después el vertical.","Avanzar 4 hacia la derecha es x = 4. Subir 1 es y = 1.","El punto es (4; 1)."],t:"(4; 1) y (1; 4) son puntos distintos: el orden importa."},
+"18-0":{p:["La fórmula es y = x + 2, y te dicen que x = 5 km.","Reemplazá la x por 5: y = 5 + 2.","y = 7 → cobra $7 (miles)."],t:"Reemplazar es poner el número en el lugar de la letra."},
+"19-0":{p:["Si 1 alfajor cuesta $500, cada alfajor más suma $500: es proporcionalidad directa.","Multiplicá el precio de uno por la cantidad: 500 . 6.","500 . 6 = 3 000 → 6 alfajores cuestan $3 000."],t:"En la proporcionalidad directa, si comprás el doble, pagás el doble."},
+"19-1":{p:["La constante de proporcionalidad es el precio de 1 kg: se calcula dividiendo el precio por los kilos (k = y : x).","Dividí: 2 400 : 3.","2 400 : 3 = 800, así que cada kilo cuesta $800. Comprobá: 800 . 3 = 2 400 ✔"],t:"La constante es lo que vale UNO."},
+"20-0":{p:["Más pintores terminan en menos días: es proporcionalidad inversa. Lo que se mantiene igual es pintores . días.","1 pintor . 12 días = 12 (esa es la constante).","Con 4 pintores: 12 : 4 = 3 días. Comprobá: 4 . 3 = 12 ✔"],t:"En la inversa NO se multiplica 12 . 4: más pintores tienen que dar MENOS días."},
+"21-0":{p:["Usá la fórmula de Euler: Caras + Vértices = Aristas + 2.","Reemplazá: 6 + 8 = A + 2 → 14 = A + 2.","Despejá: A = 14 − 2 = 12. (Es un cubo: tiene 12 aristas.)"],t:"Podés comprobarlo con un dado: contá sus bordes."},
+"21-1":{p:["Fijate si el cuerpo tiene alguna parte curva o si todas sus caras son planas.","Una lata tiene el costado curvo (si la apoyás acostada, rueda).","Entonces es un cuerpo redondo: un cilindro."],t:"Si rueda, es un cuerpo redondo; si tiene solo caras planas, es un poliedro."},
+"22-0":{p:["El nombre de cada poliedro regular dice cuántas caras tiene.","“Octa” quiere decir 8 (como el pulpo, que tiene 8 brazos: en inglés se llama octopus).","El octaedro tiene 8 caras (triángulos equiláteros)."],t:"tetra = 4, hexa = 6, octa = 8, dodeca = 12, icosa = 20."},
+"23-0":{p:["Imaginá que desarmás una lata: arriba tiene una tapa y abajo una base.","La tapa y la base son círculos; el costado, al abrirlo, queda como un rectángulo.","El desarrollo tiene 2 círculos (y 1 rectángulo)."],t:"El cono tiene un solo círculo; el cilindro, dos."},
+"24-0":{p:["Si dos rectas se cortan y forman 4 ángulos rectos (de 90°), tienen un nombre especial.","Las paralelas no se cortan nunca, así que no puede ser esa opción.","Son perpendiculares (se escribe a ⊥ b)."],t:"Perpendiculares, como las líneas de una hoja cuadriculada."},
+"25-0":{p:["En el sistema sexagesimal, 1° = 60' (60 minutos).","Para pasar 3° a minutos, multiplicá por 60: 3 . 60.","3 . 60 = 180 → 3° = 180'."],t:"De grados a minutos: × 60. De minutos a grados: : 60."},
+"25-1":{p:["Sumá por separado: grados con grados (35° + 20° = 55°) y minutos con minutos (40' + 30' = 70').","70' es más que 60': se cambian 60' por 1°, y quedan 70' − 60' = 10'.","Ese 1° se suma a los grados: 55° + 1° = 56°. El resultado es 56° 10', así que faltaban 10 minutos."],t:"Es como con el reloj: 1 h 40 min + 30 min = 2 h 10 min."},
+"26-0":{p:["Dos ángulos complementarios suman 90°.","El complemento de 35° es lo que le falta para llegar a 90°: 90° − 35°.","90° − 35° = 55°."],t:"Complemento → 90°. Suplemento → 180°."},
+"26-1":{p:["Recordá: agudo es menor que 90°; recto es 90°; obtuso está entre 90° y 180°; llano es 180°.","120° es mayor que 90° y menor que 180°.","Entonces 120° es un ángulo obtuso."],t:"Un ángulo recto es como la esquina de una hoja; si se abre más, es obtuso."},
+"27-0":{p:["La mediatriz pasa por el punto medio del segmento: lo corta en dos partes iguales.","AB mide 8 cm, así que cada mitad mide 8 : 2.","8 : 2 = 4 → la mediatriz corta a 4 cm de A."],t:"Punto medio = la mitad del segmento."},
+"28-0":{p:["La bisectriz divide al ángulo en dos ángulos iguales.","El ángulo mide 80°, así que cada parte mide 80° : 2.","80° : 2 = 40° → quedan dos ángulos de 40°."],t:"La bisectriz parte el ángulo justo por la mitad."},
+"29-0":{p:["Los 3 ángulos de cualquier triángulo suman 180°.","Sumá los que conocés: 50° + 60° = 110°.","Lo que falta para 180° es 180° − 110° = 70°."],t:"Si entre los tres te da más de 180°, revisá la cuenta."},
+"29-1":{p:["Propiedad triangular: cada lado tiene que ser MENOR que la suma de los otros dos.","Probá con el lado más largo: 3 + 4 = 7. ¿8 es menor que 7? No.","Como no se cumple, los lados no alcanzan a cerrarse: NO existe ese triángulo."],t:"Probá siempre con el lado más largo: si ese cumple, cumplen todos."},
+"30-0":{p:["El tercer lado tiene que ser menor que la suma de los otros dos: 5 + 4 = 9.","Tiene que ser MENOR que 9 (si midiera 9, los lados quedarían acostados en línea y no formarían un triángulo).","El número entero más grande que es menor que 9 es 8 → 8 cm."],t:"“Menor que 9” quiere decir que el 9 NO sirve."},
+"31-0":{p:["Los 4 ángulos de un cuadrilátero suman 360°.","Sumá los que conocés: 90° + 80° + 110° = 280°.","Lo que falta es 360° − 280° = 80°."],t:"Triángulo → 180°. Cuadrilátero → 360°."},
+"31-1":{p:["Contá cuántos pares de lados paralelos tiene: 2 pares es paralelogramo; 1 solo par es trapecio; ninguno es trapezoide.","Acá dice que tiene un solo par de lados paralelos.","Entonces es un trapecio."],t:"Un trapecio tiene la forma de un balde visto de costado."},
+"32-0":{p:["Las diagonales del rombo son perpendiculares.","Dos rectas perpendiculares forman ángulos rectos.","Un ángulo recto mide 90°."],t:"En el rombo y en el cuadrado, las diagonales se cortan formando una cruz."},
+"33-0":{p:["El diámetro es el doble del radio: d = 2 . r.","El radio es 15 cm: d = 2 . 15.","d = 30 cm."],t:"Radio: del centro al borde. Diámetro: de borde a borde, pasando por el centro."},
+"33-1":{p:["Contá en cuántos puntos toca la recta a la circunferencia: 2 puntos es secante; 1 punto es tangente; ninguno es exterior.","Acá la toca en un solo punto.","Es una recta tangente."],t:"Tangente: como una pelota apoyada en el piso, que lo toca en un solo punto."},
+"34-0":{p:["La circunferencia tiene que pasar por los 3 vértices, así que el centro tiene que estar a la misma distancia de los tres.","Los puntos de la mediatriz de un segmento están a la misma distancia de sus dos extremos.","Por eso se usan las mediatrices de los lados: donde se cortan está el centro (el circuncentro)."],t:"Mediatrices → pasa por los vértices. Bisectrices → toca los lados."},
+"35-0":{p:["La fórmula de las diagonales es n . (n − 3) : 2, donde n es la cantidad de lados.","El hexágono tiene 6 lados: 6 . (6 − 3) : 2 = 6 . 3 : 2.","6 . 3 = 18 y 18 : 2 = 9 diagonales."],t:"Se resta 3 porque desde cada vértice no sale diagonal hacia sí mismo ni hacia sus dos vecinos."},
+"35-1":{p:["La suma de los ángulos interiores es 180° . (n − 2), donde n es la cantidad de lados.","El pentágono tiene 5 lados: 180° . (5 − 2) = 180° . 3.","180° . 3 = 540°."],t:"Truco: el pentágono se puede partir en 3 triángulos, y cada uno suma 180°."},
+"36-0":{p:["El área del rectángulo es base . altura.","La base es 5 m y la altura es 3 m: 5 . 3.","5 . 3 = 15 m² (metros cuadrados)."],t:"El área va en m² (cuadrados); el perímetro, en m."},
+"36-1":{p:["El perímetro es la suma de todos los lados (el borde).","El rectángulo tiene dos lados de 5 m y dos de 3 m: 5 + 3 + 5 + 3.","5 + 3 + 5 + 3 = 16 m."],t:"El perímetro se SUMA. Multiplicar es para el área."},
+"37-0":{p:["Un cubo tiene 6 caras, y todas son cuadrados iguales.","El área de una cara es lado . lado: 3 . 3 = 9 cm².","Las 6 caras: 6 . 9 = 54 cm²."],t:"Área total = todas las caras. No te olvides de la de arriba y la de abajo."},
+"38-0":{p:["1 litro = 1 000 ml.","Para pasar de litros a mililitros, multiplicá por 1 000: 2,5 . 1 000.","Multiplicar por 1 000 corre la coma 3 lugares a la derecha: 2,5 → 2 500 ml."],t:"De litros a ml: × 1 000. De ml a litros: : 1 000."},
+"38-1":{p:["1 m³ = 1 000 litros.","Multiplicá: 10 . 1 000.","10 . 1 000 = 10 000 litros."],t:"1 m³ es un cubo de 1 metro de lado: ¡le entran 1 000 botellas de un litro!"},
+"39-0":{p:["El volumen de una caja es largo . ancho . alto.","Multiplicá las tres medidas: 4 . 3 . 2.","4 . 3 = 12 y 12 . 2 = 24 cm³ (entran 24 cubitos de 1 cm)."],t:"El volumen va en cm³ (cúbicos), porque se multiplican tres medidas."},
+"40-0":{p:["El volumen del cilindro es π . r² . h (usamos π = 3,14).","Primero, el radio al cuadrado: 2² = 2 . 2 = 4.","Multiplicá todo: 3,14 . 4 = 12,56 y 12,56 . 5 = 62,8 cm³."],t:"r² es r . r, no r . 2. Con r = 2 da lo mismo (4), pero con r = 3 sería 9, no 6."},
+"41-0":{p:["Preguntate: ¿la respuesta es una palabra o un número? La altura es un número → es cuantitativa.","¿Se cuenta o se mide? La altura se mide con un metro y puede tener decimales (por ejemplo, 1,52 m).","Por eso es cuantitativa continua."],t:"Se cuenta → discreta (hermanos, goles). Se mide → continua (altura, peso)."},
+"42-0":{p:["La frecuencia relativa es: cuántas veces aparece : total de datos.","Azul aparece 8 veces y hay 20 alumnos: 8 : 20.",`8 : 20 = 0,4 (también es la fracción ${F(8,20)} = ${F(2,5)}).`],t:"La frecuencia relativa siempre da entre 0 y 1."},
+"42-1":{p:["Para pasar la frecuencia relativa a porcentaje, se multiplica por 100.","0,4 . 100: corré la coma dos lugares a la derecha.","0,4 . 100 = 40 → 40 %."],t:"0,5 es el 50 %, 0,25 es el 25 % y 0,4 es el 40 %."},
+"43-0":{p:["El promedio se calcula sumando todos los datos y dividiendo por la cantidad de datos.","Sumá: 7 + 4 + 9 + 6 + 7 = 33. Son 5 notas.","33 : 5 = 6,6."],t:"Contá bien cuántos datos hay: el 7 aparece dos veces y cuenta las dos."},
+"43-1":{p:["Para la mediana, primero ordená los datos de menor a mayor: 4, 6, 7, 7, 9.","Son 5 datos, así que el del medio es el tercero.","El tercero es 7 → la mediana es 7."],t:"Si no ordenás, el del medio sería el 9 (7, 4, 9, 6, 7), y eso está mal."},
+"44-0":{p:["Probabilidad = casos favorables : casos posibles.","Casos posibles en un dado: 6 (1, 2, 3, 4, 5 y 6). Casos favorables (que salga par): 2, 4 y 6 → son 3.",`P = ${F(3,6)} = ${F(1,2)} (sale la mitad de las veces).`],t:"Primero contá todos los resultados posibles; después, los que te sirven."},
+"44-1":{p:["Un dado común tiene números del 1 al 6.","El 7 no está: no hay ningún caso favorable (0 casos).",`P = ${F(0,6)} = 0 → es un suceso imposible.`],t:"Probabilidad 0 = imposible. Probabilidad 1 = seguro."},
+"45-0":{p:["Con cada remera podés usar cualquiera de los 2 pantalones.","Remera 1 → 2 opciones; remera 2 → 2 opciones; remera 3 → 2 opciones.","3 . 2 = 6 conjuntos distintos."],t:"Si elegís una cosa de cada grupo, multiplicá las opciones."},
+"45-1":{p:["Para el primer lugar de la fila hay 4 amigos posibles.","Para el segundo quedan 3, para el tercero quedan 2 y para el último queda 1.","4 . 3 . 2 . 1 = 24 formas."],t:"Cada vez que ubicás a alguien, queda una persona menos para elegir."},
+"46-0":{p:["Ubicá los dos números en la recta numérica: los negativos están a la izquierda del 0.","−2 está más cerca del 0 que −7, o sea, más a la derecha.","El que está más a la derecha es el mayor: −2 > −7."],t:"Pensá en la temperatura: −2 °C es menos frío que −7 °C, así que −2 es mayor."},
+"46-1":{p:["El módulo |a| es la distancia del número al 0.","−5 está a 5 lugares del 0.","|−5| = 5. El módulo siempre es positivo."],t:"El módulo le saca el signo al número."},
+"47-0":{p:["Los signos son distintos (− y +): se restan los números sin signo: 8 − 5 = 3.","El signo es el del número más grande sin mirar el signo: el 8 es más grande y es positivo.","Resultado: +3. (Con plata: debés 5 y te dan 8 → te sobran 3.)"],t:"Signos distintos → se resta. Signos iguales → se suma."},
+"47-1":{p:["Restar un número es sumar su opuesto: − (−6) se convierte en + 6.","Queda 4 + 6.","4 + 6 = 10."],t:"Dos signos menos juntos, − (−), se convierten en +."},
+"48-0":{p:["Multiplicá los números sin signo: 3 . 4 = 12.","Regla de los signos: un − por un + da −.","Resultado: −12."],t:"Signos iguales → +. Signos distintos → −."},
+"48-1":{p:["(−2)³ es (−2) . (−2) . (−2).","Primero, (−2) . (−2) = +4 (signos iguales). Después, 4 . (−2) = −8 (signos distintos).","Resultado: −8."],t:"Base negativa: con exponente par da positivo; con exponente impar, negativo."},
+"49-0":{p:["Separá en términos: −3 | + 2 . (−4) | − (−10) : 5.","Resolvé cada término: 2 . (−4) = −8 y (−10) : 5 = −2. Queda −3 + (−8) − (−2).","Sacá los paréntesis: −3 − 8 + 2. Negativos: −11; positivos: +2 → −11 + 2 = −9."],t:"− (−2) se convierte en + 2: ojo con los dos signos menos juntos."},
+"49-1":{p:["Separá en términos: (−2)² | + 15 : (−3).","(−2)² = (−2) . (−2) = +4. Y 15 : (−3) = −5 (signos distintos).","Sumá: 4 + (−5) = 4 − 5 = −1."],t:"(−2)² da positivo porque el exponente es par."}
+};
+const fmtN=n=>{let[i,d]=String(n).split(".");const neg=i.startsWith("-");if(neg)i=i.slice(1);i=i.replace(/\B(?=(\d{3})+(?!\d))/g," ");return(neg?"−":"")+i+(d?","+d:"");};
+const fmtAns=e=>typeof e.a==="number"?fmtN(e.a):(/^\d+\/\d+$/.test(e.a)?F(...e.a.split("/")):esc(e.a));
+function helpHTML(e,n){const x=EXPL[e.id];let h="";
+  if(x){h+=`<div class="help"><b>Ayuda para arrancar:</b> ${x.p[0]}</div><div class="help"><b>Ojo:</b> ${x.t}</div>`;}
+  if(n>=2)h+=`<div class="help"><b>Pista:</b> ${e.h}</div>`;return h;}
+function solHTML(e){const x=EXPL[e.id];if(!x)return`<div class="sol">${e.s}</div>`;
+  return`<div class="sol"><span class="tag">Cómo se resuelve, paso a paso</span><ol>${x.p.map(s=>`<li>${s}</li>`).join("")}</ol><div class="tipx"><b>Para la próxima:</b> ${x.t}</div></div>`;}
+
+/* ---------- Premios (a definir) ---------- */
+const PRIZES=[
+ {id:"bronce",name:"Bronce",need:100,color:"#E3A06A",ideas:["Sticker de la materia","Elegir la música del aula"]},
+ {id:"plata",name:"Plata",need:250,color:"#C9CCD6",ideas:["Comodín: saltear una consigna","Sentarse donde quiera una clase"]},
+ {id:"oro",name:"Oro",need:450,color:"#F5B400",ideas:["+1 en un trabajo práctico","Elegir la actividad del viernes"]},
+ {id:"diamante",name:"Diamante",need:700,color:"#7FD8F0",ideas:["Diploma “Mente Dinámica”","Ser ayudante del profe por un día"]}
+];
+
+/* ---------- Estado ---------- */
+const KEY="mat1-en-juego-v2";
+let S={name:"",solved:{},tries:{},hints:{},cap:1};
+try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw));}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+
+const ALL=[];CAPS.forEach(c=>c.temas.forEach(t=>t.ej.forEach((e,i)=>{e.id=`${t.n}-${i}`;e.cap=c.n;ALL.push(e);})));
+const total=()=>Object.values(S.solved).reduce((a,b)=>a+b,0);
+const capStats=c=>{const ids=c.temas.flatMap(t=>t.ej.map(e=>e.id));const ok=ids.filter(id=>id in S.solved).length;return{ok,n:ids.length};};
+
+/* ---------- Corrección ---------- */
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+function parse(raw){
+  let s=String(raw).trim().toLowerCase().replace(/[−–—]/g,"-").replace(/\s+/g,"");
+  s=s.replace(/^x=/,"").replace(/^\$/,"").replace(/(cm³|cm²|cm|m³|m²|ml|kg|km|l|°|%|')$/,"");
+  let m=s.match(/^(-?\d+)\/(-?\d+)$/);
+  if(m){const n=+m[1],d=+m[2];if(!d)return null;return{v:n/d,irr:gcd(n,d)===1};}
+  s=s.replace(/\.(?=\d{3}(\D|$))/g,"").replace(",",".");
+  if(/^-?\d+(\.\d+)?$/.test(s))return{v:parseFloat(s),irr:true};
+  return null;
+}
+function target(e){if(typeof e.a==="number")return e.a;const[n,d]=e.a.split("/");return d?n/d:+n;}
+function check(e,input){
+  if(e.opt)return input===e.a;
+  const p=parse(input);if(!p)return "fmt";
+  if(Math.abs(p.v-target(e))>1e-9)return false;
+  if(e.irr&&!p.irr)return "irr";
+  return true;
+}
+const pointsFor=e=>{const t=S.tries[e.id]||0,h=S.hints[e.id];if(t===0&&!h)return 10;if(t<=1)return 6;return 3;};
+
+/* ---------- Render ---------- */
+const $=s=>document.querySelector(s);
+function header(){
+  const p=total();$("#pts").textContent=p;
+  const won=PRIZES.filter(z=>p>=z.need);const next=PRIZES.find(z=>p<z.need);
+  $("#lvl").textContent="Nivel: "+(won.length?won[won.length-1].name:"Inicial")+` · ${Object.keys(S.solved).length}/${ALL.length} ejercicios`;
+  const prev=won.length?won[won.length-1].need:0;
+  if(next){$("#barfill").style.width=Math.round((p-prev)/(next.need-prev)*100)+"%";$("#next").textContent=`Faltan ${next.need-p} puntos para ${next.name}`;}
+  else{$("#barfill").style.width="100%";$("#next").textContent="¡Llegaste al nivel máximo!";}
+}
+function tabs(){
+  const el=$("#tabs");el.innerHTML="";
+  CAPS.forEach(c=>{const st=capStats(c);const b=document.createElement("button");b.className="tab";b.role="tab";b.setAttribute("aria-selected",S.cap===c.n);
+    b.innerHTML=`<b>${c.n}</b>${c.name}<span class="pc">${st.ok}/${st.n}</span>`;b.onclick=()=>{S.cap=c.n;save();render();window.scrollTo({top:0})};el.appendChild(b);});
+  const b=document.createElement("button");b.className="tab premios";b.role="tab";b.setAttribute("aria-selected",S.cap==="premios");
+  b.innerHTML=`<b>★</b>Premios`;b.onclick=()=>{S.cap="premios";save();render();window.scrollTo({top:0})};el.appendChild(b);
+  if(PROFE){const pf=document.createElement("button");pf.className="tab premios";pf.role="tab";pf.setAttribute("aria-selected",S.cap==="profe");pf.innerHTML=`<b>✎</b>Panel del profe`;pf.onclick=()=>{S.cap="profe";save();render();window.scrollTo({top:0})};el.appendChild(pf);}
+}
+function view(){
+  const v=$("#view");
+  if(S.cap==="premios")return prizes(v);
+  if(S.cap==="profe")return panel(v);
+  const c=CAPS.find(x=>x.n===S.cap)||CAPS[0];const st=capStats(c);const full=st.ok===st.n;
+  v.innerHTML=`<div class="chead"><div><small>CAPÍTULO ${c.n}</small><h2>${c.name}</h2></div>
+   <div class="medal ${full?"on":""}"><span class="m">${c.n}</span>${full?"¡Medalla del capítulo ganada!":`Medalla del capítulo: ${st.ok} de ${st.n}`}</div></div>
+   <div class="howto"><span><b>1</b>Resolvé el ejercicio en tu hoja</span><span><b>2</b>Escribí el resultado acá</span>${FOTO?`<span><b>3</b>Sacale una foto a la hoja y subila</span><span><b>4</b>Enviá: se revisa el resultado y cómo lo resolviste</span>`:`<span><b>3</b>Enviá para corregir</span>`}</div>
+   <div class="unavail" id="aibox" hidden></div><div class="temas"></div>`;
+  aiBanner();
+  const box=v.querySelector(".temas");
+  c.temas.forEach(t=>{
+    const tp=t.ej.reduce((a,e)=>a+(S.solved[e.id]||0),0);
+    const card=document.createElement("section");card.className="tema";
+    const rc=REC[t.n];
+    card.innerHTML=`<div class="th"><span class="n">${t.n}</span><h3>${t.t}</h3><span class="tp">${tp} pts</span></div>
+      ${rc?`<div class="rec"><div class="rec-r"><span class="tag">Recordá</span><p>${rc.r}</p></div><div class="rec-x"><span class="tag">Ejemplo</span>${rc.x.map(l=>`<div class="xl">${l}</div>`).join("")}</div></div>`:""}
+      <div class="ejs"></div>`;
+    const ejs=card.querySelector(".ejs");
+    t.ej.forEach((e,i)=>ejs.appendChild(exercise(e,i,t)));
+    box.appendChild(card);
+  });
+}
+/* ---------- Corrector con foto (Claude) ---------- */
+/* FOTO=false: modo prueba, sin foto ni revisión de Claude. Poner true para volver a exigir la foto. */
+/* REGISTRO_URL: dirección de la app web de Google Apps Script que anota cada intento en la planilla del profe.
+   Vacío = no se registra en Google Sheets (en claude.ai se usa la base de datos de la página). */
+const REGISTRO_URL="";
+const FOTO=false;
+const MAXT=3; // intentos por ejercicio
+let SAMPLE=null,IMG=false,SREADY=false,AIOFF="";
+const PHOTOS={};
+(async()=>{try{SAMPLE=await window.claude?.use?.("sample")||null;}catch(e){SAMPLE=null;}
+  if(SAMPLE){try{const l=await SAMPLE.limits();IMG=!!l.images;}catch(e){IMG=false;}}
+  SREADY=true;if(!SAMPLE||!IMG)AIOFF="La corrección con foto no está disponible en esta vista. Abrí la página desde tu cuenta de Claude para poder enviar los ejercicios.";aiBanner();})();
+function aiBanner(){const b=$("#aibox");if(!b)return;b.hidden=!AIOFF||!FOTO;b.textContent=AIOFF;}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function plain(html){const d=document.createElement("div");d.innerHTML=html;
+  d.querySelectorAll(".fr").forEach(f=>{const[a,b]=f.children;f.replaceWith(`(${a.textContent}/${b.textContent})`);});
+  d.querySelectorAll(".rad").forEach(r=>{const s=r.querySelector("sup"),o=r.querySelector(".ov");r.replaceWith(`${s?"raíz de índice "+s.textContent+" de ":"√"}(${o.textContent})`);});
+  d.querySelectorAll("sup").forEach(s=>s.replaceWith("^"+s.textContent));return d.textContent.replace(/\s+/g," ").trim();}
+const ansText=e=>typeof e.a==="number"?String(e.a).replace(".",","):e.a;
+function errCopy(code){
+  if(["not_granted","sampling_disabled","images_unavailable","not_declared","capability_disabled","capability_removed"].includes(code))return"Para corregir con foto, la página necesita permiso para usar Claude. Volvé a abrirla y aceptá el permiso cuando aparezca.";
+  if(code==="rate_limited")return"Hubo muchas correcciones seguidas. Esperá un minuto y volvé a enviar.";
+  if(code==="image_rejected")return"No se pudo abrir la foto. Probá con otra (JPG o PNG, menos de 20 MB).";
+  if(code==="session_expired")return"Tu sesión de Claude venció. Volvé a iniciar sesión y enviá de nuevo.";
+  if(code==="refused")return"No se pudo revisar esa foto. Sacá una foto solo de la hoja con el ejercicio.";
+  return"No se pudo corregir en este momento. Probá enviar de nuevo.";
+}
+function exercise(e,i,t){
+  const d=document.createElement("div");const done=e.id in S.solved;d.className="ej"+(done?" solved":"");
+  const letter="abcdefgh"[i];
+  if(done){
+    const ans=e.opt?`<div class="ans">${e.opt.map(o=>`<button class="opt${o===e.a?" sel":""}" disabled>${esc(o)}</button>`).join("")}<span class="badge">✔ +${S.solved[e.id]} pts</span></div>`
+      :`<div class="ans"><input id="in-${e.id}" aria-label="Resultado" value="${esc(ansText(e))}" disabled><span class="badge">✔ +${S.solved[e.id]} pts</span></div>`;
+    d.innerHTML=`<div class="q"><span class="l">${letter}.</span><div class="tx">${e.q}</div></div>${ans}<div class="fb ok"><b>¡Correcto!</b> ${e.s}</div>`;
+    return d;
+  }
+  if(S.failed&&S.failed[e.id]){d.className="ej";d.innerHTML=`<div class="q"><span class="l">${letter}.</span><div class="tx">${e.q}</div></div><div class="ans"><span class="badge" style="color:var(--bad)">✘ Sin intentos · 0 pts</span></div><div class="fb no"><b>Se terminaron los ${MAXT} intentos.</b> La respuesta correcta es <b>${fmtAns(e)}</b>.</div>${solHTML(e)}`;return d;}
+  const ans=e.opt?`<div class="ans">${e.opt.map(o=>`<button class="opt" data-o="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join("")}</div>`
+    :`<div class="ans"><input id="in-${e.id}" aria-label="Resultado del ejercicio ${e.id}" placeholder="${e.irr||typeof e.a==="string"?"ej: 3/4":"Resultado"}" autocomplete="off"></div>`;
+  d.innerHTML=`<div class="q"><span class="l">${letter}.</span><div class="tx">${e.q}</div></div>${ans}
+   <div class="photo" ${FOTO?"":"hidden"}><label class="pick" for="ph-${e.id}">📷 Subir foto de la hoja<input type="file" id="ph-${e.id}" accept="image/jpeg,image/png,image/webp" capture="environment"></label><img hidden alt="Foto de la hoja"><span class="pn"></span></div>
+   <div class="ans"><button class="btn go" disabled>Enviar para corregir</button><button class="btn ghost hb">Pista</button><span class="req"><b>*</b> ${FOTO?"Resultado y foto obligatorios":"Resultado obligatorio"}</span><span class="req att" style="font-weight:700">Intentos: ${MAXT-(S.tries[e.id]||0)} de ${MAXT}</span></div>
+   <div class="fb"></div><div class="review" aria-live="polite"></div>`;
+  const fb=d.querySelector(".fb"),rv=d.querySelector(".review"),att=d.querySelector(".att"),go=d.querySelector(".go"),file=d.querySelector("input[type=file]"),img=d.querySelector(".photo img"),pn=d.querySelector(".pn");
+  let choice=null;const inp=d.querySelector("input:not([type=file])");
+  const getVal=()=>e.opt?choice:(inp.value.trim()||null);
+  const sync=()=>{go.disabled=!(getVal()&&(!FOTO||PHOTOS[e.id]));};
+  if(PHOTOS[e.id]){img.src=URL.createObjectURL(PHOTOS[e.id]);img.hidden=false;pn.textContent="Foto cargada · podés cambiarla";}
+  if(e.opt)d.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{choice=b.dataset.o;d.querySelectorAll(".opt").forEach(x=>{x.style.borderColor="";x.setAttribute("aria-pressed","false");});b.style.borderColor="var(--vio)";b.setAttribute("aria-pressed","true");sync();});
+  else{inp.addEventListener("input",sync);inp.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&!go.disabled)go.click();});}
+  file.onchange=()=>{const f=file.files&&file.files[0];if(!f)return;PHOTOS[e.id]=f;sfx("photo");img.src=URL.createObjectURL(f);img.hidden=false;pn.textContent="Foto cargada · podés cambiarla";sync();};
+  d.querySelector(".hb").onclick=()=>{S.hints[e.id]=true;save();fb.className="fb hint";fb.innerHTML=`<b>Pista:</b> ${e.h} <span style="opacity:.75">(con pista, este ejercicio vale ${pointsFor(e)} pts)</span>`;};
+  go.onclick=async()=>{
+    const val=getVal(),photo=PHOTOS[e.id];
+    if(REGISTRO_URL&&!(S.name||"").trim()){fb.className="fb hint";fb.innerHTML="Antes de enviar, escribí tu <b>nombre</b> arriba, así el profe sabe que sos vos.";$("#alumno").focus();return;}
+    if(!val||(FOTO&&!photo)){fb.className="fb hint";fb.innerHTML="Para enviar necesitás escribir el resultado <b>y</b> subir la foto de la hoja.";return;}
+    const r=check(e,val);
+    if(r==="fmt"){fb.className="fb hint";fb.innerHTML="No entendí el número. Escribilo así: 12, 6,5, −3 o 3/4.";return;}
+    if(r==="irr"){fb.className="fb hint";fb.innerHTML="El valor está bien, pero falta simplificar hasta la fracción irreducible.";return;}
+    if(!FOTO){
+      sfx("whistle");go.disabled=true;fb.className="fb";fb.innerHTML="";
+      setTimeout(()=>{
+        if(r===true){const p=pointsFor(e);S.solved[e.id]=p;save();logAttempt(e,t,val,"correcto",p);sfx("goal");celebrate(true,p);
+          const before=PRIZES.filter(z=>total()-p>=z.need).length,after=PRIZES.filter(z=>total()>=z.need).length;
+          if(after>before)setTimeout(()=>toast(`🏅 ¡Desbloqueaste el nivel ${PRIZES[after-1].name}!`),3300);
+          render();return;}
+        S.tries[e.id]=(S.tries[e.id]||0)+1;
+        if(S.tries[e.id]>=MAXT){S.failed=S.failed||{};S.failed[e.id]=true;save();logAttempt(e,t,val,"sin intentos",0);sfx("miss");celebrate(false,0,`Se terminaron los ${MAXT} intentos de este ejercicio`);render();return;}
+        save();logAttempt(e,t,val,"incorrecto",0);sfx("miss");const left=MAXT-S.tries[e.id],lt=left===1?"Te queda 1 intento":`Te quedan ${left} intentos`;celebrate(false,0,lt);
+        fb.className="fb no";fb.innerHTML=`<b>Todavía no.</b> Revisá la cuenta en tu hoja con esta ayuda:${helpHTML(e,S.tries[e.id])}<div class="help"><b>${lt}.</b> <span style="opacity:.75">(si acertás ahora sumás ${pointsFor(e)} pts)</span></div>`;
+        att.textContent=`Intentos: ${left} de ${MAXT}`;
+        go.disabled=false;
+      },900);
+      return;}
+    if(!SREADY){fb.className="fb hint";fb.innerHTML="Conectando con el corrector… probá de nuevo en unos segundos.";return;}
+    if(!SAMPLE||!IMG){fb.className="fb no";fb.innerHTML=AIOFF;return;}
+    sfx("whistle");
+    go.disabled=true;fb.className="fb";rv.className="review show";rv.innerHTML=`<div><span class="spin"></span>Revisando tu hoja… puede tardar hasta un minuto.</div>`;
+    const prompt=`Sos profesor de Matemática de 1.er año de secundaria en Argentina. Te paso la FOTO de la hoja donde un alumno resolvió a mano este ejercicio.
+
+Tema: ${t.n}. ${t.t}
+Ejercicio: ${plain(e.q)}${e.opt?` (opciones: ${e.opt.join(" / ")})`:""}
+Respuesta correcta: ${ansText(e)}
+Resolución modelo: ${e.s}
+Respuesta que el alumno escribió en la web: ${val}
+
+Notación del curso: el punto (.) es multiplicación, los dos puntos (:) es división, la coma es decimal y los miles se separan con espacio.
+
+Revisá la foto y decidí:
+1) legible: si se puede leer lo escrito.
+2) es_el_ejercicio: si en la hoja está resuelto ESTE ejercicio (no otro ejercicio, ni una hoja en blanco, ni una foto que no es una hoja con cuentas).
+3) procedimiento_correcto: si los pasos son matemáticamente correctos y llevan a la respuesta. Aceptá caminos distintos al modelo si son válidos. No exijas pasos que un alumno de 12 o 13 años hace mentalmente en cuentas simples, pero sí tiene que verse cómo llegó.
+4) coincide_resultado: si el resultado final de la hoja es el mismo que escribió en la web.
+
+Respondé solo con JSON con esta forma:
+{"legible":true,"es_el_ejercicio":true,"procedimiento_correcto":true,"coincide_resultado":true,"resultado_en_hoja":"texto","errores":["paso que está mal y por qué"],"comentario":"texto"}
+"errores": lista vacía si no hay errores. "comentario": una o dos oraciones para el alumno, en español rioplatense, cálidas y concretas. Si se equivocó, señalá dónde está el error pero NO le digas la respuesta correcta.`;
+    try{
+      const j=await SAMPLE.json(prompt,{images:[photo],modelTier:"default"});
+      const ok=v=>v===true;
+      if(!ok(j.legible)){rv.innerHTML=`<h4>No se puede leer la foto</h4><div>${esc(j.comentario||"Sacá otra foto con buena luz, de cerca y derecha.")}</div>`;go.disabled=false;return;}
+      const resOk=r===true,accepted=resOk&&ok(j.es_el_ejercicio)&&ok(j.procedimiento_correcto)&&ok(j.coincide_resultado);
+      const pill=(c,l)=>`<span class="${c?"y":"n"}">${c?"✔":"✘"} ${l}</span>`;
+      const errs=Array.isArray(j.errores)?j.errores.filter(Boolean):[];
+      const detail=`<div class="chk">${pill(resOk,"Resultado")}${pill(ok(j.es_el_ejercicio),"Es este ejercicio")}${pill(ok(j.procedimiento_correcto),"Procedimiento")}${pill(ok(j.coincide_resultado),"Hoja = resultado escrito")}</div>
+        ${j.comentario?`<div>${esc(j.comentario)}</div>`:""}${errs.length?`<ul>${errs.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}`;
+      if(accepted){const p=pointsFor(e);S.solved[e.id]=p;S.reviews=S.reviews||{};S.reviews[e.id]=j.comentario||"";save();logAttempt(e,t,val,"correcto",p);delete PHOTOS[e.id];
+        sfx("goal");celebrate(true,p);
+        const before=PRIZES.filter(z=>total()-p>=z.need).length,after=PRIZES.filter(z=>total()>=z.need).length;
+        if(after>before)setTimeout(()=>toast(`🏅 ¡Desbloqueaste el nivel ${PRIZES[after-1].name}!`),3300);
+        render();return;}
+      S.tries[e.id]=(S.tries[e.id]||0)+1;
+      if(S.tries[e.id]>=MAXT){S.failed=S.failed||{};S.failed[e.id]=true;save();logAttempt(e,t,val,"sin intentos",0);sfx("miss");celebrate(false,0,`Se terminaron los ${MAXT} intentos de este ejercicio`);render();return;}
+      save();logAttempt(e,t,val,"incorrecto",0);sfx("miss");celebrate(false,0,MAXT-S.tries[e.id]===1?"Te queda 1 intento":`Te quedan ${MAXT-S.tries[e.id]} intentos`);att.textContent=`Intentos: ${MAXT-S.tries[e.id]} de ${MAXT}`;
+      rv.innerHTML=`<h4>Revisión de tu hoja</h4>${detail}`;
+      fb.className="fb no";fb.innerHTML=`<b>Todavía no.</b> ${S.tries[e.id]>=2?`Pista: ${e.h} `:""}Corregí en la hoja, sacá una foto nueva y volvé a enviar. <span style="opacity:.75">(si acertás ahora sumás ${pointsFor(e)} pts)</span>`;
+      go.disabled=false;
+    }catch(err){
+      const code=err&&err.code;
+      if(["not_granted","sampling_disabled","images_unavailable","not_declared","capability_disabled","capability_removed"].includes(code)){AIOFF=errCopy(code);aiBanner();}
+      rv.className="review";fb.className="fb no";fb.innerHTML=errCopy(code);go.disabled=false;
+    }
+  };
+  return d;
+}
+function prizes(v){
+  const p=total();
+  v.innerHTML=`<div class="chead"><div><small>TABLA DE PREMIOS</small><h2>Premios por puntaje</h2></div><div class="medal">Tenés <b style="margin:0 4px">${p}</b> puntos</div></div>
+  <div class="prizes">${PRIZES.map(z=>`<article class="prize ${p>=z.need?"won":""}">
+    <div class="tier"><span class="coin" style="background:${z.color}">${z.name[0]}</span><div><h3>${z.name}</h3><div class="need">${z.need} puntos</div></div></div>
+    <div class="state">${p>=z.need?"✔ Desbloqueado":`Faltan ${z.need-p} pts`}</div>
+    <div class="tbd"><strong>Premio</strong>A definir por el profe</div>
+    <div class="ideas">${z.ideas.map(i=>`<span>${i}</span>`).join("")}</div></article>`).join("")}</div>
+  <div class="rules"><h3>Cómo se suman puntos</h3><ul>
+    ${FOTO?`<li>Cada ejercicio se resuelve en la hoja. Para enviarlo hay que escribir el resultado <b>y</b> subir la foto de la hoja.</li>
+    <li>Se aprueba cuando el resultado es correcto, la foto es de ese ejercicio, el procedimiento está bien y el resultado de la hoja coincide con el escrito.</li>`:`<li>Cada ejercicio se resuelve en la hoja y el resultado se escribe acá para corregirlo.</li>`}
+    <li><b>10 puntos</b> si se aprueba al primer envío, sin pista.</li>
+    <li><b>6 puntos</b> si usaste la pista o te equivocaste una vez.</li>
+    <li><b>3 puntos</b> si acertás en el tercer intento (desde el segundo error aparece la pista sola).</li>
+    <li>Cada ejercicio tiene <b>${MAXT} intentos</b>. Si se terminan, se muestra la respuesta y el ejercicio queda cerrado sin puntos.</li>
+    ${FOTO?`<li>Si la foto no se puede leer, no cuenta como error: sacá otra y volvé a enviar.</li>`:""}
+    <li>Completar todos los ejercicios de un capítulo da su <b>medalla</b>.</li>
+    <li>Las fracciones se escriben como <b>a/b</b> (ej.: 3/4) y los decimales con coma (ej.: 6,5).</li></ul></div>
+  <div class="reset" id="reset"><button class="btn ghost" id="r1">Reiniciar mi progreso</button></div>`;
+  $("#r1").onclick=()=>{$("#reset").innerHTML=`<span>¿Borrar todos los puntos de este dispositivo?</span><button class="btn danger" id="r2">Sí, borrar</button><button class="btn ghost" id="r3">Cancelar</button>`;
+    $("#r2").onclick=()=>{S.solved={};S.tries={};S.hints={};S.failed={};save();render();toast("Progreso reiniciado");};$("#r3").onclick=()=>render();};
+}
+let tt;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2200);}
+/* ---------- Sonidos (sintetizados, sin archivos) ---------- */
+let AC=null;
+function ac(){try{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}if(AC.state==="suspended")AC.resume();return AC;}catch(e){return null;}}
+function noise(a,t,dur,o={}){const{type="bandpass",f=1000,f2=null,q=1,g=.3,attack=.01}=o;
+  const b=a.createBuffer(1,Math.ceil(a.sampleRate*dur),a.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  const s=a.createBufferSource();s.buffer=b;const fl=a.createBiquadFilter();fl.type=type;fl.frequency.setValueAtTime(f,t);if(f2)fl.frequency.exponentialRampToValueAtTime(f2,t+dur);fl.Q.value=q;
+  const gn=a.createGain();gn.gain.setValueAtTime(.0001,t);gn.gain.exponentialRampToValueAtTime(g,t+attack);gn.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  s.connect(fl).connect(gn).connect(a.destination);s.start(t);s.stop(t+dur);}
+function tone(a,t,dur,o={}){const{type="sine",f=440,f2=null,g=.2,attack=.01,vib=0,rate=0}=o;
+  const os=a.createOscillator();os.type=type;os.frequency.setValueAtTime(f,t);if(f2)os.frequency.exponentialRampToValueAtTime(f2,t+dur);
+  if(vib){const l=a.createOscillator(),lg=a.createGain();l.frequency.value=rate;lg.gain.value=vib;l.connect(lg).connect(os.frequency);l.start(t);l.stop(t+dur);}
+  const gn=a.createGain();gn.gain.setValueAtTime(.0001,t);gn.gain.exponentialRampToValueAtTime(g,t+attack);gn.gain.setValueAtTime(g,t+Math.max(attack+.01,dur-.08));gn.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  os.connect(gn).connect(a.destination);os.start(t);os.stop(t+dur+.02);}
+function sfx(kind){
+  if(S.mute)return;const a=ac();if(!a)return;const t=a.currentTime+.02;
+  try{
+  if(kind==="photo"){ // obturador de cámara
+    noise(a,t,.05,{type:"highpass",f:3000,g:.35});tone(a,t,.03,{type:"square",f:1800,g:.05});noise(a,t+.09,.07,{type:"highpass",f:2500,g:.25});}
+  else if(kind==="whistle"){ // silbato del árbitro
+    tone(a,t,.18,{f:2900,g:.12,vib:110,rate:32});tone(a,t+.26,.5,{f:2900,g:.14,vib:120,rate:34});}
+  else if(kind==="goal"){ // tribuna gritando gol + bombo + corneta
+    noise(a,t,2.8,{f:900,q:.6,g:.45,attack:.35});noise(a,t+.1,2.6,{f:2100,q:.8,g:.22,attack:.45});
+    [0,.33,.66,1.0,1.33,1.66].forEach(d=>tone(a,t+d,.24,{f:130,f2:48,g:.55,attack:.005}));
+    tone(a,t+.15,.16,{type:"sawtooth",f:523,g:.06});tone(a,t+.35,.16,{type:"sawtooth",f:523,g:.06});tone(a,t+.55,.7,{type:"sawtooth",f:659,g:.07,vib:6,rate:6});}
+  else if(kind==="miss"){ // "uhhh" de la tribuna + trombón triste
+    noise(a,t,1.7,{f:650,f2:230,q:1.3,g:.4,attack:.15});
+    tone(a,t+.2,.3,{type:"triangle",f:392,g:.18});tone(a,t+.52,.3,{type:"triangle",f:370,g:.18});tone(a,t+.84,.3,{type:"triangle",f:349,g:.18});tone(a,t+1.16,.95,{type:"triangle",f:330,g:.2,vib:7,rate:6});}
+  }catch(e){}
+}
+const sndBtn=$("#snd");
+const sndLabel=()=>{sndBtn.textContent=S.mute?"🔇 Sonido: no":"🔊 Sonido: sí";sndBtn.setAttribute("aria-pressed",String(!S.mute));};
+sndBtn.onclick=()=>{S.mute=!S.mute;save();sndLabel();if(!S.mute)sfx("photo");};sndLabel();
+
+/* ---------- Festejo / gol en contra (camiseta celeste y blanca a bastones) ---------- */
+const KIT=id=>`<pattern id="${id}" width="12" height="10" patternUnits="userSpaceOnUse"><rect width="12" height="10" fill="#fff"/><rect width="6" height="10" fill="#6CC4EE"/></pattern>`;
+const SKIN="#E9B98F",SHORTS="#1E2235",CEL="#6CC4EE";
+const field=`<rect width="320" height="190" fill="#7FC8F0"/><rect y="138" width="320" height="52" fill="#3E9E4E"/><path d="M0 150H320M0 166H320M0 182H320" stroke="#4BAE5B" stroke-width="7"/>`;
+const goalNet=(x,y,w,h)=>`<g class="netw"><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="rgba(255,255,255,.18)"/>${Array.from({length:Math.floor(w/10)},(_,i)=>`<line x1="${x+10+i*10}" y1="${y}" x2="${x+10+i*10}" y2="${y+h}" stroke="#fff" stroke-opacity=".55"/>`).join("")}${Array.from({length:Math.floor(h/10)},(_,i)=>`<line x1="${x}" y1="${y+10+i*10}" x2="${x+w}" y2="${y+10+i*10}" stroke="#fff" stroke-opacity=".55"/>`).join("")}<path d="M${x} ${y+h}V${y}H${x+w}V${y+h}" fill="none" stroke="#fff" stroke-width="5"/></g>`;
+const ball=(x,y)=>`<g class="ballin"><circle cx="${x}" cy="${y}" r="8" fill="#fff" stroke="#222" stroke-width="1.2"/><path d="M${x} ${y-3}l3 2-1 3.4h-4l-1-3.4z" fill="#222"/></g>`;
+function playerUp(id,kit,flip){return `<g transform="scale(${flip?-1:1},1)">
+ <ellipse cx="0" cy="2" rx="22" ry="4" fill="#000" opacity=".18"/>
+ <path d="M-9 -44L-13 -8M9 -44L14 -8" stroke="${SKIN}" stroke-width="9" stroke-linecap="round"/>
+ <path d="M-12 -24L-13 -7M13 -24L14 -7" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+ <path d="M-12 -24L-12.4 -19M13 -24L13.4 -19" stroke="${CEL}" stroke-width="10"/>
+ <ellipse cx="-15" cy="-3" rx="9" ry="4.5" fill="#1a1a1a"/><ellipse cx="17" cy="-3" rx="9" ry="4.5" fill="#1a1a1a"/>
+ <path d="M-17 -60H17L19 -40H3L0 -46L-3 -40H-19Z" fill="${SHORTS}"/>
+ <path d="M-15 -94L-30 -118L-33 -136M15 -94L30 -118L33 -136" stroke="${SKIN}" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="M-15 -95L-23 -108M15 -95L23 -108" stroke="${CEL}" stroke-width="12"/>
+ <path d="M-18 -98Q0 -102 18 -98L17 -58H-17Z" fill="url(#${kit})" stroke="#3B87B5" stroke-width="1.2"/>
+ <path d="M-6 -99L0 -93L6 -99" fill="none" stroke="${SHORTS}" stroke-width="2"/>
+ <rect x="-4" y="-107" width="8" height="9" fill="${SKIN}"/>
+ <circle cx="0" cy="-117" r="12" fill="${SKIN}"/>
+ <path d="M-12 -119Q-11 -132 0 -132Q11 -132 12 -119Q5 -126 -12 -119Z" fill="#2B1D14"/>
+ <circle cx="-4" cy="-119" r="1.4" fill="#222"/><circle cx="4" cy="-119" r="1.4" fill="#222"/>
+ <ellipse cx="0" cy="-111" rx="3.2" ry="3.8" fill="#7A2A2A"/></g>`;}
+function playerSad(kit){return `<g>
+ <ellipse cx="-4" cy="2" rx="28" ry="4" fill="#000" opacity=".18"/>
+ <path d="M-26 -5H-9M24 -5H9" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+ <ellipse cx="-30" cy="-4" rx="7" ry="4.5" fill="#1a1a1a"/><ellipse cx="28" cy="-4" rx="7" ry="4.5" fill="#1a1a1a"/>
+ <path d="M-8 -40L-9 -8M8 -40L9 -8" stroke="${SKIN}" stroke-width="9" stroke-linecap="round"/>
+ <path d="M-17 -56H17L18 -38H3L0 -43L-3 -38H-18Z" fill="${SHORTS}"/>
+ <path d="M-17 -92Q0 -96 17 -92L16 -54H-16Z" fill="url(#${kit})" stroke="#3B87B5" stroke-width="1.2"/>
+ <path d="M-14 -89L-24 -103L-10 -121M14 -89L24 -103L10 -121" stroke="${SKIN}" stroke-width="7.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="M-14 -89L-20 -98M14 -89L20 -98" stroke="${CEL}" stroke-width="11"/>
+ <circle cx="0" cy="-110" r="12" fill="${SKIN}"/>
+ <path d="M-12 -112Q-11 -125 0 -125Q11 -125 12 -112Q5 -119 -12 -112Z" fill="#2B1D14"/>
+ <path d="M-6 -112h4M2 -112h4" stroke="#222" stroke-width="1.6" stroke-linecap="round"/>
+ <path d="M-4 -103Q0 -107 4 -103" fill="none" stroke="#7A2A2A" stroke-width="2" stroke-linecap="round"/></g>`;}
+function playerBack(kit,name,num){const fs=name.length<=5?9.5:name.length<=7?8:6.6;return `<g>
+ <ellipse cx="0" cy="2" rx="22" ry="4" fill="#000" opacity=".18"/>
+ <path d="M-9 -44L-13 -8M9 -44L14 -8" stroke="${SKIN}" stroke-width="9" stroke-linecap="round"/>
+ <path d="M-12 -24L-13 -7M13 -24L14 -7" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+ <path d="M-12 -24L-12.4 -19M13 -24L13.4 -19" stroke="${CEL}" stroke-width="10"/>
+ <ellipse cx="-15" cy="-3" rx="9" ry="4.5" fill="#1a1a1a"/><ellipse cx="17" cy="-3" rx="9" ry="4.5" fill="#1a1a1a"/>
+ <path d="M-17 -60H17L19 -40H3L0 -46L-3 -40H-19Z" fill="${SHORTS}"/>
+ <path d="M-15 -94L-30 -118L-33 -136M15 -94L30 -118L33 -136" stroke="${SKIN}" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="M-15 -95L-23 -108M15 -95L23 -108" stroke="${CEL}" stroke-width="12"/>
+ <path d="M-19 -99Q0 -102 19 -99L18 -58H-18Z" fill="url(#${kit})" stroke="#3B87B5" stroke-width="1.2"/>
+ <text x="0" y="-88" text-anchor="middle" font-family="Rubik,Arial,sans-serif" font-weight="900" font-size="${fs}" fill="#1E2235" stroke="#fff" stroke-width="2.2" paint-order="stroke" letter-spacing=".3">${name}</text>
+ <text x="0" y="-63" text-anchor="middle" font-family="Rubik,Arial,sans-serif" font-weight="900" font-size="21" fill="#1E2235" stroke="#fff" stroke-width="2.6" paint-order="stroke">${num}</text>
+ <rect x="-4" y="-107" width="8" height="9" fill="${SKIN}"/>
+ <circle cx="-12" cy="-116" r="3" fill="${SKIN}"/><circle cx="12" cy="-116" r="3" fill="${SKIN}"/>
+ <circle cx="0" cy="-117" r="12" fill="#2B1D14"/></g>`;}
+const GOAL_SVG=(name,num)=>`<svg viewBox="0 0 320 190" aria-hidden="true"><defs>${KIT("kitA")}</defs>${field}${goalNet(232,74,78,72)}${ball(286,136)}
+ <g transform="translate(72,170)"><g class="jump d2">${playerUp("q","kitA",true)}</g></g>
+ <g transform="translate(158,182) scale(1.2)"><g class="jump">${playerBack("kitA",name,num)}</g></g></svg>`;
+const MISS_SVG=()=>`<svg viewBox="0 0 320 190" aria-hidden="true"><defs>${KIT("kitB")}</defs>${field}${goalNet(40,62,130,84)}${ball(120,136)}
+ <g transform="translate(240,176)"><g class="sob">${playerSad("kitB")}</g></g></svg>`;
+let sceneT;
+function celebrate(ok,p,msg){
+  const sc=$("#scene");clearTimeout(sceneT);
+  sc.className="scene "+(ok?"ok":"no");
+  const nm=(S.name||"").trim().split(/\s+/)[0]||"";const shirt=nm?esc(nm.toUpperCase().slice(0,9)):"CRACK";const shirtNum=/^\d{1,2}$/.test(S.num||"")&&+S.num>0?String(+S.num):"10";
+  sc.innerHTML=`<div class="scard">${ok?GOAL_SVG(shirt,shirtNum):MISS_SVG()}<div class="stitle">${ok?"¡GOOOL!":"¡Uy! Nos hicieron un gol"}</div><div class="ssub">${ok?(nm?`¡Gol de ${esc(nm)}! +${p} puntos`:`¡Ejercicio correcto! +${p} puntos<br><small>Escribí tu nombre arriba para verlo en la camiseta</small>`):(msg||"Revisá la devolución, corregí la hoja y volvé a intentar")}</div></div>`;
+  if(ok){const cols=[CEL,"#FFFFFF",CEL,"#F5B400"];for(let i=0;i<46;i++){const c=document.createElement("span");c.className="conf";c.style.left=Math.random()*100+"%";c.style.background=cols[i%cols.length];c.style.animationDuration=(1.8+Math.random()*1.6)+"s";c.style.animationDelay=(Math.random()*.6)+"s";sc.appendChild(c);}}
+  sc.hidden=false;
+  const close=()=>{sc.hidden=true;sc.innerHTML="";};
+  sc.onclick=close;sceneT=setTimeout(close,ok?3200:2800);
+}
+/* ---------- Registro de intentos para el profe ---------- */
+let DB=null,USR=null,UID=null,PROFE=false,LOGQ=Promise.resolve();
+(async()=>{
+  try{DB=await window.claude?.use?.("db")||null;}catch(e){DB=null;}
+  try{USR=await window.claude?.use?.("user")||null;}catch(e){USR=null;}
+  try{UID=USR?await USR.id():null;}catch(e){UID=null;}
+  try{PROFE=USR?((await USR.isOwner())||(await USR.canEdit())):false;}catch(e){PROFE=false;}
+  regStatus();if(PROFE)tabs();if(S.cap==="profe")view();
+})();
+function regStatus(){const r=$("#reg");if(!r)return;r.hidden=false;
+  if(REGISTRO_URL){const has=!!(S.name||"").trim();r.className="reg "+(has?"on":"off");
+    r.textContent=has?"● Tus ejercicios quedan registrados para el profe":"○ Escribí tu nombre para que el profe vea tus ejercicios";return;}
+  const on=!!(DB&&UID);r.className="reg "+(on?"on":"off");
+  r.textContent=on?"● Tus ejercicios quedan registrados para el profe":"○ Sin registro: tus ejercicios no le llegan al profe";}
+/* Envío a Google Sheets: text/plain + no-cors para que no haga falta preflight.
+   Si no hay internet, el intento queda pendiente y se reenvía en el próximo envío o al volver a abrir la página. */
+let SENDING=false;
+async function flushPend(){
+  if(!REGISTRO_URL||SENDING)return;S.pend=S.pend||[];if(!S.pend.length)return;SENDING=true;
+  try{while(S.pend.length){const row=S.pend[0];
+      await fetch(REGISTRO_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(row)});
+      S.pend.shift();save();}}
+  catch(err){/* sin conexión: se reintenta más tarde */}
+  finally{SENDING=false;}
+}
+function logAttempt(e,t,val,res,pts){
+  const intento=res==="correcto"?(S.tries[e.id]||0)+1:(S.tries[e.id]||0);
+  const now=new Date().toISOString();
+  if(!S.dev){S.dev=Math.random().toString(36).slice(2,8);save();}
+  const row={fecha:now,alumno:(S.name||"").trim()||"Sin nombre",numero:S.num||"",dispositivo:S.dev,capitulo:e.cap,tema:`${t.n}. ${t.t}`,
+    ejercicio:`${t.n}${"abcdefgh"[t.ej.indexOf(e)]}`,enunciado:plain(e.q),respuesta:String(val),correcta:ansText(e),
+    resultado:res,intento,maxIntentos:MAXT,puntos:pts,totalPuntos:total()};
+  if(REGISTRO_URL){S.pend=S.pend||[];if(S.pend.length<500)S.pend.push(row);save();flushPend();}
+  if(!DB||!UID)return;
+  const base=`intentos/${UID}`;
+  LOGQ=LOGQ.then(async()=>{
+    try{await DB.collection(base+"/registros").add(row);
+      await DB.doc(base).set({alumno:row.alumno,numero:row.numero,ultimaActividad:now,totalPuntos:total(),resueltos:Object.keys(S.solved).length,sinIntentos:Object.keys(S.failed||{}).length});}
+    catch(err){if(err&&err.code==="quota_exceeded")toast("El registro del profe está lleno: avisale al profe");}
+  });
+}
+const fmtFecha=s=>{try{return new Date(s).toLocaleString("es-AR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});}catch(e){return s;}};
+async function panel(v){
+  v.innerHTML=`<div class="chead"><div><small>SOLO PARA EL PROFE</small><h2>Panel del profe</h2></div></div><div id="pbody">Cargando el registro…</div>`;
+  const pb=$("#pbody");
+  if(!DB){pb.textContent="El registro todavía no está disponible en esta vista. Si recién abriste la página, esperá unos segundos y volvé a entrar a esta pestaña.";return;}
+  try{
+    const snap=await DB.collection("intentos").orderBy("ultimaActividad","desc").get();
+    if(!document.body.contains(pb))return;
+    if(snap.empty){pb.innerHTML=`<p>Todavía no hay ejercicios registrados. Cuando un alumno envíe un ejercicio, va a aparecer acá.</p>`;return;}
+    let html="";
+    for(const d of snap.docs){const s=d.data()||{};
+      const rs=await DB.collection(`intentos/${d.id}/registros`).orderBy("fecha","desc").limit(50).get();
+      html+=`<section class="tema"><div class="th"><span class="n">${esc(s.numero||"–")}</span><h3>${esc(s.alumno||"Sin nombre")}</h3><span class="tp">${s.totalPuntos||0} pts · ${s.resueltos||0} bien · ${s.sinIntentos||0} sin intentos</span></div>
+      <div class="ptab"><table><thead><tr><th>Fecha</th><th>Ejercicio</th><th>Respondió</th><th>Correcta</th><th>Resultado</th><th>Intento</th><th>Pts</th></tr></thead><tbody>
+      ${rs.docs.map(x=>{const r=x.data()||{};return`<tr><td>${esc(fmtFecha(r.fecha))}</td><td class="l">${esc(r.ejercicio)} · ${esc(r.tema)}</td><td>${esc(r.respuesta)}</td><td>${esc(r.correcta)}</td><td><span class="stt ${r.resultado==="correcto"?"y":"n"}">${esc(r.resultado)}</span></td><td>${esc(r.intento)} de ${esc(r.maxIntentos||MAXT)}</td><td>${esc(r.puntos)}</td></tr>`;}).join("")}
+      </tbody></table></div></section>`;}
+    if(!document.body.contains(pb))return;
+    pb.innerHTML=`<div class="temas">${html}</div>`;
+  }catch(err){if(document.body.contains(pb))pb.textContent="No se pudo leer el registro. Probá de nuevo en un rato.";}
+}
+
+function render(){header();tabs();view();}
+const al=$("#alumno");al.value=S.name||"";al.addEventListener("input",()=>{S.name=al.value;save();regStatus();});
+regStatus();flushPend();window.addEventListener("online",flushPend);
+const nu=$("#numero");nu.value=S.num||"";nu.addEventListener("input",()=>{nu.value=nu.value.replace(/\D/g,"").slice(0,2);S.num=nu.value;save();});
+render();
+</script>
+
+</body>
+</html>
